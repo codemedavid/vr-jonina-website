@@ -12,6 +12,7 @@ interface MenuItemCardProps {
 
 const MenuItemCard: React.FC<MenuItemCardProps> = ({
   product,
+  onAddToCart,
   cartQuantity = 0,
   onProductClick,
 }) => {
@@ -165,15 +166,29 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({
           )}
 
           <div className="flex w-full pt-2">
-            {/* View Product Button */}
+            {/* Add to Cart Button */}
             <button
               onClick={(e) => {
                 e.stopPropagation();
-                onProductClick?.(product);
+                if (!product.available || !hasAnyStock) return;
+
+                // If it has variations, ensure one is selected
+                if (product.variations && product.variations.length > 0 && !selectedVariation) {
+                  onProductClick?.(product);
+                  return;
+                }
+
+                onAddToCart?.(product, selectedVariation, 1);
               }}
-              className="w-full btn-secondary py-2.5 sm:py-3 text-[11px] sm:text-sm flex items-center justify-center gap-2"
+              disabled={!product.available || !hasAnyStock}
+              className={`w-full py-2.5 sm:py-3 text-[11px] sm:text-sm flex items-center justify-center gap-2 font-semibold transition-all
+                ${(!product.available || !hasAnyStock)
+                  ? 'bg-gray-100 text-gray-400 cursor-not-allowed rounded'
+                  : 'btn-primary'}
+              `}
             >
-              <span className="font-semibold">View Product →</span>
+              <Package className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+              <span>Add to Cart</span>
             </button>
           </div>
 
