@@ -205,18 +205,27 @@ const Checkout: React.FC<CheckoutProps> = ({ cartItems, totalPrice, onBack }) =>
                 }
             }
 
-            // Prepare order items for database
-            const orderItems = cartItems.map(item => ({
-                product_id: item.product.id,
-                product_name: item.product.name,
-                variation_id: item.variation?.id || null,
-                variation_name: item.variation?.name || null,
-                pen_type: item.penType || null,
-                quantity: item.quantity,
-                price: item.price,
-                total: item.price * item.quantity,
-                purity_percentage: item.product.purity_percentage
-            }));
+            const orderItems = cartItems.map(item => {
+                const basePrice = item.variation ? item.variation.price : item.product.base_price;
+                let currentPrice = basePrice;
+                const isDiscounted = item.variation
+                    ? (item.variation.discount_active && item.variation.discount_price !== null && item.variation.discount_price < basePrice)
+                    : (item.product.discount_active && item.product.discount_price !== null && item.product.discount_price < item.product.base_price);
+                if (isDiscounted) {
+                    currentPrice = item.variation?.discount_price || item.product.discount_price || basePrice;
+                }
+
+                return {
+                    product_id: item.product.id,
+                    product_name: item.product.name,
+                    variation_id: item.variation?.id || null,
+                    variation_name: item.variation?.name || null,
+                    quantity: item.quantity,
+                    price: currentPrice,
+                    total: currentPrice * item.quantity,
+                    purity_percentage: item.product.purity_percentage
+                };
+            });
 
             // Save order to database
             const { data: orderData, error: orderError } = await supabase
@@ -318,10 +327,16 @@ ${cartItems.map(item => {
                 if (item.variation) {
                     line += ` (${item.variation.name})`;
                 }
-                if (item.penType) {
-                    line += ` [${item.penType === 'disposable' ? 'Disposable Pen' : 'Reusable Pen'}]`;
+                const basePrice = item.variation ? item.variation.price : item.product.base_price;
+                let currentPrice = basePrice;
+                const isDiscounted = item.variation
+                    ? (item.variation.discount_active && item.variation.discount_price !== null && item.variation.discount_price < basePrice)
+                    : (item.product.discount_active && item.product.discount_price !== null && item.product.discount_price < item.product.base_price);
+                if (isDiscounted) {
+                    currentPrice = item.variation?.discount_price || item.product.discount_price || basePrice;
                 }
-                line += ` x${item.quantity} - ₱${(item.price * item.quantity).toLocaleString('en-PH', { minimumFractionDigits: 0 })}`;
+
+                line += ` x${item.quantity} - ₱${(currentPrice * item.quantity).toLocaleString('en-PH', { minimumFractionDigits: 0 })}`;
                 if (item.product.purity_percentage && item.product.purity_percentage > 0) {
                     line += `\n  Purity: ${item.product.purity_percentage}%`;
                 }
@@ -658,12 +673,23 @@ Please confirm this order. Thank you!
                             <div className="bg-white rounded shadow-clinical p-6 sticky top-24 border border-gray-100">
                                 <h3 className="font-heading font-bold text-blush-900 mb-4">Order Summary</h3>
                                 <div className="space-y-2 mb-4">
-                                    {cartItems.map((item, idx) => (
-                                        <div key={idx} className="flex justify-between text-sm">
-                                            <span className="text-gray-600">{item.quantity}x {item.product.name}</span>
-                                            <span className="font-medium">₱{(item.price * item.quantity).toLocaleString()}</span>
-                                        </div>
-                                    ))}
+                                    {cartItems.map((item, idx) => {
+                                        const basePrice = item.variation ? item.variation.price : item.product.base_price;
+                                        let currentPrice = basePrice;
+                                        const isDiscounted = item.variation
+                                            ? (item.variation.discount_active && item.variation.discount_price !== null && item.variation.discount_price < basePrice)
+                                            : (item.product.discount_active && item.product.discount_price !== null && item.product.discount_price < item.product.base_price);
+                                        if (isDiscounted) {
+                                            currentPrice = item.variation?.discount_price || item.product.discount_price || basePrice;
+                                        }
+
+                                        return (
+                                            <div key={idx} className="flex justify-between text-sm">
+                                                <span className="text-gray-600">{item.quantity}x {item.product.name}</span>
+                                                <span className="font-medium">₱{(currentPrice * item.quantity).toLocaleString()}</span>
+                                            </div>
+                                        );
+                                    })}
                                 </div>
                                 <div className="border-t border-gray-100 pt-3 space-y-2 text-sm">
                                     <div className="flex justify-between">

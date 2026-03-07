@@ -96,15 +96,12 @@ export interface SiteSettings {
 }
 
 // Pen Type Options (for injectable products)
-export type PenType = 'disposable' | 'reusable' | null;
 
 // Cart Types
 export interface CartItem {
   product: Product;
   variation?: ProductVariation;
   quantity: number;
-  price: number;
-  penType?: PenType;
 }
 
 // Order Types

@@ -126,11 +126,7 @@ const Cart: React.FC<CartProps> = ({
                               {item.product.purity_percentage}% Purity
                             </span>
                           )}
-                          {item.penType && (
-                            <span className="text-blush-600 font-medium bg-blush-50 px-2 py-0.5 rounded border border-blush-100">
-                              {item.penType === 'disposable' ? 'Disposable Pen' : 'Reusable Pen'}
-                            </span>
-                          )}
+
                         </div>
                       </div>
                       <button
@@ -176,31 +172,34 @@ const Cart: React.FC<CartProps> = ({
 
                       <div className="text-right">
                         {(() => {
-                          // Calculate original price
-                          const originalPrice = item.variation
-                            ? item.variation.price
-                            : item.product.base_price;
+                          // Calculate base and original price
+                          const basePrice = item.variation ? item.variation.price : item.product.base_price;
+                          let currentPrice = basePrice;
 
                           // Check if this item is discounted
                           const isDiscounted = item.variation
-                            ? (item.variation.discount_active && item.variation.discount_price !== null && item.variation.discount_price < originalPrice)
+                            ? (item.variation.discount_active && item.variation.discount_price !== null && item.variation.discount_price < basePrice)
                             : (item.product.discount_active && item.product.discount_price !== null && item.product.discount_price < item.product.base_price);
+
+                          if (isDiscounted) {
+                            currentPrice = item.variation?.discount_price || item.product.discount_price || basePrice;
+                          }
 
                           return (
                             <>
                               <div className="text-lg md:text-xl font-bold text-science-blue-900">
-                                ₱{(item.price * item.quantity).toLocaleString('en-PH', { minimumFractionDigits: 0 })}
+                                ₱{(currentPrice * item.quantity).toLocaleString('en-PH', { minimumFractionDigits: 0 })}
                               </div>
                               {isDiscounted && (
                                 <div className="text-xs text-gray-400 line-through">
-                                  ₱{(originalPrice * item.quantity).toLocaleString('en-PH', { minimumFractionDigits: 0 })}
+                                  ₱{(basePrice * item.quantity).toLocaleString('en-PH', { minimumFractionDigits: 0 })}
                                 </div>
                               )}
                               <div className="text-xs text-gray-400">
-                                ₱{item.price.toLocaleString('en-PH', { minimumFractionDigits: 0 })} / unit
+                                ₱{currentPrice.toLocaleString('en-PH', { minimumFractionDigits: 0 })} / unit
                                 {isDiscounted && (
                                   <span className="ml-1 text-bio-green font-medium">
-                                    ({Math.round((1 - item.price / originalPrice) * 100)}% off)
+                                    ({Math.round((1 - currentPrice / basePrice) * 100)}% off)
                                   </span>
                                 )}
                               </div>

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import type { CartItem, Product, ProductVariation, PenType } from '../types';
+import type { CartItem, Product, ProductVariation } from '../types';
 
 export function useCart() {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
@@ -21,7 +21,7 @@ export function useCart() {
     localStorage.setItem('peptide_cart', JSON.stringify(cartItems));
   }, [cartItems]);
 
-  const addToCart = (product: Product, variation?: ProductVariation, quantity: number = 1, penType?: PenType) => {
+  const addToCart = (product: Product, variation?: ProductVariation, quantity: number = 1) => {
     // Check stock availability
     const availableStock = variation ? variation.stock_quantity : product.stock_quantity;
 
@@ -30,21 +30,10 @@ export function useCart() {
       return;
     }
 
-    const price = (() => {
-      if (penType === 'disposable' && variation?.disposable_pen_price) {
-        return variation.disposable_pen_price;
-      }
-      if (penType === 'reusable' && variation?.reusable_pen_price) {
-        return variation.reusable_pen_price;
-      }
-      return variation ? variation.price : (product.discount_active && product.discount_price ? product.discount_price : product.base_price);
-    })();
-
-    // Find existing item matching product, variation, AND pen type
+    // Find existing item matching product and variation
     const existingItemIndex = cartItems.findIndex(
       item => item.product.id === product.id &&
-        (variation ? item.variation?.id === variation.id : !item.variation) &&
-        item.penType === penType
+        (variation ? item.variation?.id === variation.id : !item.variation)
     );
 
     if (existingItemIndex > -1) {
@@ -76,9 +65,7 @@ export function useCart() {
       const newItem: CartItem = {
         product,
         variation,
-        quantity,
-        price,
-        penType
+        quantity
       };
       setCartItems([...cartItems, newItem]);
     }
@@ -116,7 +103,8 @@ export function useCart() {
 
   const getTotalPrice = () => {
     return cartItems.reduce((total, item) => {
-      return total + (item.price * item.quantity);
+      const price = item.variation ? item.variation.price : (item.product.discount_active && item.product.discount_price ? item.product.discount_price : item.product.base_price);
+      return total + (price * item.quantity);
     }, 0);
   };
 

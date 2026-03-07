@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { Package, Pen } from 'lucide-react';
-import type { Product, ProductVariation, PenType } from '../types';
+import { Package } from 'lucide-react';
+import type { Product, ProductVariation } from '../types';
 
 interface MenuItemCardProps {
   product: Product;
-  onAddToCart: (product: Product, variation?: ProductVariation, quantity?: number, penType?: PenType) => void;
+  onAddToCart?: (product: Product, variation?: ProductVariation, quantity?: number) => void;
   cartQuantity?: number;
   onUpdateQuantity?: (index: number, quantity: number) => void;
   onProductClick?: (product: Product) => void;
@@ -12,7 +12,6 @@ interface MenuItemCardProps {
 
 const MenuItemCard: React.FC<MenuItemCardProps> = ({
   product,
-  onAddToCart,
   cartQuantity = 0,
   onProductClick,
 }) => {
@@ -20,21 +19,10 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({
   const [selectedVariation, setSelectedVariation] = useState<ProductVariation | undefined>(
     product.variations && product.variations.length > 0 ? product.variations[0] : undefined
   );
-  const [quantity, setQuantity] = useState(1);
-  const [selectedPenType, setSelectedPenType] = useState<PenType>(null);
-  const isInjectableProduct = product.category !== 'supplies';
 
   // Calculate current price considering both product and variation discounts
   const currentPrice = (() => {
-    // If pen type is selected, use that specific price
-    if (selectedPenType === 'disposable' && selectedVariation?.disposable_pen_price) {
-      return selectedVariation.disposable_pen_price;
-    }
-    if (selectedPenType === 'reusable' && selectedVariation?.reusable_pen_price) {
-      return selectedVariation.reusable_pen_price;
-    }
-
-    // Otherwise fall back to variation or product price
+    // Falls back to variation or product price
     return selectedVariation
       ? (selectedVariation.discount_active && selectedVariation.discount_price)
         ? selectedVariation.discount_price
@@ -51,8 +39,6 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({
 
   // Get original price for strikethrough
   const originalPrice = selectedVariation ? selectedVariation.price : product.base_price;
-
-  const availableStock = selectedVariation ? selectedVariation.stock_quantity : product.stock_quantity;
 
   // Check if product has any available stock (either in variations or product itself)
   const hasAnyStock = product.variations && product.variations.length > 0
@@ -155,72 +141,7 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({
           )}
         </div>
 
-        {/* Pen Type Selection (Card View) */}
-        {isInjectableProduct && selectedVariation && (
-          <div className="mb-2 sm:mb-4">
-            <div className="flex flex-wrap gap-1">
-              {/* Complete Set */}
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setSelectedPenType(null);
-                }}
-                className={`
-                  px-2 py-1 text-[9px] sm:text-[10px] font-medium rounded-lg border transition-all relative z-20 flex items-center gap-1
-                  ${selectedPenType === null
-                    ? 'bg-brand-50 border-brand-400 text-brand-700'
-                    : 'bg-white text-charcoal-500 border-charcoal-200 hover:border-brand-300 hover:text-brand-600'
-                  }
-                `}
-                title="Complete Set (with insulin syringes & alcohol swabs)"
-              >
-                Set
-              </button>
 
-              {/* Disposable Pen */}
-              {selectedVariation?.disposable_pen_price && (
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setSelectedPenType('disposable');
-                  }}
-                  className={`
-                    px-2 py-1 text-[9px] sm:text-[10px] font-medium rounded-lg border transition-all relative z-20 flex items-center gap-1
-                    ${selectedPenType === 'disposable'
-                      ? 'bg-brand-50 border-brand-400 text-brand-700'
-                      : 'bg-white text-charcoal-500 border-charcoal-200 hover:border-brand-300 hover:text-brand-600'
-                    }
-                  `}
-                  title="Disposable Pen (includes 3 needles)"
-                >
-                  <Pen className="w-2.5 h-2.5" />
-                  Disp
-                </button>
-              )}
-
-              {/* Reusable Pen */}
-              {selectedVariation?.reusable_pen_price && (
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setSelectedPenType('reusable');
-                  }}
-                  className={`
-                    px-2 py-1 text-[9px] sm:text-[10px] font-medium rounded-lg border transition-all relative z-20 flex items-center gap-1
-                    ${selectedPenType === 'reusable'
-                      ? 'bg-brand-50 border-brand-400 text-brand-700'
-                      : 'bg-white text-charcoal-500 border-charcoal-200 hover:border-brand-300 hover:text-brand-600'
-                    }
-                  `}
-                  title="Reusable Pen (includes cartridge & 3 needles)"
-                >
-                  <Pen className="w-2.5 h-2.5" />
-                  Reus
-                </button>
-              )}
-            </div>
-          </div>
-        )}
 
         <div className="flex-1" />
 
@@ -244,7 +165,7 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({
           )}
 
           <div className="flex w-full pt-2">
-            {/* Add to Cart / View Product Button */}
+            {/* View Product Button */}
             <button
               onClick={(e) => {
                 e.stopPropagation();
