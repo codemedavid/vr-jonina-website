@@ -7,44 +7,44 @@ export default {
   theme: {
     extend: {
       colors: {
-        // The Babe Studio - Luxury Biotech Theme
+        // IgorotaPepGlow - Elegant Feminine Wellness Theme
         'theme-bg': '#FFFFFF',           // Pure White
-        'theme-text': '#1E1E1E',         // Luxury Dark text
+        'theme-text': '#2B2B2B',         // Dark Text
 
-        // Primary Palette - Rose Gold
+        // Primary Palette - Pink & Purple
         'brand': {
-          DEFAULT: '#CFA07A', // Rose Gold
-          50: '#FDF9F7',
-          100: '#F9F1EB',
-          200: '#E7C6B1',     // Soft Rose Gold
-          300: '#DFB49A',
-          400: '#CFA07A',     // Primary Rose Gold
-          500: '#BB855B',
-          600: '#A66B41',
-          700: '#8C5A44',     // Deep Copper
-          800: '#734A38',
-          900: '#5C3C2E',
+          DEFAULT: '#8E5FBF', // Primary Purple
+          50: '#FDE7F3',      // Light Pink Background
+          100: '#F5D5EA',
+          200: '#E8B5D6',
+          300: '#C9A6E8',     // Soft Lavender
+          400: '#F48FB1',     // Elegant Pink
+          500: '#8E5FBF',     // Primary Purple
+          600: '#7A4FA8',
+          700: '#6B4399',     // Deep Purple
+          800: '#5A3780',
+          900: '#482C68',
         },
 
         // Secondary & Neutral
         'charcoal': {
-          DEFAULT: '#1E1E1E',
-          50: '#F7F7F7',      // Soft Gray
-          100: '#EEEEEE',
-          200: '#D9D9D9',
+          DEFAULT: '#2B2B2B',
+          50: '#F9F5FC',      // Soft Lavender Tint
+          100: '#F0EAF5',
+          200: '#E0D5EB',
           300: '#B0B0B0',
           400: '#858585',
           500: '#595959',
           600: '#4D4D4D',
           700: '#3D3D3D',
           800: '#2E2E2E',
-          900: '#1E1E1E',     // Luxury Dark
+          900: '#2B2B2B',     // Dark Text
         },
 
         // Backgrounds & Accents
         'cream': '#FFFFFF',
-        'blush-light': '#F4E3DA', // Light Rose Accent
-        'warm-white': '#FDFDFD',
+        'blush-light': '#FDE7F3', // Light Pink Background
+        'warm-white': '#FDFAFD',
       },
       fontFamily: {
         sans: ['Inter', 'sans-serif'],

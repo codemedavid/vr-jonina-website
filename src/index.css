@@ -5,19 +5,23 @@
 @tailwind utilities;
 
 :root {
-  /* The Babe Studio - Luxury Biotech Theme */
+  /* IgorotaPepGlow - Elegant Feminine Wellness Theme */
   --theme-bg: #FFFFFF;
-  --theme-text: #1E1E1E;
+  --theme-text: #2B2B2B;
 
   /* Primary Palette */
-  --rose-gold: #CFA07A;
-  --deep-copper: #8C5A44;
-  --light-rose: #F4E3DA;
+  --primary-purple: #8E5FBF;
+  --soft-lavender: #C9A6E8;
+  --elegant-pink: #F48FB1;
+  --light-pink-bg: #FDE7F3;
 
   /* Backgrounds */
   --cream: #FFFFFF;
-  --blush-light: #F4E3DA;
-  --warm-white: #FDFDFD;
+  --blush-light: #FDE7F3;
+  --warm-white: #FDFAFD;
+
+  /* Gradient */
+  --brand-gradient: linear-gradient(135deg, #F48FB1, #8E5FBF);
 }
 
 @layer base {
@@ -37,9 +41,13 @@
 
 @layer components {
 
-  /* The Babe Studio Button Styles */
+  /* IgorotaPepGlow Button Styles */
   .btn-primary {
-    @apply bg-brand-400 text-white px-8 py-4 rounded-xl font-semibold text-sm tracking-wide transition-all duration-300 shadow-soft hover:bg-brand-500 hover:shadow-luxury active:transform active:scale-[0.98];
+    @apply text-white px-8 py-4 rounded-xl font-semibold text-sm tracking-wide transition-all duration-300 shadow-soft hover:shadow-luxury active:transform active:scale-[0.98];
+    background: linear-gradient(135deg, #F48FB1, #8E5FBF);
+  }
+  .btn-primary:hover {
+    background: linear-gradient(135deg, #E87DA0, #7D50AB);
   }
 
   .btn-secondary {
