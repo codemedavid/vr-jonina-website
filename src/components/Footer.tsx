@@ -1,5 +1,5 @@
 import React from 'react';
-import { HelpCircle, Truck, FlaskConical } from 'lucide-react';
+import { Truck, FlaskConical, Mail, MapPin } from 'lucide-react';
 
 const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
@@ -7,18 +7,34 @@ const Footer: React.FC = () => {
   return (
     <footer className="bg-charcoal-900 pt-16 pb-8 border-t border-charcoal-800">
       <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mb-10">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mb-10">
 
           {/* Brand Section */}
           <div className="flex flex-col items-center md:items-start gap-4">
             <img
               src="/logo.png"
-              alt="IgorotaPepGlow"
+              alt="BIORICH"
               className="h-14 w-auto object-contain bg-white/10 rounded-lg p-2"
             />
             <p className="text-charcoal-400 text-sm max-w-xs text-center md:text-left">
-              Premium peptides for beauty and wellness. Lab-tested, high-purity formulations you can trust.
+              Advanced peptide solutions designed for innovation and research. Lab-tested, high-purity formulations you can trust.
             </p>
+          </div>
+
+          {/* Contact Us */}
+          <div className="flex flex-col items-center md:items-start gap-3">
+            <h3 className="text-white font-semibold text-sm uppercase tracking-wider mb-2">Contact Us</h3>
+            <a
+              href="mailto:Reechsendin@gmail.com"
+              className="text-charcoal-300 hover:text-brand-400 transition-colors flex items-center gap-2 text-sm"
+            >
+              <Mail className="w-4 h-4" />
+              Reechsendin@gmail.com
+            </a>
+            <div className="text-charcoal-300 flex items-center gap-2 text-sm">
+              <MapPin className="w-4 h-4" />
+              Marilao, Bulacan
+            </div>
           </div>
 
           {/* Quick Links */}
@@ -38,13 +54,6 @@ const Footer: React.FC = () => {
               <Truck className="w-4 h-4" />
               Track Order
             </a>
-            <a
-              href="/faq"
-              className="text-charcoal-300 hover:text-brand-400 transition-colors flex items-center gap-2 text-sm"
-            >
-              <HelpCircle className="w-4 h-4" />
-              FAQ
-            </a>
           </div>
 
         </div>
@@ -56,7 +65,7 @@ const Footer: React.FC = () => {
         <div className="text-center">
           <p className="text-xs text-charcoal-500 flex items-center justify-center gap-1">
             Made with
-            © {currentYear} IgorotaPepGlow.
+            © {currentYear} BIORICH.
           </p>
         </div>
       </div>

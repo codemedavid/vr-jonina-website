@@ -20,53 +20,63 @@ const Hero: React.FC<HeroProps> = ({ onShopAll }) => {
       {/* Soft pink blob - top left */}
       <div
         className="absolute -top-20 -left-20 w-[400px] h-[400px] rounded-full opacity-30 blur-3xl animate-pulse"
-        style={{ background: '#FDE7F3', animationDuration: '7s' }}
+        style={{ background: '#F8BBD0', animationDuration: '7s' }}
       />
 
-      {/* Soft pink blob - bottom right */}
+      {/* Soft lavender blob - bottom right */}
       <div
         className="absolute -bottom-32 -right-20 w-[500px] h-[500px] rounded-full opacity-25 blur-3xl animate-pulse"
-        style={{ background: '#F48FB1', animationDuration: '9s' }}
+        style={{ background: '#C9B6E4', animationDuration: '9s' }}
       />
 
-      {/* Purple gradient circle - top right */}
+      {/* Pastel lavender circle - top right */}
       <div
         className="absolute top-16 right-[10%] w-[250px] h-[250px] rounded-full opacity-15 blur-2xl"
-        style={{ background: 'radial-gradient(circle, #C9A6E8, transparent 70%)' }}
+        style={{ background: 'radial-gradient(circle, #E6DAF4, transparent 70%)' }}
       />
 
-      {/* Purple gradient circle - bottom left */}
+      {/* Primary pink circle - bottom left */}
       <div
         className="absolute bottom-20 left-[8%] w-[200px] h-[200px] rounded-full opacity-20 blur-2xl animate-pulse"
-        style={{ background: 'radial-gradient(circle, #8E5FBF, transparent 70%)', animationDuration: '8s' }}
+        style={{ background: 'radial-gradient(circle, #F06292, transparent 70%)', animationDuration: '8s' }}
       />
 
-      {/* Small pink accent blob - mid right */}
+      {/* Small soft pink accent - mid right */}
       <div
         className="absolute top-1/2 right-[5%] w-[120px] h-[120px] rounded-full opacity-20 blur-xl"
-        style={{ background: '#F48FB1' }}
+        style={{ background: '#F8BBD0' }}
       />
 
-      {/* ── Floral Line Art SVGs ── */}
+      {/* ── DNA Helix SVG Decorations ── */}
 
-      {/* Floral element - top right */}
+      {/* DNA helix - top right */}
       <svg
         className="absolute top-12 right-12 w-40 h-40 opacity-[0.07] text-brand-500"
         viewBox="0 0 200 200"
         fill="none"
         stroke="currentColor"
-        strokeWidth="1"
+        strokeWidth="1.2"
       >
-        <path d="M100 20 C120 50, 150 60, 180 50 C160 80, 150 110, 160 140 C130 130, 110 140, 100 170 C90 140, 70 130, 40 140 C50 110, 40 80, 20 50 C50 60, 80 50, 100 20Z" />
-        <circle cx="100" cy="95" r="15" />
-        <path d="M100 60 Q110 80, 100 95 Q90 80, 100 60" />
-        <path d="M130 75 Q115 85, 100 95 Q115 95, 130 75" />
-        <path d="M125 120 Q115 105, 100 95 Q110 110, 125 120" />
-        <path d="M75 120 Q85 105, 100 95 Q90 110, 75 120" />
-        <path d="M70 75 Q85 85, 100 95 Q85 95, 70 75" />
+        <path d="M60 10 C80 30, 120 30, 140 10" />
+        <path d="M60 40 C80 60, 120 60, 140 40" />
+        <path d="M60 70 C80 90, 120 90, 140 70" />
+        <path d="M60 100 C80 120, 120 120, 140 100" />
+        <path d="M60 130 C80 150, 120 150, 140 130" />
+        <path d="M60 160 C80 180, 120 180, 140 160" />
+        <path d="M60 10 C80 -10, 120 -10, 140 10" opacity="0.5" />
+        <line x1="75" y1="20" x2="125" y2="20" strokeWidth="0.8" />
+        <line x1="68" y1="50" x2="132" y2="50" strokeWidth="0.8" />
+        <line x1="75" y1="80" x2="125" y2="80" strokeWidth="0.8" />
+        <line x1="68" y1="110" x2="132" y2="110" strokeWidth="0.8" />
+        <line x1="75" y1="140" x2="125" y2="140" strokeWidth="0.8" />
+        <line x1="68" y1="170" x2="132" y2="170" strokeWidth="0.8" />
+        <circle cx="60" cy="10" r="3" fill="currentColor" opacity="0.3" />
+        <circle cx="140" cy="40" r="3" fill="currentColor" opacity="0.3" />
+        <circle cx="60" cy="70" r="3" fill="currentColor" opacity="0.3" />
+        <circle cx="140" cy="100" r="3" fill="currentColor" opacity="0.3" />
       </svg>
 
-      {/* Floral element - bottom left */}
+      {/* DNA helix - bottom left */}
       <svg
         className="absolute bottom-16 left-12 w-36 h-36 opacity-[0.06] text-brand-400"
         viewBox="0 0 200 200"
@@ -74,15 +84,20 @@ const Hero: React.FC<HeroProps> = ({ onShopAll }) => {
         stroke="currentColor"
         strokeWidth="1.2"
       >
-        <path d="M100 30 Q130 60, 160 50 Q140 90, 160 130 Q120 120, 100 160 Q80 120, 40 130 Q60 90, 40 50 Q70 60, 100 30Z" />
-        <circle cx="100" cy="95" r="12" />
-        <path d="M100 10 C100 10, 95 50, 100 95" />
-        <path d="M100 180 C100 180, 105 140, 100 95" />
-        <path d="M20 95 C20 95, 60 90, 100 95" />
-        <path d="M180 95 C180 95, 140 100, 100 95" />
+        <path d="M60 20 C80 40, 120 40, 140 20" />
+        <path d="M60 50 C80 70, 120 70, 140 50" />
+        <path d="M60 80 C80 100, 120 100, 140 80" />
+        <path d="M60 110 C80 130, 120 130, 140 110" />
+        <path d="M60 140 C80 160, 120 160, 140 140" />
+        <path d="M60 170 C80 190, 120 190, 140 170" />
+        <line x1="70" y1="30" x2="130" y2="30" strokeWidth="0.8" />
+        <line x1="70" y1="60" x2="130" y2="60" strokeWidth="0.8" />
+        <line x1="70" y1="90" x2="130" y2="90" strokeWidth="0.8" />
+        <line x1="70" y1="120" x2="130" y2="120" strokeWidth="0.8" />
+        <line x1="70" y1="150" x2="130" y2="150" strokeWidth="0.8" />
       </svg>
 
-      {/* Vine / leaf line art - left side */}
+      {/* Pastel circles - left side */}
       <svg
         className="absolute top-1/3 left-4 w-16 h-64 opacity-[0.06] text-brand-300"
         viewBox="0 0 60 250"
@@ -90,14 +105,13 @@ const Hero: React.FC<HeroProps> = ({ onShopAll }) => {
         stroke="currentColor"
         strokeWidth="1"
       >
-        <path d="M30 250 C30 200, 25 180, 30 150 C35 120, 25 100, 30 70 C35 40, 30 20, 30 0" />
-        <path d="M30 200 C15 190, 8 175, 10 160" />
-        <path d="M30 160 C45 150, 52 135, 50 120" />
-        <path d="M30 120 C15 110, 8 95, 10 80" />
-        <path d="M30 80 C45 70, 52 55, 50 40" />
+        <circle cx="30" cy="40" r="18" />
+        <circle cx="30" cy="100" r="12" />
+        <circle cx="30" cy="150" r="22" />
+        <circle cx="30" cy="210" r="10" />
       </svg>
 
-      {/* Vine / leaf line art - right side */}
+      {/* Pastel circles - right side */}
       <svg
         className="absolute top-1/4 right-4 w-16 h-64 opacity-[0.06] text-brand-300"
         viewBox="0 0 60 250"
@@ -105,11 +119,10 @@ const Hero: React.FC<HeroProps> = ({ onShopAll }) => {
         stroke="currentColor"
         strokeWidth="1"
       >
-        <path d="M30 250 C30 200, 35 180, 30 150 C25 120, 35 100, 30 70 C25 40, 30 20, 30 0" />
-        <path d="M30 210 C45 200, 52 185, 50 170" />
-        <path d="M30 170 C15 160, 8 145, 10 130" />
-        <path d="M30 130 C45 120, 52 105, 50 90" />
-        <path d="M30 90 C15 80, 8 65, 10 50" />
+        <circle cx="30" cy="30" r="14" />
+        <circle cx="30" cy="90" r="20" />
+        <circle cx="30" cy="160" r="10" />
+        <circle cx="30" cy="220" r="16" />
       </svg>
 
       {/* ── Main Content (Centered) ── */}
@@ -123,19 +136,19 @@ const Hero: React.FC<HeroProps> = ({ onShopAll }) => {
         <div className="mb-6">
           <img
             src="/logo.png"
-            alt="IgorotaPepGlow"
+            alt="BIORICH"
             className="h-24 sm:h-28 md:h-32 w-auto object-contain rounded-2xl shadow-lg"
           />
         </div>
 
         {/* Title */}
         <h1 className="text-4xl md:text-5xl lg:text-6xl font-heading font-semibold text-charcoal-900 mb-4 leading-tight tracking-tight">
-          IgorotaPepGlow
+          Transcending Limits with Peptide Science
         </h1>
 
         {/* Subtitle */}
         <p className="text-lg md:text-xl text-charcoal-500 mb-10 leading-relaxed font-light max-w-lg">
-          Beauty and wellness inspired by culture and nature.
+          Advanced peptide solutions designed for innovation and research.
         </p>
 
         {/* Buttons */}
@@ -143,9 +156,9 @@ const Hero: React.FC<HeroProps> = ({ onShopAll }) => {
           <button
             onClick={onShopAll}
             className="w-full sm:w-auto px-8 py-4 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-2 group"
-            style={{ background: 'linear-gradient(135deg, #F48FB1, #8E5FBF)' }}
+            style={{ background: 'linear-gradient(135deg, #F8BBD0, #C9B6E4)' }}
           >
-            Shop Products
+            Explore Products
             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
           </button>
           <button

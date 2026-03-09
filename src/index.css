@@ -5,23 +5,24 @@
 @tailwind utilities;
 
 :root {
-  /* IgorotaPepGlow - Elegant Feminine Wellness Theme */
+  /* BIORICH - Soft Modern Biotech Theme */
   --theme-bg: #FFFFFF;
   --theme-text: #2B2B2B;
 
   /* Primary Palette */
-  --primary-purple: #8E5FBF;
-  --soft-lavender: #C9A6E8;
-  --elegant-pink: #F48FB1;
-  --light-pink-bg: #FDE7F3;
+  --primary-pink: #F06292;
+  --soft-pink: #F8BBD0;
+  --light-lavender: #C9B6E4;
+  --pastel-lavender: #E6DAF4;
+  --gold-accent: #C8A46B;
 
   /* Backgrounds */
   --cream: #FFFFFF;
-  --blush-light: #FDE7F3;
-  --warm-white: #FDFAFD;
+  --soft-bg: #FAF7FF;
+  --warm-white: #FAF7FF;
 
   /* Gradient */
-  --brand-gradient: linear-gradient(135deg, #F48FB1, #8E5FBF);
+  --brand-gradient: linear-gradient(135deg, #F8BBD0, #C9B6E4);
 }
 
 @layer base {
@@ -41,13 +42,13 @@
 
 @layer components {
 
-  /* IgorotaPepGlow Button Styles */
+  /* BIORICH Button Styles */
   .btn-primary {
     @apply text-white px-8 py-4 rounded-xl font-semibold text-sm tracking-wide transition-all duration-300 shadow-soft hover:shadow-luxury active:transform active:scale-[0.98];
-    background: linear-gradient(135deg, #F48FB1, #8E5FBF);
+    background: linear-gradient(135deg, #F8BBD0, #C9B6E4);
   }
   .btn-primary:hover {
-    background: linear-gradient(135deg, #E87DA0, #7D50AB);
+    background: linear-gradient(135deg, #F06292, #B39DDB);
   }
 
   .btn-secondary {

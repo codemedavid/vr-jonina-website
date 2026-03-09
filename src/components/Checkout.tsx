@@ -229,7 +229,7 @@ const Checkout: React.FC<CheckoutProps> = ({ cartItems, totalPrice, onBack }) =>
 
             // Generate order number before saving
             const randomDigits = Math.floor(Math.random() * 9000 + 1000); // 1000-9999
-            const customOrderNumber = `TBS-${randomDigits}`;
+            const customOrderNumber = `BRC-${randomDigits}`;
 
             // Save order to database
             const { data: orderData, error: orderError } = await supabase
@@ -307,7 +307,7 @@ const Checkout: React.FC<CheckoutProps> = ({ cartItems, totalPrice, onBack }) =>
             });
 
             const orderDetails = `
-✨ THE BABE STUDIO - NEW ORDER
+✨ BIORICH - NEW ORDER
 
 📅 ORDER DATE & TIME
 ${dateTimeStamp}
@@ -358,7 +358,7 @@ ${paymentMethod?.name || 'N/A'}
 ${paymentProofUrl ? 'Screenshot attached to order.' : 'Pending'}
 
 📱 CONTACT METHOD
-${contactMethod === 'viber' ? 'Viber (0949 613 3242)' : 'WhatsApp (0949 613 3242)'}
+WhatsApp (+63 927 487 6549)
 
 📋 ORDER NUMBER: ${customOrderNumber}
 
@@ -377,6 +377,12 @@ Please confirm this order. Thank you!
 
             // Show confirmation
             setStep('confirmation');
+
+            // Auto-open WhatsApp with pre-filled order details
+            setTimeout(() => {
+                const whatsappUrl = `https://wa.me/639274876549?text=${encodeURIComponent(orderDetails)}`;
+                window.open(whatsappUrl, '_blank');
+            }, 1500);
         } catch (error) {
             console.error('❌ Error placing order:', error);
             alert(`Failed to place order: ${error instanceof Error ? error.message : 'Unknown error'}. Please try again.`);
@@ -396,20 +402,8 @@ Please confirm this order. Thank you!
     };
 
     const handleOpenContact = () => {
-        // Remove the %2B (+) from Viber as it can cause "address is invalid" in Safari
-        const contactUrl = contactMethod === 'viber'
-            ? `viber://chat?number=639496133242&text=${encodeURIComponent(orderMessage)}`
-            : contactMethod === 'whatsapp'
-                ? `https://wa.me/639496133242?text=${encodeURIComponent(orderMessage)}`
-                : null;
-
-        if (contactUrl) {
-            if (contactMethod === 'viber') {
-                window.location.href = contactUrl;
-            } else {
-                window.open(contactUrl, '_blank');
-            }
-        }
+        const contactUrl = `https://wa.me/639274876549?text=${encodeURIComponent(orderMessage)}`;
+        window.open(contactUrl, '_blank');
     };
 
     if (step === 'confirmation') {
@@ -424,7 +418,7 @@ Please confirm this order. Thank you!
                             Order Confirmed
                         </h1>
                         <p className="text-gray-600 mb-4 text-base md:text-lg leading-relaxed">
-                            Copy the order message below and send it via {contactMethod === 'viber' ? 'Viber' : 'WhatsApp'} along with your payment screenshot to finalize your order.
+                            Your order details have been pre-filled on WhatsApp. Just hit send to finalize your order!
                         </p>
 
                         {/* Order ID Display */}
@@ -482,14 +476,12 @@ Please confirm this order. Thank you!
                                 className="w-full btn-primary py-4 text-base flex items-center justify-center gap-2 shadow-lg"
                             >
                                 <MessageCircle className="w-5 h-5" />
-                                {contactMethod === 'viber' ? 'Open Viber' : 'Open WhatsApp'} & Send
+                                Open WhatsApp & Send
                             </button>
 
-                            {!contactOpened && (
-                                <p className="text-sm text-gray-500">
-                                    If the app doesn't open automatically (or shows an invalid address error), please ensure {contactMethod === 'viber' ? 'Viber' : 'WhatsApp'} is installed, or manually send the copied message to <span className="font-bold">{contactMethod === 'viber' ? '0949 613 3242 on Viber' : '0949 613 3242 on WhatsApp'}</span>
-                                </p>
-                            )}
+                            <p className="text-sm text-gray-500">
+                                If WhatsApp doesn't open automatically, please send the copied message to <span className="font-bold">+63 927 487 6549 on WhatsApp</span>
+                            </p>
                         </div>
 
                         <div className="bg-brand-50/20 rounded-lg p-6 mb-8 text-left border border-brand-100">
