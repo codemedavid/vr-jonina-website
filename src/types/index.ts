@@ -97,10 +97,16 @@ export interface SiteSettings {
 
 // Pen Type Options (for injectable products)
 
+// Kit Type Options
+export type KitType = 'vial_only' | 'complete_kit';
+
+export const KIT_UPGRADE_PRICE = 150;
+
 // Cart Types
 export interface CartItem {
   product: Product;
   variation?: ProductVariation;
+  kitType: KitType;
   quantity: number;
 }
 

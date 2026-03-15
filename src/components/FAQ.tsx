@@ -1,19 +1,19 @@
 import React, { useState } from 'react';
-import { ChevronDown, ChevronUp, FlaskConical, Package, CreditCard, Truck, ArrowLeft, MessageCircle, HelpCircle } from 'lucide-react';
+import { ChevronDown, ChevronUp, Heart, Package, CreditCard, Truck, ArrowLeft, MessageCircle, HelpCircle } from 'lucide-react';
 import { useFAQs } from '../hooks/useFAQs';
 
 const categoryIcons: { [key: string]: React.ReactElement } = {
-    'PRODUCT & USAGE': <FlaskConical className="w-5 h-5" />,
+    'PRODUCT & USAGE': <Heart className="w-5 h-5" fill="currentColor" />,
     'ORDERING & PACKAGING': <Package className="w-5 h-5" />,
     'PAYMENT METHODS': <CreditCard className="w-5 h-5" />,
     'SHIPPING & DELIVERY': <Truck className="w-5 h-5" />,
 };
 
 const categoryColors: { [key: string]: string } = {
-    'PRODUCT & USAGE': 'text-black border-navy-900 bg-gold-50/50',
-    'ORDERING & PACKAGING': 'text-black border-navy-900 bg-gold-50/50',
-    'PAYMENT METHODS': 'text-black border-navy-900 bg-gold-50/50',
-    'SHIPPING & DELIVERY': 'text-black border-navy-900 bg-gold-50/50',
+    'PRODUCT & USAGE': 'text-black border-brand-200 bg-brand-50/50',
+    'ORDERING & PACKAGING': 'text-black border-brand-200 bg-brand-50/50',
+    'PAYMENT METHODS': 'text-black border-brand-200 bg-brand-50/50',
+    'SHIPPING & DELIVERY': 'text-black border-brand-200 bg-brand-50/50',
 };
 
 const FAQ: React.FC = () => {
@@ -42,27 +42,27 @@ const FAQ: React.FC = () => {
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-                <div className="animate-spin w-8 h-8 border-2 border-navy-900 border-t-transparent rounded-full" />
+            <div className="min-h-screen flex items-center justify-center" style={{ background: 'linear-gradient(180deg, #FFF5F7, #FFFAFC)' }}>
+                <div className="animate-spin w-8 h-8 border-2 border-brand-500 border-t-transparent rounded-full" />
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen font-cute" style={{ background: 'linear-gradient(180deg, #FFF5F7, #FFFAFC)' }}>
             {/* Header */}
-            <div className="bg-white border-b-4 border-navy-900 sticky top-0 z-10 shadow-sm">
+            <div className="bg-white border-b-4 border-brand-500 sticky top-0 z-10 shadow-soft">
                 <div className="container mx-auto px-4 py-4">
                     <div className="flex items-center gap-4">
                         <a
                             href="/"
-                            className="p-2 hover:bg-gray-100 rounded-lg transition-colors group"
+                            className="p-2 hover:bg-brand-50 rounded-2xl transition-colors group"
                         >
-                            <ArrowLeft className="w-5 h-5 text-gray-600 group-hover:text-navy-900" />
+                            <ArrowLeft className="w-5 h-5 text-gray-600 group-hover:text-brand-600" />
                         </a>
                         <div className="flex items-center gap-2">
                             <HelpCircle className="w-6 h-6 text-black" />
-                            <h1 className="text-xl md:text-2xl font-bold text-black">Frequently Asked Questions</h1>
+                            <h1 className="text-xl md:text-2xl font-bold font-cute text-charcoal-900">Frequently Asked Questions</h1>
                         </div>
                     </div>
                 </div>
@@ -73,9 +73,9 @@ const FAQ: React.FC = () => {
                 <div className="flex flex-wrap gap-2 mb-8">
                     <button
                         onClick={() => setActiveCategory(null)}
-                        className={`px-6 py-2.5 rounded-full text-sm font-bold transition-all border shadow-sm ${activeCategory === null
-                            ? 'bg-navy-900 text-black border-navy-900 shadow-md transform scale-105'
-                            : 'bg-white text-black border-navy-900 hover:bg-navy-50'
+                        className={`px-6 py-2.5 rounded-full text-sm font-bold font-cute transition-all border shadow-soft ${activeCategory === null
+                            ? 'bg-brand-500 text-white border-brand-500 shadow-md transform scale-105'
+                            : 'bg-white text-charcoal-900 border-brand-200 hover:bg-brand-50'
                             }`}
                     >
                         All
@@ -84,9 +84,9 @@ const FAQ: React.FC = () => {
                         <button
                             key={category}
                             onClick={() => setActiveCategory(category)}
-                            className={`px-4 py-2.5 rounded-full text-xs md:text-sm font-bold transition-all flex items-center gap-2 border shadow-sm ${activeCategory === category
-                                ? 'bg-navy-900 text-white border-navy-900 shadow-md transform scale-105'
-                                : 'bg-white text-black border-navy-900 hover:bg-navy-50 hover:text-black'
+                            className={`px-4 py-2.5 rounded-full text-xs md:text-sm font-bold font-cute transition-all flex items-center gap-2 border shadow-soft ${activeCategory === category
+                                ? 'bg-brand-500 text-white border-brand-500 shadow-md transform scale-105'
+                                : 'bg-white text-charcoal-900 border-brand-200 hover:bg-brand-50 hover:text-charcoal-900'
                                 }`}
                         >
                             <span className={activeCategory === category ? 'text-black' : 'text-black'}>
@@ -101,7 +101,7 @@ const FAQ: React.FC = () => {
                 {(activeCategory ? [activeCategory] : categories).map(category => (
                     <div key={category} className="mb-10">
                         {/* Section Header */}
-                        <div className="flex items-center gap-3 mb-6 px-4 py-3 rounded-lg border border-navy-900 bg-white shadow-sm w-full">
+                        <div className="flex items-center gap-3 mb-6 px-4 py-3 rounded-2xl border border-brand-200 bg-white shadow-soft w-full">
                             <span className="text-black">
                                 {categoryIcons[category] || <HelpCircle className="w-5 h-5" />}
                             </span>
@@ -114,7 +114,7 @@ const FAQ: React.FC = () => {
                                 .map(faq => (
                                     <div
                                         key={faq.id}
-                                        className="bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-all duration-200"
+                                        className="bg-white rounded-2xl border border-brand-200 shadow-soft hover:shadow-md transition-all duration-200"
                                     >
                                         <button
                                             onClick={() => toggleItem(faq.id)}
@@ -126,7 +126,7 @@ const FAQ: React.FC = () => {
                                             {openItems.has(faq.id) ? (
                                                 <ChevronUp className="w-5 h-5 text-gray-400 flex-shrink-0 mt-1" />
                                             ) : (
-                                                <ChevronDown className="w-5 h-5 text-gray-400 group-hover:text-navy-900 flex-shrink-0 transition-colors mt-1" />
+                                                <ChevronDown className="w-5 h-5 text-gray-400 group-hover:text-brand-500 flex-shrink-0 transition-colors mt-1" />
                                             )}
                                         </button>
                                         {openItems.has(faq.id) && (
@@ -144,7 +144,7 @@ const FAQ: React.FC = () => {
                 ))}
 
                 {/* Contact CTA */}
-                <div className="mt-12 bg-white rounded-2xl border border-navy-900/30 p-6 md:p-8 text-center shadow-lg">
+                <div className="mt-12 bg-white rounded-2xl border border-brand-200 p-6 md:p-8 text-center shadow-soft">
                     <h3 className="text-lg md:text-xl font-bold text-black mb-2">
                         Still have questions?
                     </h3>
@@ -154,7 +154,7 @@ const FAQ: React.FC = () => {
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                         <a
                             href={viberUrl}
-                            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#7360f2] text-white px-6 py-3 rounded-lg font-medium hover:opacity-90 transition-all shadow-md hover:shadow-lg"
+                            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#7360f2] text-white px-6 py-3 rounded-2xl font-cute font-medium hover:opacity-90 transition-all shadow-soft hover:shadow-lg"
                         >
                             <MessageCircle className="w-5 h-5" />
                             Message us on Viber
@@ -163,7 +163,7 @@ const FAQ: React.FC = () => {
                             href={whatsappUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#25D366] text-white px-6 py-3 rounded-lg font-medium hover:opacity-90 transition-all shadow-md hover:shadow-lg"
+                            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#25D366] text-white px-6 py-3 rounded-2xl font-cute font-medium hover:opacity-90 transition-all shadow-soft hover:shadow-lg"
                         >
                             <MessageCircle className="w-5 h-5" />
                             Message us on WhatsApp

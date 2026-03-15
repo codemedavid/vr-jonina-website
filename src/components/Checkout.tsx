@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowLeft, ShieldCheck, Package, CreditCard, Activity, Copy, Check, MessageCircle, Tag, Upload, Database, Lock, Truck } from 'lucide-react';
+import { ArrowLeft, ShieldCheck, Package, CreditCard, Heart, Copy, Check, MessageCircle, Tag, Upload, Database, Lock, Truck } from 'lucide-react';
 import type { CartItem } from '../types';
 import { usePaymentMethods } from '../hooks/usePaymentMethods';
 import { useShippingLocations } from '../hooks/useShippingLocations';
@@ -307,7 +307,7 @@ const Checkout: React.FC<CheckoutProps> = ({ cartItems, totalPrice, onBack }) =>
             });
 
             const orderDetails = `
-✨ BIORICH - NEW ORDER
+✨ VR Jonina - NEW ORDER
 
 📅 ORDER DATE & TIME
 ${dateTimeStamp}
@@ -410,9 +410,9 @@ Please confirm this order. Thank you!
         return (
             <div className="min-h-screen bg-gradient-to-br from-white via-brand-50 to-white flex items-center justify-center px-4 py-12">
                 <div className="max-w-2xl w-full">
-                    <div className="bg-white rounded shadow-clinical p-8 md:p-12 text-center border border-gray-100">
-                        <div className="bg-emerald-100 w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm">
-                            <ShieldCheck className="w-12 h-12 text-emerald-600" />
+                    <div className="bg-white rounded-2xl shadow-soft p-8 md:p-12 text-center border border-brand-100">
+                        <div className="bg-brand-50 w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm">
+                            <ShieldCheck className="w-12 h-12 text-brand-600" />
                         </div>
                         <h1 className="font-heading text-3xl md:text-4xl font-bold text-charcoal-900 mb-4 tracking-tight">
                             Order Confirmed
@@ -433,7 +433,7 @@ Please confirm this order. Thank you!
                         )}
 
                         {/* Order Message Display */}
-                        <div className="bg-gray-50 rounded-lg p-6 mb-6 text-left border border-gray-200">
+                        <div className="bg-brand-50 rounded-lg p-6 mb-6 text-left border border-brand-200">
                             <div className="flex items-center justify-between mb-3">
                                 <h3 className="font-bold text-charcoal-900 flex items-center gap-2">
                                     <MessageCircle className="w-5 h-5 text-brand-600" />
@@ -462,7 +462,7 @@ Please confirm this order. Thank you!
                                 </pre>
                             </div>
                             {copied && (
-                                <p className="text-emerald-600 text-sm mt-2 flex items-center gap-1 font-medium">
+                                <p className="text-brand-600 text-sm mt-2 flex items-center gap-1 font-medium">
                                     <Check className="w-4 h-4" />
                                     Copied to clipboard! Ready to send.
                                 </p>
@@ -486,7 +486,7 @@ Please confirm this order. Thank you!
 
                         <div className="bg-brand-50/20 rounded-lg p-6 mb-8 text-left border border-brand-100">
                             <h3 className="font-bold text-charcoal-900 mb-4 flex items-center gap-2">
-                                <Activity className="w-5 h-5 text-brand-600" />
+                                <Heart className="w-5 h-5 text-brand-600" />
                                 Next Steps
                             </h3>
                             <ul className="space-y-3 text-sm text-gray-700">
@@ -547,7 +547,7 @@ Please confirm this order. Thank you!
                         <div className="lg:col-span-2 space-y-6">
 
                             {/* Payment Methods */}
-                            <div className="bg-white rounded shadow-clinical p-6 border border-gray-100">
+                            <div className="bg-white rounded-2xl shadow-soft p-6 border border-brand-100">
                                 <h2 className="font-heading text-lg font-bold text-charcoal-900 mb-4 flex items-center gap-2">
                                     <CreditCard className="w-5 h-5 text-brand-600" />
                                     Select Payment Method
@@ -606,12 +606,12 @@ Please confirm this order. Thank you!
                             </div>
 
                             {/* Payment Proof Upload */}
-                            <div className="bg-white rounded shadow-clinical p-6 border border-gray-100">
+                            <div className="bg-white rounded-2xl shadow-soft p-6 border border-brand-100">
                                 <h2 className="font-heading text-lg font-bold text-charcoal-900 mb-4 flex items-center gap-2">
                                     <Upload className="w-5 h-5 text-brand-600" />
                                     Upload Proof of Payment
                                 </h2>
-                                <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-brand-400 transition-colors bg-gray-50/50">
+                                <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-brand-400 transition-colors bg-brand-50/50">
                                     <input
                                         type="file"
                                         accept="image/*"
@@ -626,7 +626,7 @@ Please confirm this order. Thank you!
                                     <label htmlFor="payment-proof-upload" className="cursor-pointer flex flex-col items-center">
                                         {paymentProof ? (
                                             <>
-                                                <Check className="w-12 h-12 text-emerald-600 mb-3" />
+                                                <Check className="w-12 h-12 text-brand-600 mb-3" />
                                                 <p className="font-medium text-charcoal-900">{paymentProof.name}</p>
                                                 <p className="text-sm text-gray-500 mt-1">Click to change file</p>
                                             </>
@@ -642,7 +642,7 @@ Please confirm this order. Thank you!
                             </div>
 
                             {/* Notes */}
-                            <div className="bg-white rounded shadow-clinical p-6 border border-gray-100">
+                            <div className="bg-white rounded-2xl shadow-soft p-6 border border-brand-100">
                                 <h2 className="font-heading text-lg font-bold text-charcoal-900 mb-4">
                                     Additional Notes (Optional)
                                 </h2>
@@ -665,7 +665,7 @@ Please confirm this order. Thank you!
 
                         {/* Sidebar Summary (Reused logic, simplified UI) */}
                         <div className="lg:col-span-1">
-                            <div className="bg-white rounded shadow-clinical p-6 sticky top-24 border border-gray-100">
+                            <div className="bg-white rounded-2xl shadow-soft p-6 sticky top-24 border border-gray-100">
                                 <h3 className="font-heading font-bold text-charcoal-900 mb-4">Order Summary</h3>
                                 <div className="space-y-2 mb-4">
                                     {cartItems.map((item, idx) => {
@@ -696,7 +696,7 @@ Please confirm this order. Thank you!
                                         <span>₱{shippingFee.toLocaleString()}</span>
                                     </div>
                                     {discountAmount > 0 && (
-                                        <div className="flex justify-between text-emerald-600 font-medium">
+                                        <div className="flex justify-between text-brand-600 font-medium">
                                             <span>Discount</span>
                                             <span>-₱{discountAmount.toLocaleString()}</span>
                                         </div>
@@ -729,14 +729,14 @@ Please confirm this order. Thank you!
 
                 <h1 className="font-heading text-2xl md:text-3xl font-bold text-charcoal-900 mb-8 flex items-center gap-3">
                     Checkout Information
-                    <Activity className="w-6 h-6 text-brand-600" />
+                    <Heart className="w-6 h-6 text-brand-600" />
                 </h1>
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     {/* Main Form */}
                     <div className="lg:col-span-2 space-y-6">
                         {/* Customer Information */}
-                        <div className="bg-white rounded shadow-clinical p-6 border border-gray-100">
+                        <div className="bg-white rounded-2xl shadow-soft p-6 border border-brand-100">
                             <h2 className="font-heading text-lg font-bold text-charcoal-900 mb-6 flex items-center gap-2">
                                 <div className="bg-brand-50 p-2 rounded text-brand-600">
                                     <Package className="w-5 h-5" />
@@ -787,7 +787,7 @@ Please confirm this order. Thank you!
                         </div>
 
                         {/* Shipping Address */}
-                        <div className="bg-white rounded shadow-clinical p-6 border border-gray-100">
+                        <div className="bg-white rounded-2xl shadow-soft p-6 border border-brand-100">
                             <h2 className="font-heading text-lg font-bold text-charcoal-900 mb-6 flex items-center gap-2">
                                 <div className="bg-brand-50 p-2 rounded text-brand-600">
                                     <Database className="w-5 h-5" />
@@ -866,7 +866,7 @@ Please confirm this order. Thank you!
                         </div>
 
                         {/* Contact Method Selection */}
-                        <div className="bg-white rounded shadow-clinical p-6 border border-gray-100">
+                        <div className="bg-white rounded-2xl shadow-soft p-6 border border-brand-100">
                             <h2 className="font-heading text-lg font-bold text-charcoal-900 mb-3 flex items-center gap-2">
                                 <MessageCircle className="w-5 h-5 text-brand-600" />
                                 Contact Method *
@@ -915,7 +915,7 @@ Please confirm this order. Thank you!
                     </div>
 
                     {/* Courier Selection */}
-                    <div className="bg-white rounded shadow-clinical p-6 border border-gray-100">
+                    <div className="bg-white rounded-2xl shadow-soft p-6 border border-brand-100">
                         <h2 className="font-heading text-lg font-bold text-charcoal-900 mb-3 flex items-center gap-2">
                             <Truck className="w-5 h-5 text-brand-600" />
                             Select Courier Provider *
@@ -942,7 +942,7 @@ Please confirm this order. Thank you!
                     </div>
 
                     {/* Shipping Location Selection */}
-                    <div className={`bg-white rounded shadow-clinical p-6 border border-gray-100 transition-opacity duration-300 ${!selectedCourierId ? 'opacity-50 pointer-events-none' : 'opacity-100'}`}>
+                    <div className={`bg-white rounded-2xl shadow-soft p-6 border border-brand-100 transition-opacity duration-300 ${!selectedCourierId ? 'opacity-50 pointer-events-none' : 'opacity-100'}`}>
                         <h2 className="font-heading text-lg font-bold text-charcoal-900 mb-3 flex items-center gap-2">
                             Choose Shipping Region *
                         </h2>
@@ -997,10 +997,10 @@ Please confirm this order. Thank you!
 
                 {/* Order Summary Sidebar */}
                 <div className="lg:col-span-1">
-                    <div className="bg-white rounded shadow-clinical p-6 sticky top-24 border border-gray-100">
+                    <div className="bg-white rounded-2xl shadow-soft p-6 sticky top-24 border border-gray-100">
                         <h2 className="font-heading text-lg font-bold text-charcoal-900 mb-6 flex items-center gap-2">
                             Order Summary
-                            <Activity className="w-4 h-4 text-brand-600" />
+                            <Heart className="w-4 h-4 text-brand-600" />
                         </h2>
 
                         <div className="space-y-4 mb-6">
@@ -1073,7 +1073,7 @@ Please confirm this order. Thank you!
                                 )}
                             </div>
                             {promoError && <p className="text-red-500 text-xs mt-1">{promoError}</p>}
-                            {promoSuccess && <p className="text-emerald-600 text-xs mt-1 font-medium">{promoSuccess}</p>}
+                            {promoSuccess && <p className="text-brand-600 text-xs mt-1 font-medium">{promoSuccess}</p>}
                         </div>
 
                         <div className="space-y-2 text-sm text-gray-600 border-t border-gray-100 pt-4">
@@ -1082,7 +1082,7 @@ Please confirm this order. Thank you!
                                 <span>₱{totalPrice.toLocaleString()}</span>
                             </div>
                             {discountAmount > 0 && (
-                                <div className="flex justify-between text-emerald-600 font-medium">
+                                <div className="flex justify-between text-brand-600 font-medium">
                                     <span>Discount</span>
                                     <span>-₱{discountAmount.toLocaleString()}</span>
                                 </div>

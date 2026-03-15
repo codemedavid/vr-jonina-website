@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FFFDE8"/>
+      <stop offset="100%" stop-color="#FFE8A0" stop-opacity="0.3"/>
+    </radialGradient>
+    <linearGradient id="bottle" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FFF5B0"/>
+      <stop offset="100%" stop-color="#FFD54F"/>
+    </linearGradient>
+    <linearGradient id="cap" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#E8A830"/>
+      <stop offset="100%" stop-color="#FFD54F"/>
+    </linearGradient>
+    <linearGradient id="lemon" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FFF176"/>
+      <stop offset="100%" stop-color="#FFCA28"/>
+    </linearGradient>
+  </defs>
+  <circle cx="150" cy="150" r="140" fill="url(#bg)"/>
+  <!-- Bottle body -->
+  <rect x="112" y="95" width="76" height="135" rx="14" fill="url(#bottle)" stroke="#E8A830" stroke-width="2"/>
+  <!-- Bottle neck -->
+  <rect x="132" y="72" width="36" height="28" rx="4" fill="#FFF5B0" stroke="#E8A830" stroke-width="2"/>
+  <!-- Cap -->
+  <rect x="127" y="62" width="46" height="16" rx="5" fill="url(#cap)"/>
+  <!-- Label area -->
+  <rect x="118" y="118" width="64" height="68" rx="6" fill="white" fill-opacity="0.85"/>
+  <!-- Lemon slice icon -->
+  <circle cx="150" cy="140" r="12" fill="url(#lemon)" stroke="#E8A830" stroke-width="1"/>
+  <line x1="150" y1="130" x2="150" y2="150" stroke="#FFF9C4" stroke-width="1.5"/>
+  <line x1="140" y1="140" x2="160" y2="140" stroke="#FFF9C4" stroke-width="1.5"/>
+  <line x1="143" y1="133" x2="157" y2="147" stroke="#FFF9C4" stroke-width="1.5"/>
+  <line x1="157" y1="133" x2="143" y2="147" stroke="#FFF9C4" stroke-width="1.5"/>
+  <text x="150" y="165" text-anchor="middle" font-family="Georgia, serif" font-size="9" font-weight="bold" fill="#4A3040">Lemon</text>
+  <text x="150" y="178" text-anchor="middle" font-family="Georgia, serif" font-size="9" font-weight="bold" fill="#4A3040">Bottle</text>
+  <!-- Ribbon bow (pink accent) -->
+  <ellipse cx="140" cy="66" rx="17" ry="9" fill="#FF85A2" opacity="0.8"/>
+  <ellipse cx="160" cy="66" rx="17" ry="9" fill="#FF85A2" opacity="0.8"/>
+  <circle cx="150" cy="66" r="5" fill="#E8A830"/>
+  <path d="M142 71 L133 86 L140 82" fill="#FF85A2" opacity="0.6"/>
+  <path d="M158 71 L167 86 L160 82" fill="#FF85A2" opacity="0.6"/>
+  <!-- Hearts (mix of pink and yellow) -->
+  <g opacity="0.5">
+    <path d="M60 80 C60 75,67 75,67 80 C67 85,60 90,60 90 C60 90,53 85,53 80 C53 75,60 75,60 80Z" fill="#FFD54F" transform="scale(0.58) translate(56,44)"/>
+    <path d="M60 80 C60 75,67 75,67 80 C67 85,60 90,60 90 C60 90,53 85,53 80 C53 75,60 75,60 80Z" fill="#E8739B" transform="scale(0.5) translate(424,82)"/>
+    <path d="M60 80 C60 75,67 75,67 80 C67 85,60 90,60 90 C60 90,53 85,53 80 C53 75,60 75,60 80Z" fill="#FFD54F" transform="scale(0.44) translate(108,438)"/>
+    <path d="M60 80 C60 75,67 75,67 80 C67 85,60 90,60 90 C60 90,53 85,53 80 C53 75,60 75,60 80Z" fill="#E8739B" transform="scale(0.4) translate(476,446)"/>
+  </g>
+  <circle cx="82" cy="112" r="2" fill="#FFE082"/>
+  <circle cx="222" cy="100" r="2.5" fill="#FFD54F" opacity="0.6"/>
+  <circle cx="90" cy="214" r="1.5" fill="#FF85A2" opacity="0.5"/>
+  <circle cx="214" cy="222" r="2" fill="#FFE082" opacity="0.7"/>
+  <text x="150" y="260" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#4A3040">Lemon Bottle</text>
+</svg>

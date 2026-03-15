@@ -1,33 +1,37 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Quicksand:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  /* BIORICH - Soft Modern Biotech Theme */
-  --theme-bg: #FFFFFF;
-  --theme-text: #2B2B2B;
+  /* VR Jonina - Cute Coquette Pink Theme */
+  --theme-bg: #FFF5F7;
+  --theme-text: #4A3040;
 
   /* Primary Palette */
-  --primary-pink: #F06292;
-  --soft-pink: #F8BBD0;
-  --light-lavender: #C9B6E4;
-  --pastel-lavender: #E6DAF4;
-  --gold-accent: #C8A46B;
+  --primary-pink: #E8739B;
+  --soft-pink: #FFB6C8;
+  --light-pink: #FFCDD8;
+  --blush: #FFF0F5;
+  --ribbon-pink: #FF85A2;
+  --rose-gold: #D4A574;
 
   /* Backgrounds */
-  --cream: #FFFFFF;
-  --soft-bg: #FAF7FF;
-  --warm-white: #FAF7FF;
+  --cream: #FFF5F7;
+  --soft-bg: #FFF0F5;
+  --warm-white: #FFFAFC;
 
   /* Gradient */
-  --brand-gradient: linear-gradient(135deg, #F8BBD0, #C9B6E4);
+  --brand-gradient: linear-gradient(135deg, #FFB6C8, #E8739B);
+  --ribbon-gradient: linear-gradient(135deg, #FF85A2, #FFB6C8);
 }
 
 @layer base {
   body {
-    @apply font-sans text-charcoal-800 bg-white antialiased leading-relaxed;
+    @apply font-sans text-charcoal-800 antialiased leading-relaxed;
+    background: linear-gradient(180deg, #FFF5F7 0%, #FFFAFC 50%, #FFF0F5 100%);
+    min-height: 100vh;
   }
 
   h1,
@@ -42,26 +46,27 @@
 
 @layer components {
 
-  /* BIORICH Button Styles */
+  /* VR Jonina Button Styles */
   .btn-primary {
-    @apply text-white px-8 py-4 rounded-xl font-semibold text-sm tracking-wide transition-all duration-300 shadow-soft hover:shadow-luxury active:transform active:scale-[0.98];
-    background: linear-gradient(135deg, #F8BBD0, #C9B6E4);
+    @apply text-white px-8 py-4 rounded-2xl font-semibold text-sm tracking-wide transition-all duration-300 shadow-soft hover:shadow-luxury active:transform active:scale-[0.98];
+    background: linear-gradient(135deg, #FFB6C8, #E8739B);
   }
   .btn-primary:hover {
-    background: linear-gradient(135deg, #F06292, #B39DDB);
+    background: linear-gradient(135deg, #FF9BB4, #D4568A);
   }
 
   .btn-secondary {
-    @apply bg-transparent text-charcoal-800 border-2 border-charcoal-200 px-8 py-4 rounded-xl font-semibold text-sm transition-all duration-300 hover:bg-charcoal-50 hover:border-charcoal-800 active:transform active:scale-[0.98];
+    @apply bg-transparent text-brand-600 border-2 border-brand-200 px-8 py-4 rounded-2xl font-semibold text-sm transition-all duration-300 hover:bg-brand-50 hover:border-brand-400 active:transform active:scale-[0.98];
   }
 
-  /* Luxury Card Styles */
+  /* Cute Card Styles with ribbon border */
   .card {
-    @apply bg-white rounded-2xl shadow-soft border border-brand-300 p-6 transition-all duration-300 hover:shadow-luxury hover:border-brand-500;
+    @apply bg-white rounded-2xl shadow-soft border border-brand-200 p-6 transition-all duration-300 hover:shadow-luxury hover:border-brand-400;
+    background: linear-gradient(135deg, #FFFFFF 0%, #FFF8FA 100%);
   }
 
   .input-field {
-    @apply w-full px-4 py-3 bg-white border border-charcoal-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-400 focus:border-transparent transition-all placeholder-charcoal-400 text-charcoal-800;
+    @apply w-full px-4 py-3 bg-white border border-brand-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-brand-300 focus:border-transparent transition-all placeholder-charcoal-300 text-charcoal-800;
   }
 
   .badge {
@@ -73,7 +78,24 @@
   }
 
   .badge-accent {
-    @apply bg-charcoal-50 text-charcoal-800;
+    @apply bg-brand-100 text-brand-800;
+  }
+
+  /* Ribbon decoration */
+  .ribbon {
+    position: relative;
+  }
+  .ribbon::before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 16px;
+    background: linear-gradient(135deg, #FF85A2, #FFB6C8);
+    border-radius: 0 0 30px 30px;
+    opacity: 0.8;
   }
 }
 

@@ -224,7 +224,7 @@ export default function GuideManager() {
                                 <span className="text-sm">Dashboard</span>
                             </a>
                             <span className="text-gray-400">•</span>
-                            <h1 className="text-base font-bold text-navy-900">Article Manager</h1>
+                            <h1 className="text-base font-bold text-charcoal-900">Article Manager</h1>
                         </div>
                         <button
                             onClick={() => openModal()}

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowLeft, FlaskConical, Syringe, Thermometer, Clock, AlertTriangle, ChevronDown, ChevronUp, BookOpen } from 'lucide-react';
+import { ArrowLeft, Heart, Syringe, Thermometer, Clock, AlertTriangle, ChevronDown, ChevronUp, BookOpen } from 'lucide-react';
 import Header from './Header';
 import Footer from './Footer';
 import { useCart } from '../hooks/useCart';
@@ -54,7 +54,7 @@ const ProtocolGuide: React.FC = () => {
                         <BookOpen className="w-4 h-4 text-rose-500" />
                         <span className="text-xs font-medium text-charcoal-700 uppercase tracking-widest">Protocol Guide</span>
                     </div>
-                    <h1 className="font-heading text-3xl sm:text-4xl font-bold text-charcoal-900 mb-3">
+                    <h1 className="font-cute text-3xl sm:text-4xl font-bold text-charcoal-900 mb-3">
                         Peptide Protocol Guide
                     </h1>
                     <p className="text-charcoal-600 max-w-2xl mx-auto">
@@ -66,7 +66,7 @@ const ProtocolGuide: React.FC = () => {
 
                 {/* General Guidelines */}
                 <div className="bg-white rounded-2xl shadow-soft border border-brand-100 p-6 mb-8">
-                    <h2 className="font-heading text-xl font-semibold text-charcoal-900 mb-4 flex items-center gap-2">
+                    <h2 className="font-cute text-xl font-semibold text-charcoal-900 mb-4 flex items-center gap-2">
                         <Syringe className="w-5 h-5 text-rose-500" />
                         General Injection Guidelines
                     </h2>
@@ -92,7 +92,7 @@ const ProtocolGuide: React.FC = () => {
 
                 {/* Storage Guidelines */}
                 <div className="bg-white rounded-2xl shadow-soft border border-brand-100 p-6 mb-8">
-                    <h2 className="font-heading text-xl font-semibold text-charcoal-900 mb-4 flex items-center gap-2">
+                    <h2 className="font-cute text-xl font-semibold text-charcoal-900 mb-4 flex items-center gap-2">
                         <Thermometer className="w-5 h-5 text-rose-500" />
                         Storage Guidelines
                     </h2>
@@ -109,8 +109,8 @@ const ProtocolGuide: React.FC = () => {
                 </div>
 
                 {/* Protocol Cards */}
-                <h2 className="font-heading text-xl font-semibold text-charcoal-900 mb-4 flex items-center gap-2">
-                    <FlaskConical className="w-5 h-5 text-rose-500" />
+                <h2 className="font-cute text-xl font-semibold text-charcoal-900 mb-4 flex items-center gap-2">
+                    <Heart className="w-5 h-5 text-rose-500" fill="currentColor" />
                     Peptide Protocols
                 </h2>
 
@@ -152,7 +152,7 @@ const ProtocolGuide: React.FC = () => {
                                 >
                                     <div>
                                         <span className="text-xs font-medium text-rose-500 uppercase tracking-wider">{protocol.category}</span>
-                                        <h3 className="font-heading text-lg font-semibold text-charcoal-900 mt-1">{protocol.name}</h3>
+                                        <h3 className="font-cute text-lg font-semibold text-charcoal-900 mt-1">{protocol.name}</h3>
                                     </div>
                                     {expandedProtocol === protocol.id ? (
                                         <ChevronUp className="w-5 h-5 text-charcoal-400" />
@@ -215,7 +215,7 @@ const ProtocolGuide: React.FC = () => {
                         href="/calculator"
                         className="inline-flex items-center gap-2 px-6 py-3 bg-rose-500 hover:bg-rose-600 text-white font-semibold rounded-2xl shadow-lg transition-all"
                     >
-                        <FlaskConical className="w-4 h-4" />
+                        <Heart className="w-4 h-4" fill="currentColor" />
                         Use Peptide Calculator
                     </a>
                 </div>

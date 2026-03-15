@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ArrowRight, Shield, FlaskConical, Award } from 'lucide-react';
+import { ArrowRight, Heart, Sparkles, Star } from 'lucide-react';
 
 interface HeroProps {
   onShopAll: () => void;
@@ -13,171 +13,119 @@ const Hero: React.FC<HeroProps> = ({ onShopAll }) => {
   }, []);
 
   return (
-    <div className="relative min-h-[90vh] overflow-hidden bg-white flex items-center justify-center">
+    <div className="relative min-h-[90vh] overflow-hidden flex items-center justify-center" style={{ background: 'linear-gradient(180deg, #FFF0F5 0%, #FFE4EE 30%, #FFF5F7 70%, #FFFFFF 100%)' }}>
 
-      {/* ── Background Decorative Elements ── */}
+      {/* ── Ribbon Decorations ── */}
 
-      {/* Soft pink blob - top left */}
-      <div
-        className="absolute -top-20 -left-20 w-[400px] h-[400px] rounded-full opacity-30 blur-3xl animate-pulse"
-        style={{ background: '#F8BBD0', animationDuration: '7s' }}
-      />
-
-      {/* Soft lavender blob - bottom right */}
-      <div
-        className="absolute -bottom-32 -right-20 w-[500px] h-[500px] rounded-full opacity-25 blur-3xl animate-pulse"
-        style={{ background: '#C9B6E4', animationDuration: '9s' }}
-      />
-
-      {/* Pastel lavender circle - top right */}
-      <div
-        className="absolute top-16 right-[10%] w-[250px] h-[250px] rounded-full opacity-15 blur-2xl"
-        style={{ background: 'radial-gradient(circle, #E6DAF4, transparent 70%)' }}
-      />
-
-      {/* Primary pink circle - bottom left */}
-      <div
-        className="absolute bottom-20 left-[8%] w-[200px] h-[200px] rounded-full opacity-20 blur-2xl animate-pulse"
-        style={{ background: 'radial-gradient(circle, #F06292, transparent 70%)', animationDuration: '8s' }}
-      />
-
-      {/* Small soft pink accent - mid right */}
-      <div
-        className="absolute top-1/2 right-[5%] w-[120px] h-[120px] rounded-full opacity-20 blur-xl"
-        style={{ background: '#F8BBD0' }}
-      />
-
-      {/* ── DNA Helix SVG Decorations ── */}
-
-      {/* DNA helix - top right */}
-      <svg
-        className="absolute top-12 right-12 w-40 h-40 opacity-[0.07] text-brand-500"
-        viewBox="0 0 200 200"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.2"
-      >
-        <path d="M60 10 C80 30, 120 30, 140 10" />
-        <path d="M60 40 C80 60, 120 60, 140 40" />
-        <path d="M60 70 C80 90, 120 90, 140 70" />
-        <path d="M60 100 C80 120, 120 120, 140 100" />
-        <path d="M60 130 C80 150, 120 150, 140 130" />
-        <path d="M60 160 C80 180, 120 180, 140 160" />
-        <path d="M60 10 C80 -10, 120 -10, 140 10" opacity="0.5" />
-        <line x1="75" y1="20" x2="125" y2="20" strokeWidth="0.8" />
-        <line x1="68" y1="50" x2="132" y2="50" strokeWidth="0.8" />
-        <line x1="75" y1="80" x2="125" y2="80" strokeWidth="0.8" />
-        <line x1="68" y1="110" x2="132" y2="110" strokeWidth="0.8" />
-        <line x1="75" y1="140" x2="125" y2="140" strokeWidth="0.8" />
-        <line x1="68" y1="170" x2="132" y2="170" strokeWidth="0.8" />
-        <circle cx="60" cy="10" r="3" fill="currentColor" opacity="0.3" />
-        <circle cx="140" cy="40" r="3" fill="currentColor" opacity="0.3" />
-        <circle cx="60" cy="70" r="3" fill="currentColor" opacity="0.3" />
-        <circle cx="140" cy="100" r="3" fill="currentColor" opacity="0.3" />
+      {/* Top left ribbon bow */}
+      <svg className="absolute top-6 left-6 w-32 h-32 opacity-20 animate-ribbon-sway" viewBox="0 0 120 120" fill="none">
+        <path d="M60 50 Q30 20 15 45 Q5 65 40 55 Z" fill="#FF85A2" />
+        <path d="M60 50 Q90 20 105 45 Q115 65 80 55 Z" fill="#E8739B" />
+        <path d="M55 50 Q60 70 65 50 Q60 55 55 50 Z" fill="#D4568A" />
+        <path d="M50 55 Q60 90 70 55" stroke="#FF85A2" strokeWidth="3" fill="none" strokeLinecap="round" />
+        <path d="M45 65 Q60 100 75 65" stroke="#FFB6C8" strokeWidth="2" fill="none" strokeLinecap="round" />
       </svg>
 
-      {/* DNA helix - bottom left */}
-      <svg
-        className="absolute bottom-16 left-12 w-36 h-36 opacity-[0.06] text-brand-400"
-        viewBox="0 0 200 200"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.2"
-      >
-        <path d="M60 20 C80 40, 120 40, 140 20" />
-        <path d="M60 50 C80 70, 120 70, 140 50" />
-        <path d="M60 80 C80 100, 120 100, 140 80" />
-        <path d="M60 110 C80 130, 120 130, 140 110" />
-        <path d="M60 140 C80 160, 120 160, 140 140" />
-        <path d="M60 170 C80 190, 120 190, 140 170" />
-        <line x1="70" y1="30" x2="130" y2="30" strokeWidth="0.8" />
-        <line x1="70" y1="60" x2="130" y2="60" strokeWidth="0.8" />
-        <line x1="70" y1="90" x2="130" y2="90" strokeWidth="0.8" />
-        <line x1="70" y1="120" x2="130" y2="120" strokeWidth="0.8" />
-        <line x1="70" y1="150" x2="130" y2="150" strokeWidth="0.8" />
+      {/* Top right ribbon bow */}
+      <svg className="absolute top-10 right-10 w-28 h-28 opacity-15" viewBox="0 0 120 120" fill="none">
+        <path d="M60 50 Q30 20 15 45 Q5 65 40 55 Z" fill="#FFB6C8" />
+        <path d="M60 50 Q90 20 105 45 Q115 65 80 55 Z" fill="#FF9BB4" />
+        <path d="M55 50 Q60 70 65 50 Q60 55 55 50 Z" fill="#E8739B" />
+        <path d="M50 55 Q60 85 70 55" stroke="#FFB6C8" strokeWidth="2.5" fill="none" strokeLinecap="round" />
       </svg>
 
-      {/* Pastel circles - left side */}
-      <svg
-        className="absolute top-1/3 left-4 w-16 h-64 opacity-[0.06] text-brand-300"
-        viewBox="0 0 60 250"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1"
-      >
-        <circle cx="30" cy="40" r="18" />
-        <circle cx="30" cy="100" r="12" />
-        <circle cx="30" cy="150" r="22" />
-        <circle cx="30" cy="210" r="10" />
-      </svg>
+      {/* Floating hearts */}
+      <Heart className="absolute top-[15%] left-[15%] w-6 h-6 text-brand-300 opacity-30 animate-float" style={{ animationDelay: '0s' }} fill="currentColor" />
+      <Heart className="absolute top-[25%] right-[20%] w-4 h-4 text-brand-400 opacity-25 animate-float" style={{ animationDelay: '1s' }} fill="currentColor" />
+      <Heart className="absolute bottom-[30%] left-[10%] w-5 h-5 text-brand-200 opacity-35 animate-float" style={{ animationDelay: '2s' }} fill="currentColor" />
+      <Heart className="absolute bottom-[20%] right-[15%] w-7 h-7 text-brand-300 opacity-20 animate-float" style={{ animationDelay: '3s' }} fill="currentColor" />
+      <Heart className="absolute top-[40%] left-[5%] w-3 h-3 text-brand-400 opacity-30 animate-float" style={{ animationDelay: '1.5s' }} fill="currentColor" />
 
-      {/* Pastel circles - right side */}
-      <svg
-        className="absolute top-1/4 right-4 w-16 h-64 opacity-[0.06] text-brand-300"
-        viewBox="0 0 60 250"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1"
-      >
-        <circle cx="30" cy="30" r="14" />
-        <circle cx="30" cy="90" r="20" />
-        <circle cx="30" cy="160" r="10" />
-        <circle cx="30" cy="220" r="16" />
-      </svg>
+      {/* Sparkle decorations */}
+      <Sparkles className="absolute top-[20%] right-[30%] w-5 h-5 text-brand-300 opacity-25 animate-sparkle" style={{ animationDelay: '0.5s' }} />
+      <Sparkles className="absolute bottom-[25%] left-[25%] w-4 h-4 text-brand-400 opacity-20 animate-sparkle" style={{ animationDelay: '1.5s' }} />
+      <Star className="absolute top-[35%] right-[8%] w-4 h-4 text-brand-200 opacity-25 animate-sparkle" style={{ animationDelay: '2.5s' }} fill="currentColor" />
 
-      {/* ── Main Content (Centered) ── */}
+      {/* Soft pink blobs */}
+      <div
+        className="absolute -top-20 -left-20 w-[400px] h-[400px] rounded-full opacity-25 blur-3xl animate-pulse"
+        style={{ background: '#FFB6C8', animationDuration: '7s' }}
+      />
+      <div
+        className="absolute -bottom-32 -right-20 w-[500px] h-[500px] rounded-full opacity-20 blur-3xl animate-pulse"
+        style={{ background: '#FFCDD8', animationDuration: '9s' }}
+      />
+      <div
+        className="absolute bottom-20 left-[8%] w-[200px] h-[200px] rounded-full opacity-15 blur-2xl animate-pulse"
+        style={{ background: 'radial-gradient(circle, #E8739B, transparent 70%)', animationDuration: '8s' }}
+      />
+
+      {/* Ribbon border top */}
+      <div className="absolute top-0 left-0 right-0 h-2" style={{ background: 'linear-gradient(90deg, #FFB6C8, #E8739B, #FF85A2, #FFB6C8, #E8739B)' }} />
+
+      {/* ── Main Content ── */}
       <div className={`
         relative z-10 flex flex-col items-center text-center max-w-2xl mx-auto px-4 sm:px-6 py-20
         transition-all duration-1000 ease-out transform
         ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}
       `}>
 
-        {/* Logo */}
-        <div className="mb-6">
-          <img
-            src="/logo.png"
-            alt="BIORICH"
-            className="h-24 sm:h-28 md:h-32 w-auto object-contain rounded-2xl shadow-lg"
-          />
+        {/* Ribbon Banner */}
+        <div className="relative mb-6">
+          <div className="px-6 py-2 rounded-full text-brand-700 text-xs font-semibold tracking-widest uppercase" style={{ background: 'linear-gradient(135deg, #FFE4EE, #FFB6C8)' }}>
+            <span className="flex items-center gap-2">
+              <Heart className="w-3 h-3" fill="currentColor" />
+              Your Trusted Peptide Partner
+              <Heart className="w-3 h-3" fill="currentColor" />
+            </span>
+          </div>
         </div>
 
-        {/* Title */}
-        <h1 className="text-4xl md:text-5xl lg:text-6xl font-heading font-semibold text-charcoal-900 mb-4 leading-tight tracking-tight">
-          Transcending Limits with Peptide Science
+        {/* Brand Name */}
+        <h1 className="text-5xl md:text-6xl lg:text-7xl font-heading font-semibold mb-4 leading-tight tracking-tight" style={{ color: '#4A3040' }}>
+          VR <span style={{ color: '#E8739B' }}>Jonina</span>
         </h1>
 
-        {/* Subtitle */}
-        <p className="text-lg md:text-xl text-charcoal-500 mb-10 leading-relaxed font-light max-w-lg">
-          Advanced peptide solutions designed for innovation and research.
+        {/* Subtitle with ribbon divider */}
+        <div className="flex items-center gap-3 mb-6">
+          <div className="h-px w-12 bg-brand-300" />
+          <Heart className="w-4 h-4 text-brand-400" fill="currentColor" />
+          <div className="h-px w-12 bg-brand-300" />
+        </div>
+
+        <p className="text-lg md:text-xl text-charcoal-400 mb-10 leading-relaxed font-light max-w-lg font-cute">
+          Premium peptide sets curated with love. Quality you can trust, prices you'll adore.
         </p>
 
         {/* Buttons */}
         <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
           <button
             onClick={onShopAll}
-            className="w-full sm:w-auto px-8 py-4 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-2 group"
-            style={{ background: 'linear-gradient(135deg, #F8BBD0, #C9B6E4)' }}
+            className="w-full sm:w-auto px-8 py-4 text-white font-semibold rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-2 group"
+            style={{ background: 'linear-gradient(135deg, #FFB6C8, #E8739B)' }}
           >
-            Explore Products
+            <Heart className="w-5 h-5" fill="currentColor" />
+            Shop Our Products
             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
           </button>
           <button
             onClick={onShopAll}
-            className="w-full sm:w-auto px-8 py-4 bg-transparent border-2 border-brand-300 text-brand-500 hover:bg-brand-50 font-semibold rounded-xl transition-all duration-300 flex items-center justify-center"
+            className="w-full sm:w-auto px-8 py-4 bg-transparent border-2 border-brand-300 text-brand-500 hover:bg-brand-50 font-semibold rounded-2xl transition-all duration-300 flex items-center justify-center gap-2"
           >
-            Learn More
+            <Sparkles className="w-5 h-5" />
+            View Sets
           </button>
         </div>
 
         {/* Trust Indicators */}
-        <div className="mt-14 flex flex-wrap justify-center gap-6 border-t border-charcoal-100 pt-8 w-full">
+        <div className="mt-14 flex flex-wrap justify-center gap-6 border-t border-brand-200 pt-8 w-full">
           {[
-            { icon: Shield, label: '99% Purity Guaranteed' },
-            { icon: FlaskConical, label: 'Lab Tested' },
-            { icon: Award, label: 'Premium Grade' },
+            { icon: Heart, label: 'Curated with Love' },
+            { icon: Sparkles, label: 'Premium Quality' },
+            { icon: Star, label: 'Trusted Reseller' },
           ].map((item, idx) => (
-            <div key={idx} className="flex items-center gap-2 text-sm font-medium text-charcoal-500">
-              <item.icon className="w-4 h-4 text-brand-400" />
+            <div key={idx} className="flex items-center gap-2 text-sm font-medium text-charcoal-400 font-cute">
+              <item.icon className="w-4 h-4 text-brand-400" fill={item.icon === Heart ? 'currentColor' : 'none'} />
               {item.label}
             </div>
           ))}

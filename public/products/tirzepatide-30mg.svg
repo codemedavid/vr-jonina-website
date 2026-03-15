@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FFF0F5"/>
+      <stop offset="100%" stop-color="#FFB6C8" stop-opacity="0.3"/>
+    </radialGradient>
+    <linearGradient id="vial" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FFB6C8"/>
+      <stop offset="100%" stop-color="#E8739B"/>
+    </linearGradient>
+    <linearGradient id="cap" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#D4568A"/>
+      <stop offset="100%" stop-color="#E8739B"/>
+    </linearGradient>
+  </defs>
+  <circle cx="150" cy="150" r="140" fill="url(#bg)"/>
+  <rect x="110" y="100" width="80" height="130" rx="12" fill="url(#vial)" stroke="#D4568A" stroke-width="2"/>
+  <rect x="130" y="75" width="40" height="30" rx="4" fill="#FFB6C8" stroke="#D4568A" stroke-width="2"/>
+  <rect x="125" y="65" width="50" height="18" rx="6" fill="url(#cap)"/>
+  <rect x="120" y="130" width="60" height="50" rx="6" fill="white" fill-opacity="0.85"/>
+  <text x="150" y="152" text-anchor="middle" font-family="Georgia, serif" font-size="16" font-weight="bold" fill="#4A3040">30mg</text>
+  <text x="150" y="170" text-anchor="middle" font-family="Georgia, serif" font-size="9" fill="#D4568A">Tirzepatide</text>
+  <ellipse cx="135" cy="68" rx="18" ry="10" fill="#FF85A2" opacity="0.85"/>
+  <ellipse cx="165" cy="68" rx="18" ry="10" fill="#FF85A2" opacity="0.85"/>
+  <circle cx="150" cy="68" r="5" fill="#D4568A"/>
+  <path d="M140 73 L130 90 L138 85" fill="#FF85A2" opacity="0.7"/>
+  <path d="M160 73 L170 90 L162 85" fill="#FF85A2" opacity="0.7"/>
+  <g fill="#E8739B" opacity="0.5">
+    <path d="M60 80 C60 75,67 75,67 80 C67 85,60 90,60 90 C60 90,53 85,53 80 C53 75,60 75,60 80Z" transform="scale(0.55) translate(65,55)"/>
+    <path d="M60 80 C60 75,67 75,67 80 C67 85,60 90,60 90 C60 90,53 85,53 80 C53 75,60 75,60 80Z" transform="scale(0.5) translate(415,85)"/>
+    <path d="M60 80 C60 75,67 75,67 80 C67 85,60 90,60 90 C60 90,53 85,53 80 C53 75,60 75,60 80Z" transform="scale(0.4) translate(120,440)"/>
+    <path d="M60 80 C60 75,67 75,67 80 C67 85,60 90,60 90 C60 90,53 85,53 80 C53 75,60 75,60 80Z" transform="scale(0.45) translate(460,430)"/>
+  </g>
+  <circle cx="82" cy="118" r="2" fill="#FFB6C8"/>
+  <circle cx="222" cy="108" r="2.5" fill="#E8739B" opacity="0.6"/>
+  <circle cx="88" cy="208" r="1.5" fill="#FF85A2" opacity="0.5"/>
+  <circle cx="218" cy="218" r="2" fill="#FFB6C8" opacity="0.7"/>
+  <text x="150" y="260" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#4A3040">Tirzepatide 30mg</text>
+</svg>

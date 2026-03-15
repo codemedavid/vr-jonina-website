@@ -59,7 +59,7 @@ export default function ArticleDetail() {
         return (
             <div className="min-h-screen bg-gray-50 flex items-center justify-center">
                 <div className="text-center">
-                    <h2 className="text-2xl font-bold text-navy-900 mb-4">Article Not Found</h2>
+                    <h2 className="text-2xl font-bold text-charcoal-900 mb-4">Article Not Found</h2>
                     <button
                         onClick={() => navigate('/peptalk')}
                         className="text-brand-400 hover:underline"
@@ -78,7 +78,7 @@ export default function ArticleDetail() {
                 <div className="container mx-auto px-4 py-4">
                     <button
                         onClick={() => navigate('/peptalk')}
-                        className="flex items-center gap-2 text-gray-600 hover:text-navy-900 transition-colors group"
+                        className="flex items-center gap-2 text-gray-600 hover:text-charcoal-900 transition-colors group"
                     >
                         <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
                         <span className="font-medium">Back to Peptalk</span>
@@ -103,7 +103,7 @@ export default function ArticleDetail() {
                 <article className="bg-white rounded-2xl shadow-lg overflow-hidden">
                     {/* Article Header */}
                     <div className="p-8 md:p-12 border-b border-gray-200">
-                        <h1 className="text-3xl md:text-4xl font-bold text-navy-900 mb-6 leading-tight">
+                        <h1 className="text-3xl md:text-4xl font-bold text-charcoal-900 mb-6 leading-tight">
                             {article.title}
                         </h1>
 
@@ -139,7 +139,7 @@ export default function ArticleDetail() {
                     <div className="mt-8 text-center">
                         <button
                             onClick={() => navigate('/peptalk')}
-                            className="inline-flex items-center gap-2 bg-navy-900 text-white px-6 py-3 rounded-lg font-medium hover:bg-navy-800 transition-colors shadow-md hover:shadow-lg"
+                            className="inline-flex items-center gap-2 bg-brand-700 text-white px-6 py-3 rounded-lg font-medium hover:bg-brand-800 transition-colors shadow-md hover:shadow-lg"
                         >
                             <ArrowLeft className="w-4 h-4" />
                             Back to Peptalk

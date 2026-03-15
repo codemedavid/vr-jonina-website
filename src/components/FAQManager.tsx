@@ -111,15 +111,15 @@ const FAQManager: React.FC<FAQManagerProps> = ({ onBack }) => {
                             <ArrowLeft className="w-6 h-6 text-gray-600" />
                         </button>
                     )}
-                    <HelpCircle className="w-6 h-6 text-navy-900" />
-                    <h2 className="text-xl font-bold text-navy-900">FAQ Management</h2>
+                    <HelpCircle className="w-6 h-6 text-charcoal-900" />
+                    <h2 className="text-xl font-bold text-charcoal-900">FAQ Management</h2>
                 </div>
                 <button
                     onClick={() => {
                         resetForm();
                         setIsAdding(true);
                     }}
-                    className="w-full md:w-auto flex items-center justify-center gap-2 bg-navy-900 text-white px-4 py-2 rounded-lg hover:bg-navy-800 transition-colors shadow-sm"
+                    className="w-full md:w-auto flex items-center justify-center gap-2 bg-brand-700 text-white px-4 py-2 rounded-lg hover:bg-brand-800 transition-colors shadow-sm"
                 >
                     <Plus className="w-4 h-4" />
                     Add FAQ
@@ -142,7 +142,7 @@ const FAQManager: React.FC<FAQManagerProps> = ({ onBack }) => {
                         <button
                             type="button"
                             onClick={saveFAQ}
-                            className="flex items-center gap-2 bg-navy-900 text-white px-3 py-1.5 rounded-lg hover:bg-navy-800 transition-colors text-sm shadow-sm"
+                            className="flex items-center gap-2 bg-brand-700 text-white px-3 py-1.5 rounded-lg hover:bg-brand-800 transition-colors text-sm shadow-sm"
                         >
                             <Save className="w-4 h-4" />
                             Save
@@ -211,7 +211,7 @@ const FAQManager: React.FC<FAQManagerProps> = ({ onBack }) => {
                                 id="is_active"
                                 checked={formData.is_active}
                                 onChange={(e) => setFormData({ ...formData, is_active: e.target.checked })}
-                                className="w-4 h-4 rounded border-gray-300 text-navy-900 focus:ring-navy-900"
+                                className="w-4 h-4 rounded border-gray-300 text-charcoal-900 focus:ring-navy-900"
                             />
                             <label htmlFor="is_active" className="text-sm text-gray-700">
                                 Active (visible on website)
@@ -220,7 +220,7 @@ const FAQManager: React.FC<FAQManagerProps> = ({ onBack }) => {
                         <div className="flex gap-3">
                             <button
                                 type="submit"
-                                className="flex items-center gap-2 bg-navy-900 text-white px-4 py-2 rounded-lg hover:bg-navy-800 transition-colors shadow-sm"
+                                className="flex items-center gap-2 bg-brand-700 text-white px-4 py-2 rounded-lg hover:bg-brand-800 transition-colors shadow-sm"
                             >
                                 <Save className="w-4 h-4" />
                                 {editingId ? 'Update FAQ' : 'Save FAQ'}
@@ -256,9 +256,9 @@ const FAQManager: React.FC<FAQManagerProps> = ({ onBack }) => {
                         return (
                             <div key={category}>
                                 {/* Section Header */}
-                                <div className="flex items-center gap-3 mb-8 px-5 py-4 rounded-lg border border-navy-900 bg-white shadow-sm w-full">
+                                <div className="flex items-center gap-3 mb-8 px-5 py-4 rounded-lg border border-brand-500 bg-white shadow-sm w-full">
                                     <HelpCircle className="w-6 h-6 text-gold-500" />
-                                    <h2 className="font-bold text-base md:text-lg uppercase tracking-wide text-navy-900">{category}</h2>
+                                    <h2 className="font-bold text-base md:text-lg uppercase tracking-wide text-charcoal-900">{category}</h2>
                                 </div>
 
                                 <div className="space-y-6">
@@ -277,7 +277,7 @@ const FAQManager: React.FC<FAQManagerProps> = ({ onBack }) => {
                                                             </span>
                                                         )}
                                                     </div>
-                                                    <h3 className="font-bold text-navy-900 text-lg md:text-xl leading-snug mb-3">
+                                                    <h3 className="font-bold text-charcoal-900 text-lg md:text-xl leading-snug mb-3">
                                                         {faq.question}
                                                     </h3>
                                                     <p className="text-gray-600 whitespace-pre-line leading-relaxed text-base md:text-lg">
@@ -302,7 +302,7 @@ const FAQManager: React.FC<FAQManagerProps> = ({ onBack }) => {
                                                     </button>
                                                     <button
                                                         onClick={() => handleEdit(faq)}
-                                                        className="p-2.5 text-navy-900 hover:bg-navy-50 rounded-lg transition-colors"
+                                                        className="p-2.5 text-charcoal-900 hover:bg-brand-50 rounded-lg transition-colors"
                                                         title="Edit FAQ"
                                                     >
                                                         <Edit2 className="w-5 h-5" />

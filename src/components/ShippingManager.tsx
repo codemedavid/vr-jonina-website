@@ -91,7 +91,7 @@ const ShippingManager: React.FC<ShippingManagerProps> = ({ onBack }) => {
                             >
                                 <span className="text-xs md:text-sm">← Dashboard</span>
                             </button>
-                            <h1 className="text-sm md:text-base font-bold text-navy-900 flex items-center gap-2">
+                            <h1 className="text-sm md:text-base font-bold text-charcoal-900 flex items-center gap-2">
                                 <MapPin className="w-4 h-4 text-gold-500" />
                                 Shipping Locations
                             </h1>

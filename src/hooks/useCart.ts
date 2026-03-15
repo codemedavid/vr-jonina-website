@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import type { CartItem, Product, ProductVariation } from '../types';
+import type { CartItem, Product, ProductVariation, KitType } from '../types';
+import { KIT_UPGRADE_PRICE } from '../types';
 
 export function useCart() {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
@@ -9,7 +10,13 @@ export function useCart() {
     const savedCart = localStorage.getItem('peptide_cart');
     if (savedCart) {
       try {
-        setCartItems(JSON.parse(savedCart));
+        const parsed = JSON.parse(savedCart);
+        // Migrate old cart items that don't have kitType
+        const migrated = parsed.map((item: CartItem) => ({
+          ...item,
+          kitType: item.kitType || 'vial_only',
+        }));
+        setCartItems(migrated);
       } catch (error) {
         console.error('Error loading cart from localStorage:', error);
       }
@@ -21,7 +28,7 @@ export function useCart() {
     localStorage.setItem('peptide_cart', JSON.stringify(cartItems));
   }, [cartItems]);
 
-  const addToCart = (product: Product, variation?: ProductVariation, quantity: number = 1) => {
+  const addToCart = (product: Product, variation?: ProductVariation, quantity: number = 1, kitType: KitType = 'vial_only') => {
     // Check stock availability
     const availableStock = variation ? variation.stock_quantity : product.stock_quantity;
 
@@ -30,14 +37,14 @@ export function useCart() {
       return;
     }
 
-    // Find existing item matching product and variation
+    // Find existing item matching product, variation, AND kitType
     const existingItemIndex = cartItems.findIndex(
       item => item.product.id === product.id &&
-        (variation ? item.variation?.id === variation.id : !item.variation)
+        (variation ? item.variation?.id === variation.id : !item.variation) &&
+        item.kitType === kitType
     );
 
     if (existingItemIndex > -1) {
-      // Update existing item - check if new total exceeds stock
       const currentQuantity = cartItems[existingItemIndex].quantity;
       const newQuantity = currentQuantity + quantity;
 
@@ -56,7 +63,6 @@ export function useCart() {
       updatedItems[existingItemIndex].quantity += quantity;
       setCartItems(updatedItems);
     } else {
-      // Add new item - check if quantity exceeds stock
       if (quantity > availableStock) {
         alert(`Only ${availableStock} item(s) available in stock. Added ${availableStock} to your cart.`);
         quantity = availableStock;
@@ -65,6 +71,7 @@ export function useCart() {
       const newItem: CartItem = {
         product,
         variation,
+        kitType,
         quantity
       };
       setCartItems([...cartItems, newItem]);
@@ -77,7 +84,6 @@ export function useCart() {
       return;
     }
 
-    // Check stock availability
     const item = cartItems[index];
     const availableStock = item.variation ? item.variation.stock_quantity : item.product.stock_quantity;
 
@@ -101,10 +107,17 @@ export function useCart() {
     localStorage.removeItem('peptide_cart');
   };
 
+  const getItemPrice = (item: CartItem) => {
+    const basePrice = item.variation
+      ? (item.variation.discount_active && item.variation.discount_price != null ? item.variation.discount_price : item.variation.price)
+      : (item.product.discount_active && item.product.discount_price != null ? item.product.discount_price : item.product.base_price);
+    const kitUpgrade = item.kitType === 'complete_kit' ? KIT_UPGRADE_PRICE : 0;
+    return basePrice + kitUpgrade;
+  };
+
   const getTotalPrice = () => {
     return cartItems.reduce((total, item) => {
-      const price = item.variation ? item.variation.price : (item.product.discount_active && item.product.discount_price ? item.product.discount_price : item.product.base_price);
-      return total + (price * item.quantity);
+      return total + (getItemPrice(item) * item.quantity);
     }, 0);
   };
 
@@ -119,6 +132,7 @@ export function useCart() {
     removeFromCart,
     clearCart,
     getTotalPrice,
-    getTotalItems
+    getTotalItems,
+    getItemPrice
   };
 }

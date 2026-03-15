@@ -2,12 +2,12 @@ import React, { useState, useRef } from 'react';
 import MenuItemCard from './MenuItemCard';
 import Hero from './Hero';
 import ProductDetailModal from './ProductDetailModal';
-import type { Product, ProductVariation, CartItem } from '../types';
-import { Search, Filter, Package } from 'lucide-react';
+import type { Product, ProductVariation, CartItem, KitType } from '../types';
+import { Search, Filter, Heart } from 'lucide-react';
 
 interface MenuProps {
   menuItems: Product[];
-  addToCart: (product: Product, variation?: ProductVariation, quantity?: number) => void;
+  addToCart: (product: Product, variation?: ProductVariation, quantity?: number, kitType?: KitType) => void;
   cartItems: CartItem[];
   updateQuantity: (index: number, quantity: number) => void;
 }
@@ -62,13 +62,13 @@ const Menu: React.FC<MenuProps> = ({ menuItems, addToCart, cartItems }) => {
         <ProductDetailModal
           product={selectedProduct}
           onClose={() => setSelectedProduct(null)}
-          onAddToCart={(product, variation, quantity) => {
-            addToCart(product, variation, quantity);
+          onAddToCart={(product, variation, quantity, kitType) => {
+            addToCart(product, variation, quantity, kitType);
           }}
         />
       )}
 
-      <div className="min-h-screen bg-theme-bg">
+      <div className="min-h-screen" style={{ background: 'linear-gradient(180deg, #FFFFFF 0%, #FFF5F7 50%, #FFF0F5 100%)' }}>
         <Hero
           onShopAll={() => {
             productsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -91,8 +91,8 @@ const Menu: React.FC<MenuProps> = ({ menuItems, addToCart, cartItems }) => {
             </div>
 
             {/* Sort Dropdown */}
-            <div className="flex items-center gap-3 sm:w-auto bg-white rounded-lg px-4 py-3 border border-gray-200">
-              <Filter className="text-gray-400 w-5 h-5" />
+            <div className="flex items-center gap-3 sm:w-auto bg-white rounded-2xl px-4 py-3 border border-brand-200">
+              <Filter className="text-brand-400 w-5 h-5" />
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as 'name' | 'price' | 'purity')}
@@ -107,8 +107,8 @@ const Menu: React.FC<MenuProps> = ({ menuItems, addToCart, cartItems }) => {
 
           {/* Results Count */}
           <div className="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <h2 className="text-3xl font-heading font-semibold text-charcoal-900 tracking-tight">Our Peptide Collection</h2>
-            <span className="text-sm font-medium text-gray-500 bg-gray-50 px-3 py-1 rounded-full border border-gray-100">
+            <h2 className="text-3xl font-heading font-semibold text-charcoal-900 tracking-tight">Our Products</h2>
+            <span className="text-sm font-medium text-brand-600 bg-brand-50 px-3 py-1 rounded-full border border-brand-200 font-cute">
               {sortedProducts.length} Results
             </span>
           </div>
@@ -116,12 +116,12 @@ const Menu: React.FC<MenuProps> = ({ menuItems, addToCart, cartItems }) => {
           {/* Products Grid */}
           {sortedProducts.length === 0 ? (
             <div className="text-center py-20">
-              <div className="bg-white rounded-lg shadow-sm p-12 max-w-md mx-auto border border-gray-100">
-                <div className="bg-gray-50 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <Package className="w-10 h-10 text-gray-300" />
+              <div className="bg-white rounded-2xl shadow-soft p-12 max-w-md mx-auto border border-brand-200">
+                <div className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6" style={{ background: 'linear-gradient(135deg, #FFF0F5, #FFE4EE)' }}>
+                  <Heart className="w-10 h-10 text-brand-300" fill="currentColor" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2">No products found</h3>
-                <p className="text-gray-500 mb-6">
+                <h3 className="text-xl font-bold text-charcoal-900 mb-2 font-cute">No products found</h3>
+                <p className="text-charcoal-400 mb-6 font-cute">
                   {searchQuery
                     ? `No products match "${searchQuery}".`
                     : 'No products available.'}

@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FFF0F5"/>
+      <stop offset="100%" stop-color="#FFB6C8" stop-opacity="0.3"/>
+    </radialGradient>
+    <linearGradient id="vial" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#F0B8D0"/>
+      <stop offset="100%" stop-color="#D4568A"/>
+    </linearGradient>
+    <linearGradient id="cap" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#B8407A"/>
+      <stop offset="100%" stop-color="#D4568A"/>
+    </linearGradient>
+  </defs>
+  <circle cx="150" cy="150" r="140" fill="url(#bg)"/>
+  <rect x="110" y="100" width="80" height="130" rx="12" fill="url(#vial)" stroke="#B8407A" stroke-width="2"/>
+  <rect x="130" y="75" width="40" height="30" rx="4" fill="#F0B8D0" stroke="#B8407A" stroke-width="2"/>
+  <rect x="125" y="65" width="50" height="18" rx="6" fill="url(#cap)"/>
+  <rect x="115" y="125" width="70" height="58" rx="6" fill="white" fill-opacity="0.85"/>
+  <text x="150" y="148" text-anchor="middle" font-family="Georgia, serif" font-size="14" font-weight="bold" fill="#4A3040">AOD+AA</text>
+  <text x="150" y="168" text-anchor="middle" font-family="Georgia, serif" font-size="9" fill="#B8407A">Set</text>
+  <ellipse cx="135" cy="68" rx="18" ry="10" fill="#FF85A2" opacity="0.85"/>
+  <ellipse cx="165" cy="68" rx="18" ry="10" fill="#FF85A2" opacity="0.85"/>
+  <circle cx="150" cy="68" r="5" fill="#B8407A"/>
+  <path d="M140 73 L130 90 L138 85" fill="#FF85A2" opacity="0.7"/>
+  <path d="M160 73 L170 90 L162 85" fill="#FF85A2" opacity="0.7"/>
+  <g fill="#D4568A" opacity="0.5">
+    <path d="M60 80 C60 75,67 75,67 80 C67 85,60 90,60 90 C60 90,53 85,53 80 C53 75,60 75,60 80Z" transform="scale(0.55) translate(65,52)"/>
+    <path d="M60 80 C60 75,67 75,67 80 C67 85,60 90,60 90 C60 90,53 85,53 80 C53 75,60 75,60 80Z" transform="scale(0.5) translate(418,88)"/>
+    <path d="M60 80 C60 75,67 75,67 80 C67 85,60 90,60 90 C60 90,53 85,53 80 C53 75,60 75,60 80Z" transform="scale(0.45) translate(102,432)"/>
+    <path d="M60 80 C60 75,67 75,67 80 C67 85,60 90,60 90 C60 90,53 85,53 80 C53 75,60 75,60 80Z" transform="scale(0.42) translate(478,442)"/>
+  </g>
+  <circle cx="76" cy="116" r="2" fill="#FFB6C8"/>
+  <circle cx="226" cy="104" r="2.5" fill="#E8739B" opacity="0.6"/>
+  <circle cx="86" cy="216" r="1.5" fill="#FF85A2" opacity="0.5"/>
+  <circle cx="216" cy="224" r="2" fill="#FFB6C8" opacity="0.7"/>
+  <text x="150" y="260" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#4A3040">AOD + AA Set</text>
+</svg>

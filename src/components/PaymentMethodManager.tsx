@@ -132,7 +132,7 @@ const PaymentMethodManager: React.FC<PaymentMethodManagerProps> = ({ onBack }) =
                   <ArrowLeft className="h-4 w-4 sm:h-5 sm:w-5" />
                   <span className="text-sm sm:text-base">Back</span>
                 </button>
-                <h1 className="text-lg sm:text-xl md:text-2xl font-bold text-navy-900">
+                <h1 className="text-lg sm:text-xl md:text-2xl font-bold text-charcoal-900">
                   {currentView === 'add' ? 'Add Payment Method' : 'Edit Payment Method'}
                 </h1>
               </div>

@@ -481,8 +481,8 @@ const AdminDashboard: React.FC = () => {
           <div className="text-center mb-6">
             <div className="mx-auto mb-4">
               <img
-                src="/logo.png"
-                alt="BIORICH"
+                src="/logo.svg"
+                alt="VR Jonina"
                 className="h-14 w-auto mx-auto object-contain"
               />
             </div>
@@ -547,7 +547,7 @@ const AdminDashboard: React.FC = () => {
                     <ArrowLeft className="h-4 w-4 group-hover:-translate-x-1 transition-transform" />
                     <span className="text-xs md:text-sm">Back</span>
                   </button>
-                  <h1 className="text-sm md:text-base font-bold text-navy-900">
+                  <h1 className="text-sm md:text-base font-bold text-charcoal-900">
                     {currentView === 'add' ? '✨ Add New' : '✏️ Edit Product'}
                   </h1>
                 </div>
@@ -944,7 +944,7 @@ const AdminDashboard: React.FC = () => {
                     <ArrowLeft className="h-4 w-4 group-hover:-translate-x-1 transition-transform" />
                     <span className="text-xs md:text-sm">Dashboard</span>
                   </button>
-                  <h1 className="text-sm md:text-base font-bold text-navy-900">Products</h1>
+                  <h1 className="text-sm md:text-base font-bold text-charcoal-900">Products</h1>
                 </div>
                 <div className="flex items-center gap-1.5">
                   <button
@@ -1380,8 +1380,8 @@ const AdminDashboard: React.FC = () => {
               <div className="flex items-center space-x-4">
                 <div className="h-10 flex items-center">
                   <img
-                    src="/logo.png"
-                    alt="BIORICH"
+                    src="/logo.svg"
+                    alt="VR Jonina"
                     className="h-10 w-auto object-contain"
                   />
                 </div>
@@ -1507,10 +1507,10 @@ const AdminDashboard: React.FC = () => {
                   className="group flex items-center gap-3 p-3 text-left hover:bg-gray-50 rounded-xl transition-all border border-transparent hover:border-gray-200"
                 >
                   <div className="w-10 h-10 rounded-lg bg-emerald-50 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                    <Package className="h-5 w-5 text-emerald-600" />
+                    <Package className="h-5 w-5 text-brand-600" />
                   </div>
                   <div>
-                    <span className="block text-sm font-semibold text-gray-900 group-hover:text-emerald-600 transition-colors">Manage Products</span>
+                    <span className="block text-sm font-semibold text-gray-900 group-hover:text-brand-600 transition-colors">Manage Products</span>
                     <span className="text-xs text-gray-500">Edit existing items</span>
                   </div>
                 </button>

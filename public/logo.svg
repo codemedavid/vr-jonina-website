@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 120" width="400" height="120">
+  <defs>
+    <linearGradient id="heartGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FF85A2"/>
+      <stop offset="100%" style="stop-color:#E8739B"/>
+    </linearGradient>
+    <linearGradient id="ribbonGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFB6C8"/>
+      <stop offset="100%" style="stop-color:#FF85A2"/>
+    </linearGradient>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&amp;display=swap');
+    </style>
+  </defs>
+
+  <!-- Background pill shape -->
+  <rect x="0" y="0" width="400" height="120" rx="24" fill="#FFF0F5"/>
+
+  <!-- Small decorative hearts -->
+  <path d="M30 18 C30 14, 36 14, 36 18 C36 22, 30 26, 30 26 C30 26, 24 22, 24 18 C24 14, 30 14, 30 18Z" fill="#FFB6C8" opacity="0.5"/>
+  <path d="M375 95 C375 92, 379 92, 379 95 C379 98, 375 100, 375 100 C375 100, 371 98, 371 95 C371 92, 375 92, 375 95Z" fill="#FFB6C8" opacity="0.4"/>
+  <path d="M365 20 C365 17, 369 17, 369 20 C369 23, 365 25, 365 25 C365 25, 361 23, 361 20 C361 17, 365 17, 365 20Z" fill="#FFCDD8" opacity="0.35"/>
+
+  <!-- Main Heart Icon -->
+  <g transform="translate(45, 30)">
+    <path d="M25 45 C25 45, 0 30, 0 15 C0 5, 8 0, 15 0 C20 0, 25 5, 25 10 C25 5, 30 0, 35 0 C42 0, 50 5, 50 15 C50 30, 25 45, 25 45Z" fill="url(#heartGrad)"/>
+    <!-- Heart shine -->
+    <ellipse cx="15" cy="14" rx="6" ry="8" fill="white" opacity="0.25" transform="rotate(-20, 15, 14)"/>
+  </g>
+
+  <!-- Ribbon bow on heart -->
+  <g transform="translate(45, 25)">
+    <path d="M25 8 Q15 0 10 6 Q7 10 18 9 Z" fill="url(#ribbonGrad)" opacity="0.9"/>
+    <path d="M25 8 Q35 0 40 6 Q43 10 32 9 Z" fill="url(#ribbonGrad)" opacity="0.8"/>
+    <circle cx="25" cy="8" r="2.5" fill="#D4568A"/>
+    <!-- Ribbon tails -->
+    <path d="M20 10 Q25 18 22 22" stroke="#FFB6C8" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <path d="M30 10 Q25 18 28 22" stroke="#FF9BB4" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+  </g>
+
+  <!-- Brand Text: VR -->
+  <text x="110" y="78" font-family="'Playfair Display', Georgia, serif" font-weight="700" font-size="48" fill="#4A3040" letter-spacing="-1">VR</text>
+
+  <!-- Brand Text: Jonina -->
+  <text x="175" y="78" font-family="'Playfair Display', Georgia, serif" font-weight="600" font-size="48" fill="#E8739B" letter-spacing="-0.5">Jonina</text>
+
+  <!-- Decorative dots/sparkles -->
+  <circle cx="350" cy="55" r="2" fill="#FFB6C8" opacity="0.6"/>
+  <circle cx="358" cy="48" r="1.5" fill="#FF85A2" opacity="0.5"/>
+  <circle cx="355" cy="63" r="1" fill="#FFCDD8" opacity="0.5"/>
+
+  <!-- Bottom ribbon accent line -->
+  <rect x="110" y="88" width="240" height="2" rx="1" fill="url(#ribbonGrad)" opacity="0.4"/>
+</svg>

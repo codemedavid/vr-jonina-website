@@ -43,7 +43,7 @@ function MainApp() {
         : menuItems.filter(item => item.category === selectedCategory);
 
     return (
-        <div className="min-h-screen bg-white font-inter flex flex-col">
+        <div className="min-h-screen font-cute flex flex-col" style={{ background: 'linear-gradient(180deg, #FFF5F7, #FFFAFC)' }}>
             <Header
                 cartItemsCount={cart.getTotalItems()}
                 onCartClick={() => handleViewChange('cart')}
