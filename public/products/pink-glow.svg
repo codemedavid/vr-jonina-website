@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FFF0F5"/>
+      <stop offset="100%" stop-color="#FF85A2"/>
+    </radialGradient>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FF69B4" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#FF69B4" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <circle cx="150" cy="150" r="140" fill="url(#bg)" stroke="#D4568A" stroke-width="2"/>
+  <!-- Ribbon Bow - more magenta -->
+  <g transform="translate(150,38)">
+    <ellipse cx="-18" cy="0" rx="18" ry="10" fill="#FF69B4" opacity="0.9"/>
+    <ellipse cx="18" cy="0" rx="18" ry="10" fill="#FF69B4" opacity="0.9"/>
+    <circle cx="0" cy="0" r="5" fill="#D4568A"/>
+    <path d="M-8,10 Q0,28 8,10" fill="#FF69B4" opacity="0.8"/>
+    <path d="M-6,10 Q0,24 6,10" fill="#D4568A" opacity="0.5"/>
+  </g>
+  <!-- Glow effect behind bottle -->
+  <circle cx="150" cy="148" r="50" fill="url(#glow)"/>
+  <!-- Elegant Bottle with pink/magenta accent -->
+  <g transform="translate(150,152)">
+    <rect x="-8" y="-65" width="16" height="22" rx="4" fill="white" stroke="#D4568A" stroke-width="1.5"/>
+    <rect x="-12" y="-78" width="24" height="15" rx="5" fill="#D4568A"/>
+    <rect x="-10" y="-80" width="20" height="4" rx="2" fill="#C2185B"/>
+    <path d="M-8,-43 Q-30,-35 -30,-5 Q-30,30 -22,40 Q-15,48 0,48 Q15,48 22,40 Q30,30 30,-5 Q30,-35 8,-43 Z" fill="white" stroke="#D4568A" stroke-width="2"/>
+    <!-- Magenta-pink liquid fill -->
+    <path d="M-26,0 Q-28,28 -20,37 Q-14,43 0,43 Q14,43 20,37 Q28,28 26,0 Z" fill="#FF69B4" opacity="0.35"/>
+    <rect x="-20" y="-25" width="40" height="26" rx="4" fill="#FFF0F5" stroke="#FF69B4" stroke-width="1"/>
+    <line x1="-14" y1="-14" x2="14" y2="-14" stroke="#FF69B4" stroke-width="1"/>
+    <line x1="-14" y1="-5" x2="10" y2="-5" stroke="#FF69B4" stroke-width="1"/>
+    <!-- Sparkle dots -->
+    <circle cx="-15" cy="15" r="2" fill="white" opacity="0.7"/>
+    <circle cx="10" cy="20" r="1.5" fill="white" opacity="0.6"/>
+    <circle cx="-5" cy="25" r="1" fill="white" opacity="0.5"/>
+  </g>
+  <!-- Floating Hearts - more magenta -->
+  <g fill="#FF69B4" opacity="0.6">
+    <path d="M60,70 C60,64 52,58 52,64 C52,58 44,64 44,70 C44,78 52,84 52,84 C52,84 60,78 60,70Z" transform="scale(0.5) translate(55,65)"/>
+    <path d="M60,70 C60,64 52,58 52,64 C52,58 44,64 44,70 C44,78 52,84 52,84 C52,84 60,78 60,70Z" transform="scale(0.44) translate(500,130)"/>
+    <path d="M60,70 C60,64 52,58 52,64 C52,58 44,64 44,70 C44,78 52,84 52,84 C52,84 60,78 60,70Z" transform="scale(0.38) translate(140,440)"/>
+    <path d="M60,70 C60,64 52,58 52,64 C52,58 44,64 44,70 C44,78 52,84 52,84 C52,84 60,78 60,70Z" transform="scale(0.34) translate(575,395)"/>
+  </g>
+  <text x="150" y="252" text-anchor="middle" font-family="Georgia, serif" font-size="22" font-weight="bold" fill="#4A3040">Pink Glow</text>
+</svg>

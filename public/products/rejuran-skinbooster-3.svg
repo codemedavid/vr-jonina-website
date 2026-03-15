@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FFF0F5"/>
+      <stop offset="100%" stop-color="#FFB6C8"/>
+    </radialGradient>
+  </defs>
+  <circle cx="150" cy="150" r="140" fill="url(#bg)" stroke="#E8739B" stroke-width="2"/>
+  <!-- Ribbon Bow -->
+  <g transform="translate(150,38)">
+    <ellipse cx="-18" cy="0" rx="18" ry="10" fill="#FF85A2" opacity="0.9"/>
+    <ellipse cx="18" cy="0" rx="18" ry="10" fill="#FF85A2" opacity="0.9"/>
+    <circle cx="0" cy="0" r="5" fill="#D4568A"/>
+    <path d="M-8,10 Q0,28 8,10" fill="#FF85A2" opacity="0.8"/>
+    <path d="M-6,10 Q0,24 6,10" fill="#D4568A" opacity="0.5"/>
+  </g>
+  <!-- Three small vials/ampoules -->
+  <!-- Vial 1 -->
+  <g transform="translate(105,152) scale(0.75)">
+    <rect x="-8" y="-65" width="16" height="20" rx="4" fill="white" stroke="#E8739B" stroke-width="1.5"/>
+    <rect x="-10" y="-75" width="20" height="12" rx="4" fill="#E8739B"/>
+    <path d="M-8,-45 Q-24,-38 -24,-10 Q-24,18 -18,26 Q-12,32 0,32 Q12,32 18,26 Q24,18 24,-10 Q24,-38 8,-45 Z" fill="white" stroke="#E8739B" stroke-width="1.5"/>
+    <path d="M-20,0 Q-22,18 -16,24 Q-11,30 0,30 Q11,30 16,24 Q22,18 20,0 Z" fill="#FFB6C8" opacity="0.35"/>
+  </g>
+  <!-- Vial 2 -->
+  <g transform="translate(150,145) scale(0.75)">
+    <rect x="-8" y="-65" width="16" height="20" rx="4" fill="white" stroke="#E8739B" stroke-width="1.5"/>
+    <rect x="-10" y="-75" width="20" height="12" rx="4" fill="#E8739B"/>
+    <path d="M-8,-45 Q-24,-38 -24,-10 Q-24,18 -18,26 Q-12,32 0,32 Q12,32 18,26 Q24,18 24,-10 Q24,-38 8,-45 Z" fill="white" stroke="#E8739B" stroke-width="1.5"/>
+    <path d="M-20,0 Q-22,18 -16,24 Q-11,30 0,30 Q11,30 16,24 Q22,18 20,0 Z" fill="#FFB6C8" opacity="0.35"/>
+  </g>
+  <!-- Vial 3 -->
+  <g transform="translate(195,152) scale(0.75)">
+    <rect x="-8" y="-65" width="16" height="20" rx="4" fill="white" stroke="#E8739B" stroke-width="1.5"/>
+    <rect x="-10" y="-75" width="20" height="12" rx="4" fill="#E8739B"/>
+    <path d="M-8,-45 Q-24,-38 -24,-10 Q-24,18 -18,26 Q-12,32 0,32 Q12,32 18,26 Q24,18 24,-10 Q24,-38 8,-45 Z" fill="white" stroke="#E8739B" stroke-width="1.5"/>
+    <path d="M-20,0 Q-22,18 -16,24 Q-11,30 0,30 Q11,30 16,24 Q22,18 20,0 Z" fill="#FFB6C8" opacity="0.35"/>
+  </g>
+  <!-- Floating Hearts -->
+  <g fill="#E8739B" opacity="0.55">
+    <path d="M60,70 C60,64 52,58 52,64 C52,58 44,64 44,70 C44,78 52,84 52,84 C52,84 60,78 60,70Z" transform="scale(0.45) translate(60,70)"/>
+    <path d="M60,70 C60,64 52,58 52,64 C52,58 44,64 44,70 C44,78 52,84 52,84 C52,84 60,78 60,70Z" transform="scale(0.4) translate(520,130)"/>
+    <path d="M60,70 C60,64 52,58 52,64 C52,58 44,64 44,70 C44,78 52,84 52,84 C52,84 60,78 60,70Z" transform="scale(0.35) translate(160,470)"/>
+  </g>
+  <text x="150" y="248" text-anchor="middle" font-family="Georgia, serif" font-size="22" font-weight="bold" fill="#4A3040">Rejuran</text>
+  <text x="150" y="270" text-anchor="middle" font-family="Georgia, serif" font-size="16" fill="#D4568A">3 Vials</text>
+</svg>

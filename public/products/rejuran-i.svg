@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FFF0F5"/>
+      <stop offset="100%" stop-color="#FFB6C8"/>
+    </radialGradient>
+  </defs>
+  <circle cx="150" cy="150" r="140" fill="url(#bg)" stroke="#E8739B" stroke-width="2"/>
+  <!-- Ribbon Bow -->
+  <g transform="translate(150,38)">
+    <ellipse cx="-18" cy="0" rx="18" ry="10" fill="#FF85A2" opacity="0.9"/>
+    <ellipse cx="18" cy="0" rx="18" ry="10" fill="#FF85A2" opacity="0.9"/>
+    <circle cx="0" cy="0" r="5" fill="#D4568A"/>
+    <path d="M-8,10 Q0,28 8,10" fill="#FF85A2" opacity="0.8"/>
+    <path d="M-6,10 Q0,24 6,10" fill="#D4568A" opacity="0.5"/>
+  </g>
+  <!-- Elegant Bottle -->
+  <g transform="translate(150,152)">
+    <rect x="-8" y="-65" width="16" height="22" rx="4" fill="white" stroke="#E8739B" stroke-width="1.5"/>
+    <rect x="-12" y="-78" width="24" height="15" rx="5" fill="#E8739B"/>
+    <rect x="-10" y="-80" width="20" height="4" rx="2" fill="#D4568A"/>
+    <path d="M-8,-43 Q-30,-35 -30,-5 Q-30,30 -22,40 Q-15,48 0,48 Q15,48 22,40 Q30,30 30,-5 Q30,-35 8,-43 Z" fill="white" stroke="#E8739B" stroke-width="2"/>
+    <path d="M-26,5 Q-28,30 -20,38 Q-14,44 0,44 Q14,44 20,38 Q28,30 26,5 Z" fill="#FFB6C8" opacity="0.35"/>
+    <rect x="-20" y="-25" width="40" height="26" rx="4" fill="#FFF0F5" stroke="#FFB6C8" stroke-width="1"/>
+    <line x1="-14" y1="-14" x2="14" y2="-14" stroke="#FFB6C8" stroke-width="1"/>
+    <line x1="-14" y1="-5" x2="10" y2="-5" stroke="#FFB6C8" stroke-width="1"/>
+  </g>
+  <!-- Floating Hearts -->
+  <g fill="#E8739B" opacity="0.55">
+    <path d="M60,70 C60,64 52,58 52,64 C52,58 44,64 44,70 C44,78 52,84 52,84 C52,84 60,78 60,70Z" transform="scale(0.46) translate(72,78)"/>
+    <path d="M60,70 C60,64 52,58 52,64 C52,58 44,64 44,70 C44,78 52,84 52,84 C52,84 60,78 60,70Z" transform="scale(0.4) translate(505,140)"/>
+    <path d="M60,70 C60,64 52,58 52,64 C52,58 44,64 44,70 C44,78 52,84 52,84 C52,84 60,78 60,70Z" transform="scale(0.37) translate(145,445)"/>
+  </g>
+  <text x="150" y="248" text-anchor="middle" font-family="Georgia, serif" font-size="22" font-weight="bold" fill="#4A3040">Rejuran</text>
+  <text x="150" y="270" text-anchor="middle" font-family="Georgia, serif" font-size="16" fill="#D4568A">I</text>
+</svg>

@@ -38,7 +38,7 @@ const FAQ: React.FC = () => {
         : faqs;
 
     const viberUrl = 'viber://chat?number=%2B639989747336';
-    const whatsappUrl = 'https://wa.me/639989747336';
+    const whatsappUrl = 'https://wa.me/639058429200';
 
     if (loading) {
         return (

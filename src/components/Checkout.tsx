@@ -358,7 +358,7 @@ ${paymentMethod?.name || 'N/A'}
 ${paymentProofUrl ? 'Screenshot attached to order.' : 'Pending'}
 
 📱 CONTACT METHOD
-WhatsApp (+63 927 487 6549)
+WhatsApp (+63 905 842 9200)
 
 📋 ORDER NUMBER: ${customOrderNumber}
 
@@ -380,7 +380,7 @@ Please confirm this order. Thank you!
 
             // Auto-open WhatsApp with pre-filled order details
             setTimeout(() => {
-                const whatsappUrl = `https://wa.me/639274876549?text=${encodeURIComponent(orderDetails)}`;
+                const whatsappUrl = `https://wa.me/639058429200?text=${encodeURIComponent(orderDetails)}`;
                 window.open(whatsappUrl, '_blank');
             }, 1500);
         } catch (error) {
@@ -402,7 +402,7 @@ Please confirm this order. Thank you!
     };
 
     const handleOpenContact = () => {
-        const contactUrl = `https://wa.me/639274876549?text=${encodeURIComponent(orderMessage)}`;
+        const contactUrl = `https://wa.me/639058429200?text=${encodeURIComponent(orderMessage)}`;
         window.open(contactUrl, '_blank');
     };
 
@@ -480,7 +480,7 @@ Please confirm this order. Thank you!
                             </button>
 
                             <p className="text-sm text-gray-500">
-                                If WhatsApp doesn't open automatically, please send the copied message to <span className="font-bold">+63 927 487 6549 on WhatsApp</span>
+                                If WhatsApp doesn't open automatically, please send the copied message to <span className="font-bold">+63 905 842 9200 on WhatsApp</span>
                             </p>
                         </div>
 

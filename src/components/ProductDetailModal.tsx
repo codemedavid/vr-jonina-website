@@ -26,9 +26,13 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product, onClos
   const hasDiscount = product.discount_active && product.discount_price;
   const isSetProduct = product.inclusions && product.inclusions.length > 0;
 
+  // If variation is a "Kit (10 Vials)" type, it's already a kit - no toggle needed
+  const isKitVariation = selectedVariation?.name?.toLowerCase().includes('kit');
+  const showKitToggle = isSetProduct && !isKitVariation;
+
   const calculatePrice = () => {
     const base = selectedVariation ? selectedVariation.price : product.base_price;
-    const kitUpgrade = kitType === 'complete_kit' ? KIT_UPGRADE_PRICE : 0;
+    const kitUpgrade = (kitType === 'complete_kit' && !isKitVariation) ? KIT_UPGRADE_PRICE : 0;
     return base + kitUpgrade;
   }
 
@@ -43,7 +47,9 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product, onClos
   const decrementQuantity = () => setQuantity(prev => prev > 1 ? prev - 1 : 1);
 
   const handleAddToCart = () => {
-    onAddToCart(product, selectedVariation, quantity, kitType);
+    // Kit variations are always 'vial_only' (no +₱150 since they're already a kit)
+    const effectiveKitType = isKitVariation ? 'vial_only' : kitType;
+    onAddToCart(product, selectedVariation, quantity, effectiveKitType);
     onClose();
   };
 
@@ -172,7 +178,7 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product, onClos
                     <>
                       <div className="flex items-center justify-center gap-2 mb-1">
                         <span className="text-base sm:text-lg md:text-xl lg:text-2xl text-charcoal-300 line-through font-medium">
-                          ₱{(product.base_price + (kitType === 'complete_kit' ? KIT_UPGRADE_PRICE : 0)).toLocaleString('en-PH', { minimumFractionDigits: 0 })}
+                          ₱{(product.base_price + (kitType === 'complete_kit' && !isKitVariation ? KIT_UPGRADE_PRICE : 0)).toLocaleString('en-PH', { minimumFractionDigits: 0 })}
                         </span>
                         <span className="text-xs sm:text-sm font-bold text-brand-600 bg-brand-50 px-2 py-1 rounded-full">
                           {Math.round((1 - product.discount_price! / product.base_price) * 100)}% OFF
@@ -189,8 +195,8 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product, onClos
                   )}
                 </div>
 
-                {/* Kit Type Selection */}
-                {isSetProduct && (
+                {/* Kit Type Selection - hidden when Kit variation is selected */}
+                {showKitToggle && (
                   <div className="mb-3 sm:mb-4">
                     <label className="block text-xs sm:text-sm font-bold text-charcoal-700 mb-1.5 sm:mb-2 uppercase tracking-wide font-cute">
                       Choose Option
@@ -311,9 +317,14 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product, onClos
                       ₱{(currentPrice * quantity).toLocaleString('en-PH', { minimumFractionDigits: 0 })}
                     </span>
                   </div>
-                  {kitType === 'complete_kit' && (
+                  {kitType === 'complete_kit' && !isKitVariation && (
                     <div className="text-[10px] text-brand-600 text-right mt-1 font-cute">
                       Includes complete kit (+₱{KIT_UPGRADE_PRICE}/item)
+                    </div>
+                  )}
+                  {isKitVariation && (
+                    <div className="text-[10px] text-brand-600 text-right mt-1 font-cute">
+                      Kit (10 Vials) — complete package
                     </div>
                   )}
                 </div>

@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FFF0F5"/>
+      <stop offset="100%" stop-color="#FFB6C8"/>
+    </radialGradient>
+  </defs>
+  <circle cx="150" cy="150" r="140" fill="url(#bg)" stroke="#E8739B" stroke-width="2"/>
+  <!-- Ribbon Bow -->
+  <g transform="translate(150,38)">
+    <ellipse cx="-18" cy="0" rx="18" ry="10" fill="#FF85A2" opacity="0.9"/>
+    <ellipse cx="18" cy="0" rx="18" ry="10" fill="#FF85A2" opacity="0.9"/>
+    <circle cx="0" cy="0" r="5" fill="#D4568A"/>
+    <path d="M-8,10 Q0,28 8,10" fill="#FF85A2" opacity="0.8"/>
+    <path d="M-6,10 Q0,24 6,10" fill="#D4568A" opacity="0.5"/>
+  </g>
+  <!-- Vial shape -->
+  <g transform="translate(150,155)">
+    <!-- Vial body -->
+    <rect x="-24" y="-45" width="48" height="75" rx="8" fill="white" stroke="#E8739B" stroke-width="2"/>
+    <!-- Vial cap -->
+    <rect x="-16" y="-60" width="32" height="18" rx="4" fill="#E8739B"/>
+    <rect x="-12" y="-64" width="24" height="6" rx="3" fill="#D4568A"/>
+    <!-- Label area -->
+    <rect x="-20" y="-30" width="40" height="45" rx="4" fill="#FFF0F5" stroke="#FFB6C8" stroke-width="1"/>
+    <!-- Label lines -->
+    <line x1="-14" y1="-18" x2="14" y2="-18" stroke="#FFB6C8" stroke-width="1"/>
+    <line x1="-14" y1="-8" x2="14" y2="-8" stroke="#FFB6C8" stroke-width="1"/>
+    <line x1="-14" y1="2" x2="8" y2="2" stroke="#FFB6C8" stroke-width="1"/>
+    <!-- Liquid fill -->
+    <rect x="-20" y="10" width="40" height="16" rx="3" fill="#FFB6C8" opacity="0.4"/>
+  </g>
+  <!-- Floating Hearts -->
+  <g fill="#E8739B" opacity="0.6">
+    <path d="M60,70 C60,64 52,58 52,64 C52,58 44,64 44,70 C44,78 52,84 52,84 C52,84 60,78 60,70Z" transform="scale(0.5) translate(55,65)"/>
+    <path d="M60,70 C60,64 52,58 52,64 C52,58 44,64 44,70 C44,78 52,84 52,84 C52,84 60,78 60,70Z" transform="scale(0.45) translate(490,130)"/>
+    <path d="M60,70 C60,64 52,58 52,64 C52,58 44,64 44,70 C44,78 52,84 52,84 C52,84 60,78 60,70Z" transform="scale(0.4) translate(130,430)"/>
+  </g>
+  <text x="150" y="252" text-anchor="middle" font-family="Georgia, serif" font-size="22" font-weight="bold" fill="#4A3040">Botulax</text>
+  <text x="150" y="274" text-anchor="middle" font-family="Georgia, serif" font-size="16" fill="#D4568A">100u</text>
+</svg>

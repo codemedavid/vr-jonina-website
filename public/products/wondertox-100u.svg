@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FFF0F5"/>
+      <stop offset="100%" stop-color="#FFB6C8"/>
+    </radialGradient>
+  </defs>
+  <!-- Background -->
+  <circle cx="150" cy="150" r="140" fill="url(#bg)" stroke="#E8739B" stroke-width="2"/>
+  <!-- Ribbon Bow -->
+  <g transform="translate(150,38)">
+    <ellipse cx="-18" cy="0" rx="18" ry="10" fill="#FF85A2" opacity="0.9"/>
+    <ellipse cx="18" cy="0" rx="18" ry="10" fill="#FF85A2" opacity="0.9"/>
+    <circle cx="0" cy="0" r="5" fill="#D4568A"/>
+    <path d="M-8,10 Q0,28 8,10" fill="#FF85A2" opacity="0.8"/>
+    <path d="M-6,10 Q0,24 6,10" fill="#D4568A" opacity="0.5"/>
+  </g>
+  <!-- Syringe Body -->
+  <g transform="translate(150,158)">
+    <!-- Barrel -->
+    <rect x="-18" y="-60" width="36" height="90" rx="6" fill="white" stroke="#E8739B" stroke-width="2"/>
+    <!-- Measurement lines -->
+    <line x1="-12" y1="-40" x2="-4" y2="-40" stroke="#FFB6C8" stroke-width="1.5"/>
+    <line x1="-12" y1="-25" x2="-4" y2="-25" stroke="#FFB6C8" stroke-width="1.5"/>
+    <line x1="-12" y1="-10" x2="-4" y2="-10" stroke="#FFB6C8" stroke-width="1.5"/>
+    <line x1="-12" y1="5" x2="-4" y2="5" stroke="#FFB6C8" stroke-width="1.5"/>
+    <!-- Liquid fill -->
+    <rect x="-14" y="-5" width="28" height="30" rx="3" fill="#FFB6C8" opacity="0.5"/>
+    <!-- Plunger top -->
+    <rect x="-22" y="30" width="44" height="8" rx="3" fill="#E8739B"/>
+    <rect x="-4" y="38" width="8" height="20" rx="2" fill="#E8739B"/>
+    <!-- Needle -->
+    <rect x="-2" y="-80" width="4" height="22" rx="1" fill="#D4568A"/>
+    <polygon points="-2,-80 2,-80 0,-88" fill="#D4568A"/>
+    <!-- Cap ring -->
+    <rect x="-20" y="-62" width="40" height="5" rx="2" fill="#E8739B" opacity="0.7"/>
+  </g>
+  <!-- Floating Hearts -->
+  <g fill="#E8739B" opacity="0.6">
+    <path d="M60,70 C60,64 52,58 52,64 C52,58 44,64 44,70 C44,78 52,84 52,84 C52,84 60,78 60,70Z" transform="scale(0.5) translate(60,60)"/>
+    <path d="M60,70 C60,64 52,58 52,64 C52,58 44,64 44,70 C44,78 52,84 52,84 C52,84 60,78 60,70Z" transform="scale(0.45) translate(500,120)"/>
+    <path d="M60,70 C60,64 52,58 52,64 C52,58 44,64 44,70 C44,78 52,84 52,84 C52,84 60,78 60,70Z" transform="scale(0.4) translate(120,420)"/>
+    <path d="M60,70 C60,64 52,58 52,64 C52,58 44,64 44,70 C44,78 52,84 52,84 C52,84 60,78 60,70Z" transform="scale(0.35) translate(580,400)"/>
+  </g>
+  <!-- Product Name -->
+  <text x="150" y="248" text-anchor="middle" font-family="Georgia, serif" font-size="22" font-weight="bold" fill="#4A3040">Wondertox</text>
+  <text x="150" y="270" text-anchor="middle" font-family="Georgia, serif" font-size="16" fill="#D4568A">100u</text>
+</svg>

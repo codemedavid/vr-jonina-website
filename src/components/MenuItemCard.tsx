@@ -34,7 +34,9 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({
         : product.base_price;
   })();
 
-  const currentPrice = basePrice + (kitType === 'complete_kit' ? KIT_UPGRADE_PRICE : 0);
+  // Don't add kit upgrade price if variation is already a kit
+  const isSelectedKitVariation = selectedVariation?.name?.toLowerCase().includes('kit');
+  const currentPrice = basePrice + (kitType === 'complete_kit' && !isSelectedKitVariation ? KIT_UPGRADE_PRICE : 0);
 
   // Check if there's an active discount
   const hasDiscount = selectedVariation
@@ -42,7 +44,7 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({
     : (product.discount_active && product.discount_price !== null);
 
   // Get original price for strikethrough
-  const originalPrice = (selectedVariation ? selectedVariation.price : product.base_price) + (kitType === 'complete_kit' ? KIT_UPGRADE_PRICE : 0);
+  const originalPrice = (selectedVariation ? selectedVariation.price : product.base_price) + (kitType === 'complete_kit' && !isSelectedKitVariation ? KIT_UPGRADE_PRICE : 0);
 
   // Check if product has any available stock
   const hasAnyStock = product.variations && product.variations.length > 0
@@ -51,6 +53,12 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({
 
   // Check if this is an individual/accessory item (no kit option)
   const isSetProduct = product.inclusions && product.inclusions.length > 0;
+
+  // If variation is a "Kit (10 Vials)" type, it's already a kit - no toggle needed
+  const isKitVariation = selectedVariation?.name?.toLowerCase().includes('kit');
+
+  // Show kit toggle only for set products where the selected variation is NOT already a kit
+  const showKitToggle = isSetProduct && !isKitVariation;
 
   return (
     <div className="card h-full flex flex-col group relative">
@@ -148,8 +156,8 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({
           )}
         </div>
 
-        {/* Kit Type Toggle - Only for set products */}
-        {isSetProduct && (
+        {/* Kit Type Toggle - Only for set products with single vial selected */}
+        {showKitToggle && (
           <div className="mb-2 sm:mb-3 relative z-20">
             <div className="flex rounded-full border border-brand-200 overflow-hidden text-[10px] sm:text-xs font-medium">
               <button
@@ -208,7 +216,9 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({
                   return;
                 }
 
-                onAddToCart?.(product, selectedVariation, 1, kitType);
+                // Kit variations are always 'vial_only' (no +₱150 since they're already a kit)
+                const effectiveKitType = selectedVariation?.name?.toLowerCase().includes('kit') ? 'vial_only' : kitType;
+                onAddToCart?.(product, selectedVariation, 1, effectiveKitType);
               }}
               disabled={!product.available || !hasAnyStock}
               className={`w-full py-2.5 sm:py-3 text-[11px] sm:text-sm flex items-center justify-center gap-2 font-semibold transition-all rounded-2xl
