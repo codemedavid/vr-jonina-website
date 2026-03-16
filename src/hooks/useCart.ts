@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import posthog from 'posthog-js';
 import type { CartItem, Product, ProductVariation, KitType } from '../types';
 import { KIT_UPGRADE_PRICE } from '../types';
 
@@ -44,6 +45,13 @@ export function useCart() {
         item.kitType === kitType
     );
 
+    // Calculate the actual price the customer pays (respecting discounts and kit upgrades)
+    const basePrice = variation
+      ? (variation.discount_active && variation.discount_price != null ? variation.discount_price : variation.price)
+      : (product.discount_active && product.discount_price != null ? product.discount_price : product.base_price);
+    const kitUpgrade = kitType === 'complete_kit' ? KIT_UPGRADE_PRICE : 0;
+    const actualPrice = basePrice + kitUpgrade;
+
     if (existingItemIndex > -1) {
       const currentQuantity = cartItems[existingItemIndex].quantity;
       const newQuantity = currentQuantity + quantity;
@@ -62,6 +70,14 @@ export function useCart() {
       const updatedItems = [...cartItems];
       updatedItems[existingItemIndex].quantity += quantity;
       setCartItems(updatedItems);
+      posthog.capture('vrjonina_add_to_cart', {
+        product_name: product.name,
+        product_id: product.id,
+        variation: variation?.name,
+        quantity,
+        price: actualPrice,
+        kit_type: kitType,
+      });
     } else {
       if (quantity > availableStock) {
         alert(`Only ${availableStock} item(s) available in stock. Added ${availableStock} to your cart.`);
@@ -75,6 +91,14 @@ export function useCart() {
         quantity
       };
       setCartItems([...cartItems, newItem]);
+      posthog.capture('vrjonina_add_to_cart', {
+        product_name: product.name,
+        product_id: product.id,
+        variation: variation?.name,
+        quantity,
+        price: actualPrice,
+        kit_type: kitType,
+      });
     }
   };
 

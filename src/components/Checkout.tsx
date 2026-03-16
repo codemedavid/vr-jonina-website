@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { ArrowLeft, ShieldCheck, Package, CreditCard, Heart, Copy, Check, MessageCircle, Tag, Upload, Database, Lock, Truck } from 'lucide-react';
+import posthog from 'posthog-js';
 import type { CartItem } from '../types';
+import { KIT_UPGRADE_PRICE } from '../types';
 import { usePaymentMethods } from '../hooks/usePaymentMethods';
 import { useShippingLocations } from '../hooks/useShippingLocations';
 import { useCouriers } from '../hooks/useCouriers';
@@ -35,7 +37,7 @@ const Checkout: React.FC<CheckoutProps> = ({ cartItems, totalPrice, onBack }) =>
 
     // Payment
     const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('');
-    const [contactMethod, setContactMethod] = useState<'viber' | 'whatsapp' | ''>('viber');
+    const [contactMethod, setContactMethod] = useState<'whatsapp'>('whatsapp');
     const [notes, setNotes] = useState('');
 
     const [orderMessage, setOrderMessage] = useState<string>('');
@@ -162,13 +164,29 @@ const Checkout: React.FC<CheckoutProps> = ({ cartItems, totalPrice, onBack }) =>
         city.trim() !== '' &&
         state.trim() !== '' &&
         zipCode.trim() !== '' &&
-        state.trim() !== '' &&
-        zipCode.trim() !== '' &&
         selectedCourierId !== '' &&
         shippingLocation !== '';
 
     const handleProceedToPayment = () => {
         if (isDetailsValid) {
+            // Reset before identify to prevent cross-customer identity merging
+            posthog.reset();
+            posthog.identify(email, {
+                $email: email,
+                name: fullName,
+                phone: phone,
+                city: city,
+                state: state,
+            });
+            posthog.capture('vrjonina_checkout_started', {
+                total_price: totalPrice,
+                item_count: cartItems.reduce((sum, item) => sum + item.quantity, 0),
+                items: cartItems.map(item => ({
+                    product_name: item.product.name,
+                    variation: item.variation?.name,
+                    quantity: item.quantity,
+                })),
+            });
             setStep('payment');
         }
     };
@@ -176,7 +194,7 @@ const Checkout: React.FC<CheckoutProps> = ({ cartItems, totalPrice, onBack }) =>
 
     const handlePlaceOrder = async () => {
         if (!contactMethod) {
-            alert('Please select your preferred contact method (Facebook or Viber).');
+            alert('Please select your preferred contact method.');
             return;
         }
 
@@ -193,6 +211,13 @@ const Checkout: React.FC<CheckoutProps> = ({ cartItems, totalPrice, onBack }) =>
         const paymentMethod = paymentMethods.find(pm => pm.id === selectedPaymentMethod);
 
         try {
+            // Identify customer early so PostHog has time to process before capture
+            posthog.identify(email, {
+                $email: email,
+                name: fullName,
+                phone: phone,
+            });
+
             // 1. Upload Payment Proof First
             let paymentProofUrl = null;
             if (paymentProof) {
@@ -212,8 +237,12 @@ const Checkout: React.FC<CheckoutProps> = ({ cartItems, totalPrice, onBack }) =>
                     ? (item.variation.discount_active && item.variation.discount_price !== null && item.variation.discount_price < basePrice)
                     : (item.product.discount_active && item.product.discount_price !== null && item.product.discount_price < item.product.base_price);
                 if (isDiscounted) {
-                    currentPrice = item.variation?.discount_price || item.product.discount_price || basePrice;
+                    currentPrice = item.variation?.discount_price ?? item.product.discount_price ?? basePrice;
                 }
+
+                // Include kit upgrade price for complete_kit items
+                const kitUpgrade = item.kitType === 'complete_kit' ? KIT_UPGRADE_PRICE : 0;
+                currentPrice += kitUpgrade;
 
                 return {
                     product_id: item.product.id,
@@ -223,13 +252,14 @@ const Checkout: React.FC<CheckoutProps> = ({ cartItems, totalPrice, onBack }) =>
                     quantity: item.quantity,
                     price: currentPrice,
                     total: currentPrice * item.quantity,
+                    kit_type: item.kitType || 'vial_only',
                     purity_percentage: item.product.purity_percentage
                 };
             });
 
             // Generate order number before saving
             const randomDigits = Math.floor(Math.random() * 9000 + 1000); // 1000-9999
-            const customOrderNumber = `BRC-${randomDigits}`;
+            const customOrderNumber = `VRJ-${randomDigits}`;
 
             // Save order to database
             const { data: orderData, error: orderError } = await supabase
@@ -244,7 +274,7 @@ const Checkout: React.FC<CheckoutProps> = ({ cartItems, totalPrice, onBack }) =>
                     shipping_state: state,
                     shipping_zip_code: zipCode,
                     order_items: orderItems,
-                    total_price: Math.max(0, totalPrice - discountAmount), // Store subtotal minus discount (not including shipping)
+                    total_price: finalTotal, // Subtotal + shipping - discount
                     shipping_fee: shippingFee,
                     courier_id: selectedCourierId || null,
                     shipping_location: shippingLocation,
@@ -291,6 +321,38 @@ const Checkout: React.FC<CheckoutProps> = ({ cartItems, totalPrice, onBack }) =>
 
             console.log('✅ Order saved to database:', orderData);
 
+            // Build items summary from saved order data (source of truth)
+            const savedItems = orderData.order_items as Array<{ product_name: string; variation_name: string | null; quantity: number; price: number; total: number }>;
+            const itemsSummary = savedItems.map(item => {
+                const name = item.variation_name
+                    ? `${item.product_name} (${item.variation_name})`
+                    : item.product_name;
+                return `${name} x${item.quantity} - P${item.total.toLocaleString('en-PH', { minimumFractionDigits: 0 })}`;
+            }).join('\n');
+
+            // Calculate subtotal from saved order items
+            const savedSubtotal = savedItems.reduce((sum, item) => sum + item.total, 0);
+
+            // Build all event properties first
+            const eventProps = {
+                customer_name: fullName,
+                order_number: String(orderData.order_number),
+                total_price: String(orderData.total_price),
+                subtotal: String(savedSubtotal),
+                shipping_fee: String(orderData.shipping_fee || 0),
+                discount: String(orderData.discount_applied || 0),
+                payment_method: String(orderData.payment_method_name || 'N/A'),
+                contact_method: String(orderData.contact_method || 'N/A'),
+                promo_code: String(orderData.promo_code || 'None'),
+                item_count: savedItems.length,
+                items_summary: itemsSummary,
+            };
+
+            console.log('📧 PostHog event properties:', JSON.stringify(eventProps, null, 2));
+
+            // Track order placed event for PostHog email workflows
+            posthog.capture('vrjonina_order_placed', eventProps);
+
             setOrderNumber(customOrderNumber);
 
             // Get current date and time
@@ -324,29 +386,15 @@ ${city}, ${state} ${zipCode}
 Courier: ${couriers.find(c => c.id === selectedCourierId)?.name || 'N/A'}
 
 🛒 ORDER DETAILS
-${cartItems.map(item => {
-                let line = `• ${item.product.name}`;
-                if (item.variation) {
-                    line += ` (${item.variation.name})`;
-                }
-                const basePrice = item.variation ? item.variation.price : item.product.base_price;
-                let currentPrice = basePrice;
-                const isDiscounted = item.variation
-                    ? (item.variation.discount_active && item.variation.discount_price !== null && item.variation.discount_price < basePrice)
-                    : (item.product.discount_active && item.product.discount_price !== null && item.product.discount_price < item.product.base_price);
-                if (isDiscounted) {
-                    currentPrice = item.variation?.discount_price || item.product.discount_price || basePrice;
-                }
-
-                line += ` x${item.quantity} - ₱${(currentPrice * item.quantity).toLocaleString('en-PH', { minimumFractionDigits: 0 })}`;
-                if (item.product.purity_percentage && item.product.purity_percentage > 0) {
-                    line += `\n  Purity: ${item.product.purity_percentage}%`;
-                }
-                return line;
+${savedItems.map(item => {
+                const name = item.variation_name
+                    ? `• ${item.product_name} (${item.variation_name})`
+                    : `• ${item.product_name}`;
+                return `${name} x${item.quantity} - ₱${item.total.toLocaleString('en-PH', { minimumFractionDigits: 0 })}`;
             }).join('\n\n')}
 
 💰 PRICING
-Product Total: ₱${totalPrice.toLocaleString('en-PH', { minimumFractionDigits: 0 })}
+Product Total: ₱${savedSubtotal.toLocaleString('en-PH', { minimumFractionDigits: 0 })}
 Shipping Fee: ₱${shippingFee.toLocaleString('en-PH', { minimumFractionDigits: 0 })} (${shippingLocation.replace('_', ' & ')})
 ${discountAmount > 0 ? `Discount (${appliedPromo?.code}): -₱${discountAmount.toLocaleString('en-PH', { minimumFractionDigits: 0 })}\n` : ''}Grand Total: ₱${finalTotal.toLocaleString('en-PH', { minimumFractionDigits: 0 })}
 
@@ -677,6 +725,8 @@ Please confirm this order. Thank you!
                                         if (isDiscounted) {
                                             currentPrice = item.variation?.discount_price || item.product.discount_price || basePrice;
                                         }
+                                        const kitUpgrade = item.kitType === 'complete_kit' ? KIT_UPGRADE_PRICE : 0;
+                                        currentPrice += kitUpgrade;
 
                                         return (
                                             <div key={idx} className="flex justify-between text-sm">
@@ -865,42 +915,16 @@ Please confirm this order. Thank you!
                             </div>
                         </div>
 
-                        {/* Contact Method Selection */}
+                        {/* Contact Method */}
                         <div className="bg-white rounded-2xl shadow-soft p-6 border border-brand-100">
                             <h2 className="font-heading text-lg font-bold text-charcoal-900 mb-3 flex items-center gap-2">
                                 <MessageCircle className="w-5 h-5 text-brand-600" />
-                                Contact Method *
+                                Contact Method
                             </h2>
                             <p className="text-xs text-gray-500 mb-4">
-                                Choose how you'd like to send your order details after checkout.
+                                Your order details will be sent via WhatsApp after checkout.
                             </p>
-                            {/* Viber */}
-                            <button
-                                type="button"
-                                onClick={() => setContactMethod('viber')}
-                                className={`p-4 rounded border transition-all flex items-center gap-3 ${contactMethod === 'viber'
-                                    ? 'border-brand-600 bg-brand-50 ring-1 ring-brand-600'
-                                    : 'border-gray-200 hover:border-brand-300'
-                                    }`}
-                            >
-                                <svg className="w-6 h-6 text-purple-600" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M21.624 19.344C20.618 20.35 18.257 21.018 17.653 21.119C16.921 21.238 16.331 21.229 15.776 21.161C14.075 20.957 11.836 20.065 9.421 17.652C7.008 15.236 6.115 12.997 5.912 11.296C5.844 10.741 5.834 10.151 5.953 9.419C6.054 8.815 6.722 6.453 7.728 5.447C8.016 5.16 8.441 5.152 8.74 5.433C9.098 5.769 9.873 6.643 10.233 7.072C10.518 7.411 10.518 7.904 10.247 8.249C9.972 8.6 9.497 9.062 9.165 9.387C9.049 9.501 8.981 9.658 9.04 9.813C9.28 10.439 10.057 12.164 11.889 13.996C13.722 15.828 15.447 16.604 16.073 16.844C16.228 16.904 16.386 16.836 16.499 16.719C16.825 16.388 17.286 15.912 17.638 15.637C17.982 15.366 18.475 15.367 18.814 15.652C19.243 16.012 20.117 16.787 20.453 17.145C20.733 17.444 20.726 17.869 20.439 18.156L21.624 19.344Z" />
-                                </svg>
-                                <div className="text-left">
-                                    <p className="font-bold text-charcoal-900 text-sm">Viber</p>
-                                    <p className="text-xs text-gray-500">0949 613 3242</p>
-                                </div>
-                            </button>
-
-                            {/* WhatsApp */}
-                            <button
-                                type="button"
-                                onClick={() => setContactMethod('whatsapp')}
-                                className={`p-4 rounded border transition-all flex items-center gap-3 ${contactMethod === 'whatsapp'
-                                    ? 'border-brand-600 bg-brand-50 ring-1 ring-brand-600'
-                                    : 'border-gray-200 hover:border-brand-300'
-                                    }`}
-                            >
+                            <div className="p-4 rounded border border-brand-600 bg-brand-50 ring-1 ring-brand-600 flex items-center gap-3">
                                 <div className="w-6 h-6 flex items-center justify-center bg-green-500 rounded-full text-white">
                                     <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
                                         <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
@@ -908,9 +932,9 @@ Please confirm this order. Thank you!
                                 </div>
                                 <div className="text-left">
                                     <p className="font-bold text-charcoal-900 text-sm">WhatsApp</p>
-                                    <p className="text-xs text-gray-500">0949 613 3242</p>
+                                    <p className="text-xs text-gray-500">0905 842 9200</p>
                                 </div>
-                            </button>
+                            </div>
                         </div>
                     </div>
 

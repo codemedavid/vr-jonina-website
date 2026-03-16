@@ -61,16 +61,16 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({
   const showKitToggle = isSetProduct && !isKitVariation;
 
   return (
-    <div className="card h-full flex flex-col group relative">
+    <div className="card !p-0 h-full flex flex-col group relative overflow-hidden">
       {/* Click overlay for product details */}
       <div
         onClick={() => onProductClick?.(product)}
-        className="absolute inset-x-0 top-0 h-28 sm:h-44 z-10 cursor-pointer"
+        className="absolute inset-x-0 top-0 h-24 sm:h-44 z-10 cursor-pointer"
         title="View details"
       />
 
       {/* Product Image */}
-      <div className="relative h-28 sm:h-44 overflow-hidden border-b border-brand-100" style={{ background: 'linear-gradient(135deg, #FFF0F5, #FFE4EE)' }}>
+      <div className="relative h-24 sm:h-44 overflow-hidden border-b border-brand-100" style={{ background: 'linear-gradient(135deg, #FFF0F5, #FFE4EE)' }}>
         {product.image_url && !imageError ? (
           <img
             src={product.image_url}
@@ -109,16 +109,16 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({
       </div>
 
       {/* Product Details */}
-      <div className="p-4 sm:p-5 flex-1 flex flex-col">
-        <h3 className="font-heading font-semibold text-charcoal-900 text-sm sm:text-base mb-1 line-clamp-2 tracking-tight">
+      <div className="p-2.5 sm:p-5 flex-1 flex flex-col">
+        <h3 className="font-heading font-semibold text-charcoal-900 text-xs sm:text-base mb-0.5 sm:mb-1 line-clamp-1 sm:line-clamp-2 tracking-tight">
           {product.name}
         </h3>
-        <p className="text-[10px] sm:text-xs text-charcoal-400 mb-2 sm:mb-3 line-clamp-2 min-h-[1.5rem] sm:min-h-[2.5rem] leading-relaxed font-cute">
+        <p className="text-[9px] sm:text-xs text-charcoal-400 mb-1.5 sm:mb-3 line-clamp-1 sm:line-clamp-2 min-h-[1rem] sm:min-h-[2.5rem] leading-relaxed font-cute">
           {product.description}
         </p>
 
         {/* Variations (Sizes) */}
-        <div className="mb-2 sm:mb-3 min-h-[1.5rem] sm:min-h-[2rem]">
+        <div className="mb-1.5 sm:mb-3 min-h-[1.25rem] sm:min-h-[2rem]">
           {product.variations && product.variations.length > 0 && (
             <div className="flex flex-wrap gap-1 sm:gap-2">
               {product.variations.slice(0, 2).map((variation) => {
@@ -158,7 +158,7 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({
 
         {/* Kit Type Toggle - Only for set products with single vial selected */}
         {showKitToggle && (
-          <div className="mb-2 sm:mb-3 relative z-20">
+          <div className="mb-1.5 sm:mb-3 relative z-20">
             <div className="flex rounded-full border border-brand-200 overflow-hidden text-[10px] sm:text-xs font-medium">
               <button
                 onClick={(e) => { e.stopPropagation(); setKitType('vial_only'); }}
@@ -187,25 +187,25 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({
         <div className="flex-1" />
 
         {/* Price and Cart Actions */}
-        <div className="flex flex-col gap-2 sm:gap-3 mt-auto">
+        <div className="flex flex-col gap-1.5 sm:gap-3 mt-auto">
           {hasDiscount ? (
             <div className="flex items-baseline gap-1 sm:gap-2">
-              <span className="text-base sm:text-lg font-semibold text-charcoal-900">
+              <span className="text-sm sm:text-lg font-semibold text-charcoal-900">
                 ₱{currentPrice.toLocaleString('en-PH', { minimumFractionDigits: 0 })}
               </span>
-              <span className="text-[10px] sm:text-xs text-charcoal-300 line-through">
+              <span className="text-[9px] sm:text-xs text-charcoal-300 line-through">
                 ₱{originalPrice.toLocaleString('en-PH', { minimumFractionDigits: 0 })}
               </span>
             </div>
           ) : (
             <div className="flex items-baseline">
-              <span className="text-base sm:text-lg font-semibold text-charcoal-900">
+              <span className="text-sm sm:text-lg font-semibold text-charcoal-900">
                 ₱{currentPrice.toLocaleString('en-PH', { minimumFractionDigits: 0 })}
               </span>
             </div>
           )}
 
-          <div className="flex w-full pt-2">
+          <div className="flex w-full">
             <button
               onClick={(e) => {
                 e.stopPropagation();
@@ -221,13 +221,13 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({
                 onAddToCart?.(product, selectedVariation, 1, effectiveKitType);
               }}
               disabled={!product.available || !hasAnyStock}
-              className={`w-full py-2.5 sm:py-3 text-[11px] sm:text-sm flex items-center justify-center gap-2 font-semibold transition-all rounded-2xl
+              className={`w-full py-2 sm:py-3 text-[10px] sm:text-sm flex items-center justify-center gap-1.5 sm:gap-2 font-semibold transition-all rounded-xl sm:rounded-2xl
                 ${(!product.available || !hasAnyStock)
                   ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
                   : 'btn-primary'}
               `}
             >
-              <Heart className="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="currentColor" />
+              <Heart className="w-3 h-3 sm:w-4 sm:h-4" fill="currentColor" />
               <span>Add to Cart</span>
             </button>
           </div>

@@ -61,6 +61,53 @@ const OrdersManager: React.FC<OrdersManagerProps> = ({ onBack }) => {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const { refreshProducts } = useMenu();
 
+  // Fire a PostHog event for order status changes
+  // Uses PostHog API directly to send as the customer (not the admin)
+  const trackOrderStatus = async (order: Order, newStatus: string) => {
+    const shippingFee = order.shipping_fee || 0;
+    const discount = order.discount_applied || 0;
+    const total = order.total_price;
+    const subtotal = total - shippingFee + discount;
+
+    const itemsSummary = order.order_items.map(item => {
+      const name = item.variation_name
+        ? `${item.product_name} (${item.variation_name})`
+        : item.product_name;
+      return `${name} x${item.quantity} - P${(item.total || item.price * item.quantity).toLocaleString('en-PH', { minimumFractionDigits: 0 })}`;
+    }).join('\n');
+
+    // Send directly via PostHog API so the event is attributed to the customer
+    // (not the admin's browser identity)
+    try {
+      await fetch(`${import.meta.env.VITE_POSTHOG_HOST || 'https://us.i.posthog.com'}/capture/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          api_key: import.meta.env.VITE_POSTHOG_KEY,
+          event: `vrjonina_order_${newStatus}`,
+          distinct_id: order.customer_email,
+          properties: {
+            customer_name: String(order.customer_name),
+            order_number: String(order.order_number || order.id),
+            total_price: String(total),
+            subtotal: String(subtotal),
+            shipping_fee: String(shippingFee),
+            discount: String(discount),
+            payment_method: String(order.payment_method_name || 'N/A'),
+            contact_method: String(order.contact_method || 'N/A'),
+            promo_code: String(order.promo_code || 'None'),
+            item_count: order.order_items.length,
+            items_summary: itemsSummary,
+            tracking_number: String(order.tracking_number || ''),
+            shipping_provider: String(order.shipping_provider || ''),
+          },
+        }),
+      });
+    } catch (err) {
+      console.error('Failed to send PostHog event:', err);
+    }
+  };
+
   useEffect(() => {
     loadOrders();
   }, []);
@@ -194,6 +241,9 @@ const OrdersManager: React.FC<OrdersManagerProps> = ({ onBack }) => {
 
       if (updateError) throw updateError;
 
+      // Track order confirmed event
+      trackOrderStatus(order, 'confirmed');
+
       // Refresh orders and products
       await loadOrders();
       await refreshProducts();
@@ -224,6 +274,13 @@ const OrdersManager: React.FC<OrdersManagerProps> = ({ onBack }) => {
         .eq('id', orderId);
 
       if (error) throw error;
+
+      // Fire PostHog event for every status change
+      const order = orders.find(o => o.id === orderId);
+      if (order) {
+        trackOrderStatus(order, newStatus);
+      }
+
       await loadOrders();
       if (selectedOrder?.id === orderId) {
         setSelectedOrder({ ...selectedOrder, order_status: newStatus });
@@ -849,54 +906,39 @@ const OrderDetailsView: React.FC<OrderDetailsViewProps> = ({
             </div>
           )}
 
-          {/* Status Update Buttons */}
-          {order.order_status !== 'new' && order.order_status !== 'cancelled' && order.order_status !== 'delivered' && (
-            <div className="border-t-2 border-gray-200 pt-3 md:pt-4">
-              <h3 className="font-bold text-gray-900 mb-2 md:mb-3 text-sm md:text-base">Update Status</h3>
-              <div className="flex flex-wrap gap-2">
-                {order.order_status === 'confirmed' && (
-                  <button
-                    onClick={() => onUpdateStatus(order.id, 'processing')}
-                    disabled={isProcessing}
-                    className="px-3 md:px-4 py-1.5 md:py-2 bg-gradient-to-r from-gray-800 to-black hover:from-gray-900 hover:to-black text-white rounded-lg transition-colors disabled:opacity-50 text-xs md:text-sm font-medium shadow-md hover:shadow-lg border border-brand-500/20"
-                  >
-                    Mark as Processing
-                  </button>
-                )}
-                {order.order_status === 'processing' && (
-                  <button
-                    onClick={() => onUpdateStatus(order.id, 'shipped')}
-                    disabled={isProcessing}
-                    className="px-3 md:px-4 py-1.5 md:py-2 bg-gradient-to-r from-gray-800 to-black hover:from-gray-900 hover:to-black text-white rounded-lg transition-colors disabled:opacity-50 text-xs md:text-sm font-medium shadow-md hover:shadow-lg border border-brand-500/20"
-                  >
-                    Mark as Shipped
-                  </button>
-                )}
-                {order.order_status === 'shipped' && (
-                  <button
-                    onClick={() => onUpdateStatus(order.id, 'delivered')}
-                    disabled={isProcessing}
-                    className="px-3 md:px-4 py-1.5 md:py-2 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white rounded-lg transition-colors disabled:opacity-50 text-xs md:text-sm font-medium shadow-md hover:shadow-lg"
-                  >
-                    Mark as Delivered
-                  </button>
-                )}
-                {(order.order_status === 'new' || order.order_status === 'confirmed' || order.order_status === 'processing') && (
-                  <button
-                    onClick={() => {
-                      if (confirm('Are you sure you want to cancel this order?')) {
-                        onUpdateStatus(order.id, 'cancelled');
-                      }
-                    }}
-                    disabled={isProcessing}
-                    className="px-3 md:px-4 py-1.5 md:py-2 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white rounded-lg transition-colors disabled:opacity-50 text-xs md:text-sm font-medium shadow-md hover:shadow-lg"
-                  >
-                    Cancel Order
-                  </button>
-                )}
-              </div>
+          {/* Status Update Dropdown */}
+          <div className="border-t-2 border-gray-200 pt-3 md:pt-4">
+            <h3 className="font-bold text-gray-900 mb-2 md:mb-3 text-sm md:text-base">Update Order Status</h3>
+            <div className="flex flex-col sm:flex-row gap-2 sm:items-center">
+              <select
+                value={order.order_status}
+                onChange={(e) => {
+                  const newStatus = e.target.value;
+                  if (newStatus === order.order_status) return;
+                  const label = newStatus.charAt(0).toUpperCase() + newStatus.slice(1);
+                  if (newStatus === 'cancelled') {
+                    if (confirm('Are you sure you want to cancel this order?')) {
+                      onUpdateStatus(order.id, newStatus);
+                    }
+                  } else if (confirm(`Change order status to "${label}"?`)) {
+                    onUpdateStatus(order.id, newStatus);
+                  }
+                }}
+                disabled={isProcessing}
+                className="px-3 md:px-4 py-2 md:py-2.5 border-2 border-gray-300 rounded-lg focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-gold-500/20 text-sm md:text-base font-medium text-black bg-white disabled:opacity-50 cursor-pointer"
+              >
+                <option value="new">New</option>
+                <option value="confirmed">Confirmed</option>
+                <option value="processing">Processing</option>
+                <option value="shipped">Shipped</option>
+                <option value="delivered">Delivered</option>
+                <option value="cancelled">Cancelled</option>
+              </select>
+              <span className="text-xs text-gray-500">
+                Current: <span className="font-semibold capitalize">{order.order_status}</span>
+              </span>
             </div>
-          )}
+          </div>
         </div>
       </div>
     </div>

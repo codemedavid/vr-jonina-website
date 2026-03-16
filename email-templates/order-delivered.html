@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order Delivered</title>
+  <style>
+    @media only screen and (max-width: 480px) {
+      .container { width: 100% !important; padding: 12px !important; }
+    }
+  </style>
+</head>
+<body style="margin: 0; padding: 0; background-color: #ffffff; font-family: Arial, Helvetica, sans-serif;">
+
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+    <tr>
+      <td align="center" style="padding: 20px 12px;">
+        <table role="presentation" class="container" width="520" cellpadding="0" cellspacing="0">
+
+          <tr>
+            <td style="padding: 0 0 20px;">
+              <p style="margin: 0; font-size: 18px; font-weight: 700; color: #333;">VR <span style="color: #E8739B;">Jonina</span></p>
+            </td>
+          </tr>
+
+          <tr>
+            <td style="padding: 0 0 14px;">
+              <p style="margin: 0; font-size: 15px; color: #333; line-height: 1.7;">Hi {{ event.properties.customer_name }},</p>
+              <p style="margin: 14px 0 0; font-size: 15px; color: #333; line-height: 1.7;">Your order has been delivered! We hope you love your products.</p>
+            </td>
+          </tr>
+
+          <tr>
+            <td style="padding: 14px 0;">
+              <p style="margin: 0; font-size: 15px; color: #333; line-height: 1.7;"><strong>Order Number:</strong> {{ event.properties.order_number }}</p>
+            </td>
+          </tr>
+
+          <tr><td style="padding: 4px 0;"><div style="height: 1px; background-color: #eee;"></div></td></tr>
+
+          <tr>
+            <td style="padding: 14px 0;">
+              <p style="margin: 0 0 8px; font-size: 15px; font-weight: 700; color: #333;">Items Delivered</p>
+              <p style="margin: 0; font-size: 14px; color: #555; line-height: 1.8; white-space: pre-line;">{{ event.properties.items_summary }}</p>
+            </td>
+          </tr>
+
+          <tr><td style="padding: 4px 0;"><div style="height: 1px; background-color: #eee;"></div></td></tr>
+
+          <tr>
+            <td style="padding: 14px 0;">
+              <p style="margin: 0 0 8px; font-size: 15px; font-weight: 700; color: #333;">Payment Summary</p>
+              <p style="margin: 0; font-size: 14px; color: #555; line-height: 1.8;">
+                Subtotal: P{{ event.properties.subtotal }}<br>
+                Shipping Fee: P{{ event.properties.shipping_fee }}<br>
+                Discount: -P{{ event.properties.discount }}<br>
+                <strong style="color: #333;">Total: P{{ event.properties.total_price }}</strong>
+              </p>
+            </td>
+          </tr>
+
+          <tr><td style="padding: 4px 0;"><div style="height: 1px; background-color: #eee;"></div></td></tr>
+
+          <tr>
+            <td style="padding: 14px 0;">
+              <p style="margin: 0 0 8px; font-size: 15px; font-weight: 700; color: #333;">We'd love your feedback!</p>
+              <p style="margin: 0; font-size: 14px; color: #555; line-height: 1.8;">
+                If you're happy with your order, we'd really appreciate it if you could share your experience with us. Your feedback helps us serve you better!
+              </p>
+            </td>
+          </tr>
+
+          <tr>
+            <td style="padding: 14px 0;">
+              <p style="margin: 0; font-size: 14px; color: #555; line-height: 1.7;">
+                Have any concerns? Message us on <a href="https://wa.me/639058429200" style="color: #E8739B; text-decoration: none;">WhatsApp</a>.
+              </p>
+            </td>
+          </tr>
+
+          <tr>
+            <td style="padding: 14px 0 0;">
+              <p style="margin: 0; font-size: 15px; color: #333; line-height: 1.7;">
+                Thank you,<br>
+                VR Jonina Team
+              </p>
+            </td>
+          </tr>
+
+          <tr><td style="padding: 12px 0;"><div style="height: 1px; background-color: #eee;"></div></td></tr>
+
+          <tr>
+            <td style="padding: 0 0 8px;">
+              <p style="margin: 0; font-size: 12px; color: #aaa;">VR Jonina - vrjonina.com</p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

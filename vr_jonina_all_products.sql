@@ -176,9 +176,12 @@ INSERT INTO products (id, name, description, category, base_price, purity_percen
 INSERT INTO products (id, name, description, category, base_price, purity_percentage, stock_quantity, available, featured, image_url, storage_conditions, inclusions) VALUES
   ('b0b00001-0001-4000-8000-000000000016', 'Lemon Bottle', 'Lemon Bottle — fat dissolver for targeted body contouring and slimming.', 'a0a00001-0001-4000-8000-000000000003', 999, 99, 100, true, false, '/products/lemon-bottle.svg', 'Store at room temperature', NULL);
 
--- Aqualyx (On-Hand only, with QR code)
+-- Aqualyx (with QR code) - Retail & Wholesale pricing
 INSERT INTO products (id, name, description, category, base_price, purity_percentage, stock_quantity, available, featured, image_url, storage_conditions, inclusions) VALUES
-  ('c0c00001-0001-4000-8000-000000000016', 'Aqualyx (with QR code)', 'Aqualyx — premium fat dissolver with authentic QR code verification. On-Hand only.', 'a0a00001-0001-4000-8000-000000000003', 3010, 99, 50, true, false, '/products/aqualyx.svg', 'Store at room temperature', NULL);
+  ('c0c00001-0001-4000-8000-000000000016', 'Aqualyx (with QR code)', 'Aqualyx — premium fat dissolver with authentic QR code verification. Retail (1-4 boxes) or Wholesale (5+ boxes) pricing available.', 'a0a00001-0001-4000-8000-000000000003', 2200, 99, 50, true, false, '/products/aqualyx.svg', 'Store at room temperature', NULL);
+INSERT INTO product_variations (id, product_id, name, quantity_mg, price, stock_quantity) VALUES
+  ('e0e00001-0001-4000-8000-000000000005', 'c0c00001-0001-4000-8000-000000000016', 'Retail (1-4 boxes)', 0, 2200, 50),
+  ('e0e00001-0001-4000-8000-000000000006', 'c0c00001-0001-4000-8000-000000000016', 'Wholesale (5+ boxes)', 0, 2000, 50);
 
 
 -- =============================================

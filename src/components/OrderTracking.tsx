@@ -42,22 +42,16 @@ const OrderTracking: React.FC = () => {
             const { data, error } = await supabase
                 .rpc('get_order_details', {
                     order_id_input: orderId.trim()
-                })
-                .single();
+                });
 
             if (error) {
-                // If no rows returned by function, it usually returns a different error or null data depending on setup,
-                // but .single() will throw if 0 rows.
-                if (error.code === 'PGRST116') {
-                    setError('Order not found. Please check your Order ID and try again.');
-                } else {
-                    throw error;
-                }
-            } else if (data) {
-                // RPC returns the row directly when using single()
-                setOrder(data as TrackingOrder);
+                throw error;
+            }
+
+            if (data && Array.isArray(data) && data.length > 0) {
+                setOrder(data[0] as TrackingOrder);
             } else {
-                setError('Order not found.');
+                setError('Order not found. Please check your Order Number and try again.');
             }
         } catch (err) {
             console.error('Error fetching order:', err);
@@ -217,7 +211,7 @@ const OrderTracking: React.FC = () => {
                                                         Tracking {order.shipping_provider === 'lbc' ? 'Number' : 'ID'} ({
                                                             order.shipping_provider === 'lbc' ? 'LBC Express' :
                                                                 order.shipping_provider === 'lalamove' ? 'Lalamove' :
-                                                                    order.shipping_provider === 'maxim' ? 'Maxim' :
+                                                                    order.shipping_provider === 'jnt' ? 'J&T Express' :
                                                                         order.shipping_provider === 'spx' ? 'SPX Express' : 'J&T Express'
                                                         })
                                                     </p>
@@ -242,16 +236,6 @@ const OrderTracking: React.FC = () => {
                                                         className="block w-full py-3 text-white text-center rounded-2xl font-bold transition-colors shadow-md hover:shadow-lg flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-600"
                                                     >
                                                         Open Lalamove App/Web
-                                                        <ExternalLink className="w-4 h-4" />
-                                                    </a>
-                                                ) : order.shipping_provider === 'maxim' ? (
-                                                    <a
-                                                        href="https://taximaxim.com/"
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        className="block w-full py-3 text-white text-center rounded-2xl font-bold transition-colors shadow-md hover:shadow-lg flex items-center justify-center gap-2 bg-yellow-500 hover:bg-yellow-600 text-black"
-                                                    >
-                                                        Open Maxim App/Web
                                                         <ExternalLink className="w-4 h-4" />
                                                     </a>
                                                 ) : (
