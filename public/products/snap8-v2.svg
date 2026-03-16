@@ -1,0 +1,140 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 900" width="600" height="900">
+  <defs>
+    <radialGradient id="bgGrad" cx="50%" cy="38%" r="70%">
+      <stop offset="0%" stop-color="#F4E8F0"/>
+      <stop offset="100%" stop-color="#E6D4DE"/>
+    </radialGradient>
+    <linearGradient id="capSide" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#7A7A7A"/>
+      <stop offset="6%" stop-color="#999"/>
+      <stop offset="15%" stop-color="#BCBCBC"/>
+      <stop offset="28%" stop-color="#D6D6D6"/>
+      <stop offset="40%" stop-color="#E6E6E6"/>
+      <stop offset="50%" stop-color="#F0F0F0"/>
+      <stop offset="60%" stop-color="#E6E6E6"/>
+      <stop offset="72%" stop-color="#D0D0D0"/>
+      <stop offset="85%" stop-color="#B4B4B4"/>
+      <stop offset="94%" stop-color="#959595"/>
+      <stop offset="100%" stop-color="#707070"/>
+    </linearGradient>
+    <radialGradient id="capTop" cx="44%" cy="36%" r="56%">
+      <stop offset="0%" stop-color="#E8E8E8"/>
+      <stop offset="30%" stop-color="#D6D6D6"/>
+      <stop offset="65%" stop-color="#BFBFBF"/>
+      <stop offset="100%" stop-color="#9A9A9A"/>
+    </radialGradient>
+    <linearGradient id="rubber" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#5A6A7C"/>
+      <stop offset="20%" stop-color="#7A8A9C"/>
+      <stop offset="40%" stop-color="#8C9CAC"/>
+      <stop offset="60%" stop-color="#8898A8"/>
+      <stop offset="80%" stop-color="#748494"/>
+      <stop offset="100%" stop-color="#4E5E6E"/>
+    </linearGradient>
+    <linearGradient id="glassBody" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#B0ACB0" stop-opacity="0.55"/>
+      <stop offset="4%" stop-color="#D0CCD0" stop-opacity="0.4"/>
+      <stop offset="10%" stop-color="#E8E6E8" stop-opacity="0.25"/>
+      <stop offset="20%" stop-color="#F4F3F4" stop-opacity="0.12"/>
+      <stop offset="50%" stop-color="#FAFAFA" stop-opacity="0.05"/>
+      <stop offset="80%" stop-color="#F4F3F4" stop-opacity="0.12"/>
+      <stop offset="90%" stop-color="#E4E2E4" stop-opacity="0.25"/>
+      <stop offset="96%" stop-color="#C8C4C8" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#A09CA0" stop-opacity="0.55"/>
+    </linearGradient>
+    <linearGradient id="glassShoulder" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#A8A4A8" stop-opacity="0.5"/>
+      <stop offset="15%" stop-color="#D8D6D8" stop-opacity="0.3"/>
+      <stop offset="50%" stop-color="#F0F0F0" stop-opacity="0.1"/>
+      <stop offset="85%" stop-color="#D4D2D4" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#9C989C" stop-opacity="0.5"/>
+    </linearGradient>
+    <linearGradient id="pinkWave" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#F0889E"/>
+      <stop offset="40%" stop-color="#F8A0B4"/>
+      <stop offset="100%" stop-color="#FCC8D4"/>
+    </linearGradient>
+    <linearGradient id="pinkWave2" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#E87098"/>
+      <stop offset="50%" stop-color="#F08CA4"/>
+      <stop offset="100%" stop-color="#F8B0C0"/>
+    </linearGradient>
+    <filter id="vialShadow" x="-30%" y="-5%" width="160%" height="120%">
+      <feDropShadow dx="0" dy="18" stdDeviation="22" flood-color="#3A1830" flood-opacity="0.18"/>
+    </filter>
+    <linearGradient id="glassBottom" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#E0DCE0" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#D0CCD0" stop-opacity="0.6"/>
+    </linearGradient>
+    <clipPath id="vialClip">
+      <path d="M155 248 Q155 230 185 215 L185 205 Q185 195 205 188 L205 170 L395 170 L395 188 Q415 195 415 205 L415 215 Q445 230 445 248 L445 580 Q445 610 420 620 Q400 628 300 630 Q200 628 180 620 Q155 610 155 580 Z"/>
+    </clipPath>
+  </defs>
+  <rect width="600" height="900" fill="url(#bgGrad)"/>
+  <g filter="url(#vialShadow)">
+    <path d="M160 250 Q160 234 188 220 L188 210 Q188 200 208 192 L208 175 L392 175 L392 192 Q412 200 412 210 L412 220 Q440 234 440 250 L440 575 Q440 602 418 612 Q398 620 300 622 Q202 620 182 612 Q160 602 160 575 Z" fill="#EEECED"/>
+    <path d="M160 250 Q160 234 188 220 L188 210 Q188 200 208 192 L208 175 L392 175 L392 192 Q412 200 412 210 L412 220 Q440 234 440 250 L440 575 Q440 602 418 612 Q398 620 300 622 Q202 620 182 612 Q160 602 160 575 Z" fill="url(#glassBody)"/>
+    <path d="M164 256 L164 570 Q164 596 178 607" stroke="white" stroke-width="3" fill="none" opacity="0.5" stroke-linecap="round"/>
+    <path d="M168 258 L168 568 Q168 592 180 604" stroke="white" stroke-width="1.2" fill="none" opacity="0.3"/>
+    <rect x="174" y="262" width="14" height="310" rx="7" fill="white" opacity="0.1"/>
+    <path d="M436 256 L436 570 Q436 596 424 607" stroke="white" stroke-width="1.8" fill="none" opacity="0.22"/>
+    <ellipse cx="200" cy="420" rx="22" ry="80" fill="white" opacity="0.08" transform="rotate(-2, 200, 420)"/>
+    <ellipse cx="410" cy="400" rx="12" ry="60" fill="white" opacity="0.05"/>
+    <path d="M188 220 Q188 206 208 192 L208 175 L392 175 L392 192 Q412 206 412 220" fill="#E6E4E5" stroke="#C0BCBE" stroke-width="0.8"/>
+    <path d="M188 220 Q188 206 208 192 L208 175 L392 175 L392 192 Q412 206 412 220" fill="url(#glassShoulder)" opacity="0.8"/>
+    <path d="M200 218 Q250 205 300 203 Q350 205 400 218" stroke="white" stroke-width="2.5" fill="none" opacity="0.18"/>
+    <rect x="208" y="148" width="184" height="30" rx="3" fill="#E4E2E3" stroke="#BCBABC" stroke-width="0.8"/>
+    <rect x="208" y="148" width="184" height="30" rx="3" fill="url(#glassShoulder)" opacity="0.6"/>
+    <rect x="280" y="150" width="16" height="26" rx="8" fill="white" opacity="0.22"/>
+    <rect x="285" y="152" width="6" height="22" rx="3" fill="white" opacity="0.14"/>
+    <rect x="202" y="173" width="196" height="5" rx="2" fill="#DAD8D9" stroke="#B4B2B4" stroke-width="0.5"/>
+    <rect x="205" y="174" width="190" height="2" rx="1" fill="white" opacity="0.18"/>
+    <rect x="210" y="130" width="180" height="22" rx="5" fill="url(#rubber)" stroke="#3E4E5E" stroke-width="0.6"/>
+    <line x1="216" y1="138" x2="384" y2="138" stroke="#4E5E6E" stroke-width="0.5" opacity="0.3"/>
+    <line x1="216" y1="146" x2="384" y2="146" stroke="#4E5E6E" stroke-width="0.5" opacity="0.3"/>
+    <rect x="270" y="132" width="50" height="4" rx="2" fill="white" opacity="0.08"/>
+    <path d="M192 92 L192 134 Q192 140 200 142 L206 142 L206 134 Q206 130 210 130 L390 130 Q394 130 394 134 L394 142 L400 142 Q408 140 408 134 L408 92 Z" fill="url(#capSide)" stroke="#6E6E6E" stroke-width="0.4"/>
+    <line x1="196" y1="138" x2="196" y2="122" stroke="#808080" stroke-width="0.8" opacity="0.45"/>
+    <line x1="204" y1="140" x2="204" y2="118" stroke="#888" stroke-width="0.5" opacity="0.35"/>
+    <line x1="212" y1="140" x2="212" y2="118" stroke="#909090" stroke-width="0.4" opacity="0.3"/>
+    <line x1="388" y1="140" x2="388" y2="118" stroke="#909090" stroke-width="0.4" opacity="0.3"/>
+    <line x1="396" y1="140" x2="396" y2="118" stroke="#888" stroke-width="0.5" opacity="0.35"/>
+    <line x1="404" y1="138" x2="404" y2="122" stroke="#808080" stroke-width="0.8" opacity="0.45"/>
+    <ellipse cx="300" cy="92" rx="108" ry="20" fill="url(#capTop)" stroke="#888" stroke-width="0.6"/>
+    <ellipse cx="300" cy="90" rx="24" ry="7" fill="#C0C0C0" stroke="#999" stroke-width="0.6"/>
+    <ellipse cx="300" cy="89" rx="16" ry="4.5" fill="#A8A8A8"/>
+    <ellipse cx="300" cy="88.5" rx="9" ry="2.5" fill="#8E8E8E"/>
+    <ellipse cx="280" cy="88" rx="28" ry="6" fill="white" opacity="0.2"/>
+    <ellipse cx="274" cy="87" rx="14" ry="3" fill="white" opacity="0.1"/>
+    <rect x="280" y="96" width="22" height="30" rx="6" fill="white" opacity="0.08"/>
+    <g clip-path="url(#vialClip)">
+      <rect x="145" y="295" width="310" height="270" fill="white" opacity="0.97"/>
+      <line x1="145" y1="295" x2="455" y2="295" stroke="#E0D8DC" stroke-width="0.5"/>
+      <g transform="translate(172, 312) scale(0.7)">
+        <path d="M24 40 C24 40, 0 25, 0 14 C0 5, 7 0, 14 0 C19 0, 24 5, 24 9 C24 5, 29 0, 34 0 C41 0, 48 5, 48 14 C48 25, 24 40, 24 40Z" fill="#E8739B"/>
+        <ellipse cx="15" cy="12" rx="5" ry="6" fill="white" opacity="0.3" transform="rotate(-12, 15, 12)"/>
+      </g>
+      <text x="215" y="340" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-weight="800" font-size="24" fill="#1A0A14">VR</text>
+      <text x="248" y="340" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-weight="600" font-size="24" fill="#1A0A14">Jonina</text>
+      <text x="172" y="400" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-weight="900" font-size="46" fill="#0A0008" letter-spacing="-2">SNAP-8</text>
+      <text x="172" y="430" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-weight="400" font-size="16" fill="#D4628A" letter-spacing="0.3">Anti-Wrinkle Peptide</text>
+      <path d="M145 470 Q200 445 265 462 Q340 480 420 448 Q440 440 455 434 L455 565 L145 565 Z" fill="url(#pinkWave2)" opacity="0.45"/>
+      <path d="M145 490 Q220 465 290 482 Q370 500 455 465 L455 565 L145 565 Z" fill="url(#pinkWave)" opacity="0.4"/>
+      <rect x="145" y="520" width="310" height="45" fill="#FCD8E0" opacity="0.25"/>
+      <circle cx="198" cy="490" r="30" fill="#E8739B" opacity="0.93"/>
+      <text x="198" y="497" text-anchor="middle" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-weight="700" font-size="20" fill="white">50mg</text>
+      <text x="310" y="515" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-weight="600" font-size="11" fill="#1A0A14" letter-spacing="1.5" opacity="0.5">FOR RESEARCH USE</text>
+    </g>
+    <rect x="174" y="300" width="3.5" height="240" rx="1.75" fill="white" opacity="0.1" clip-path="url(#vialClip)"/>
+    <g clip-path="url(#vialClip)">
+      <path d="M163 560 Q190 540 240 548 Q290 556 340 544 Q380 536 437 556 L437 575 Q437 600 418 610 Q398 618 300 620 Q202 618 182 610 Q163 600 163 575 Z" fill="#EAE6E8" opacity="0.7"/>
+      <path d="M168 564 Q200 548 250 554 Q300 560 350 550 Q390 543 434 560" stroke="#D8D2D5" stroke-width="0.8" fill="none" opacity="0.4"/>
+    </g>
+    <path d="M160 600 Q160 608 182 616 Q202 622 300 624 Q398 622 418 616 Q440 608 440 600 L440 610 Q440 622 418 628 Q398 634 300 636 Q202 634 182 628 Q160 622 160 610 Z" fill="url(#glassBottom)" stroke="#C0BCBE" stroke-width="0.5"/>
+    <path d="M185 608 Q240 618 300 620 Q360 618 415 608" stroke="white" stroke-width="2" fill="none" opacity="0.2"/>
+  </g>
+  <ellipse cx="302" cy="672" rx="130" ry="16" fill="#3A1830" opacity="0.1"/>
+  <ellipse cx="302" cy="676" rx="90" ry="10" fill="#3A1830" opacity="0.06"/>
+  <text x="300" y="760" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="30" fill="#1A0A14" letter-spacing="0.5">SNAP-8 50mg</text>
+  <text x="300" y="795" text-anchor="middle" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-weight="500" font-size="16" fill="#E8739B" letter-spacing="4">VR JONINA</text>
+</svg>

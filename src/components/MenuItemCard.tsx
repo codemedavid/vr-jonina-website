@@ -70,12 +70,12 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({
       />
 
       {/* Product Image */}
-      <div className="relative h-24 sm:h-44 overflow-hidden border-b border-brand-100" style={{ background: 'linear-gradient(135deg, #FFF0F5, #FFE4EE)' }}>
+      <div className="relative h-44 sm:h-64 overflow-hidden border-b border-brand-100" style={{ background: 'linear-gradient(135deg, #FFF0F5, #FFE4EE)' }}>
         {product.image_url && !imageError ? (
           <img
             src={product.image_url}
             alt={product.name}
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+            className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-[1.65]" style={{ transform: 'scale(1.6) translateY(8%)' }}
             onError={() => setImageError(true)}
           />
         ) : (
