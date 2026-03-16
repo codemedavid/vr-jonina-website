@@ -75,7 +75,7 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({
           <img
             src={product.image_url}
             alt={product.name}
-            className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-[1.65]" style={{ transform: 'scale(1.6) translateY(8%)' }}
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
             onError={() => setImageError(true)}
           />
         ) : (
