@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { X, Mail, Sparkles } from 'lucide-react';
 import posthog from 'posthog-js';
+import { supabase } from '../lib/supabase';
 
 const POPUP_DISMISSED_KEY = 'biorich_popup_dismissed';
 
@@ -33,10 +34,18 @@ export default function WelcomePopup() {
       return;
     }
 
-    setStatus('success');
+    setStatus('loading');
+
     // Only capture event — do NOT identify here to avoid cross-customer
     // identity merging when a different customer checks out later on the same device
-    posthog.capture('vrjonina_promo', { email: trimmed });
+    posthog.capture('vrjonina_promo', { email: trimmed, $set: { email: trimmed } }, { send_instantly: true });
+
+    // Send welcome email via edge function (fire and forget — don't block the UI)
+    supabase.functions.invoke('send-promo-welcome', {
+      body: { email: trimmed },
+    }).catch((err) => console.error('Failed to send welcome email:', err));
+
+    setStatus('success');
   };
 
   if (!visible) return null;
@@ -121,19 +130,13 @@ export default function WelcomePopup() {
                 <button
                   type="submit"
                   disabled={status === 'loading'}
+                  onClick={(e) => e.stopPropagation()}
                   className="w-full py-3 rounded-xl font-semibold text-white transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-60"
                   style={{ background: 'linear-gradient(135deg, #FFB6C8, #E8739B)' }}
                 >
                   {status === 'loading' ? 'Subscribing...' : 'Subscribe for Discounts'}
                 </button>
               </form>
-
-              <button
-                onClick={close}
-                className="mt-4 text-sm text-pink-400 hover:text-pink-600 transition-colors"
-              >
-                No thanks, maybe later
-              </button>
             </>
           )}
         </div>

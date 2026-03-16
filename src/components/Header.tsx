@@ -22,7 +22,7 @@ const Header: React.FC<HeaderProps> = ({ cartItemsCount, onCartClick, onMenuClic
               onClick={() => { onMenuClick(); setMobileMenuOpen(false); }}
               className="flex items-center gap-2 hover:opacity-90 transition-opacity"
             >
-              <Heart className="w-6 h-6 sm:w-7 sm:h-7 text-brand-500" fill="currentColor" />
+              <img src="/logo.svg" alt="VR Jonina" className="w-8 h-8 sm:w-9 sm:h-9" />
               <span className="font-heading text-xl sm:text-2xl font-semibold tracking-tight">
                 <span className="text-charcoal-800">VR</span>{' '}
                 <span className="text-brand-500">Jonina</span>
@@ -118,7 +118,7 @@ const Header: React.FC<HeaderProps> = ({ cartItemsCount, onCartClick, onMenuClic
             {/* Drawer Header */}
             <div className="flex items-center justify-between p-5 border-b border-brand-200">
               <div className="flex items-center gap-2">
-                <Heart className="w-5 h-5 text-brand-500" fill="currentColor" />
+                <img src="/logo.svg" alt="VR Jonina" className="w-7 h-7" />
                 <span className="font-heading text-lg font-semibold">
                   <span className="text-charcoal-800">VR</span>{' '}
                   <span className="text-brand-500">Jonina</span>
