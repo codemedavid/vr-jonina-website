@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { ArrowLeft, Package, CheckCircle, XCircle, Clock, Truck, AlertCircle, Search, RefreshCw, Eye, MessageCircle, Image as ImageIcon } from 'lucide-react';
+import { ArrowLeft, Package, CheckCircle, XCircle, Clock, Truck, AlertCircle, Search, RefreshCw, Eye, MessageCircle, Image as ImageIcon, Trash2 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { useMenu } from '../hooks/useMenu';
 import { useCouriers } from '../hooks/useCouriers';
@@ -59,6 +59,7 @@ const OrdersManager: React.FC<OrdersManagerProps> = ({ onBack }) => {
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [selectedOrderIds, setSelectedOrderIds] = useState<Set<string>>(new Set());
   const { refreshProducts } = useMenu();
 
   // Fire a PostHog event for order status changes
@@ -134,6 +135,53 @@ const OrdersManager: React.FC<OrdersManagerProps> = ({ onBack }) => {
     setIsRefreshing(true);
     await loadOrders();
     setTimeout(() => setIsRefreshing(false), 500);
+  };
+
+  const toggleSelectOrder = (orderId: string) => {
+    setSelectedOrderIds(prev => {
+      const next = new Set(prev);
+      if (next.has(orderId)) {
+        next.delete(orderId);
+      } else {
+        next.add(orderId);
+      }
+      return next;
+    });
+  };
+
+  const toggleSelectAll = () => {
+    if (selectedOrderIds.size === filteredOrders.length) {
+      setSelectedOrderIds(new Set());
+    } else {
+      setSelectedOrderIds(new Set(filteredOrders.map(o => o.id)));
+    }
+  };
+
+  const handleDeleteSelected = async () => {
+    if (selectedOrderIds.size === 0) return;
+
+    if (!confirm(`Are you sure you want to delete ${selectedOrderIds.size} order(s)? This action cannot be undone.`)) {
+      return;
+    }
+
+    try {
+      setIsProcessing(true);
+      const { error } = await supabase
+        .from('orders')
+        .delete()
+        .in('id', Array.from(selectedOrderIds));
+
+      if (error) throw error;
+
+      setSelectedOrderIds(new Set());
+      await loadOrders();
+      alert(`${selectedOrderIds.size} order(s) deleted successfully.`);
+    } catch (error) {
+      console.error('Error deleting orders:', error);
+      alert('Failed to delete orders. Please try again.');
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   const handleConfirmOrder = async (order: Order) => {
@@ -524,6 +572,35 @@ const OrdersManager: React.FC<OrdersManagerProps> = ({ onBack }) => {
           </div>
         </div>
 
+        {/* Selection Toolbar */}
+        {filteredOrders.length > 0 && (
+          <div className="flex items-center justify-between bg-white rounded-lg md:rounded-xl shadow-md p-3 md:p-4 mb-4 md:mb-6 border border-navy-700/30">
+            <label className="flex items-center gap-2 cursor-pointer text-sm md:text-base text-gray-700">
+              <input
+                type="checkbox"
+                checked={filteredOrders.length > 0 && selectedOrderIds.size === filteredOrders.length}
+                onChange={toggleSelectAll}
+                className="w-4 h-4 md:w-5 md:h-5 rounded border-gray-300 text-brand-600 focus:ring-brand-500 cursor-pointer"
+              />
+              <span className="font-medium">
+                {selectedOrderIds.size > 0
+                  ? `${selectedOrderIds.size} of ${filteredOrders.length} selected`
+                  : 'Select All'}
+              </span>
+            </label>
+            {selectedOrderIds.size > 0 && (
+              <button
+                onClick={handleDeleteSelected}
+                disabled={isProcessing}
+                className="flex items-center gap-1.5 md:gap-2 px-3 md:px-4 py-1.5 md:py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium text-xs md:text-sm shadow-md hover:shadow-lg transition-all disabled:opacity-50"
+              >
+                <Trash2 className="w-3.5 h-3.5 md:w-4 md:h-4" />
+                Delete Selected ({selectedOrderIds.size})
+              </button>
+            )}
+          </div>
+        )}
+
         {/* Orders List */}
         <div className="space-y-3 md:space-y-4">
           {filteredOrders.length === 0 ? (
@@ -540,6 +617,8 @@ const OrdersManager: React.FC<OrdersManagerProps> = ({ onBack }) => {
                 onView={() => setSelectedOrder(order)}
                 getStatusColor={getStatusColor}
                 getStatusIcon={getStatusIcon}
+                isSelected={selectedOrderIds.has(order.id)}
+                onToggleSelect={() => toggleSelectOrder(order.id)}
               />
             ))
           )}
@@ -555,18 +634,31 @@ interface OrderCardProps {
   onView: () => void;
   getStatusColor: (status: string) => string;
   getStatusIcon: (status: string) => React.ReactNode;
+  isSelected: boolean;
+  onToggleSelect: () => void;
 }
 
-const OrderCard: React.FC<OrderCardProps> = ({ order, onView, getStatusColor, getStatusIcon }) => {
+const OrderCard: React.FC<OrderCardProps> = ({ order, onView, getStatusColor, getStatusIcon, isSelected, onToggleSelect }) => {
   const totalItems = order.order_items.reduce((sum, item) => sum + item.quantity, 0);
   const finalTotal = order.total_price + (order.shipping_fee || 0);
 
   return (
     <div
       onClick={onView}
-      className="bg-white rounded-lg md:rounded-xl shadow-md hover:shadow-lg p-3 md:p-4 lg:p-6 border border-navy-700/30 hover:border-brand-500 transition-all text-gray-900 cursor-pointer hover:bg-gray-50/50"
+      className={`bg-white rounded-lg md:rounded-xl shadow-md hover:shadow-lg p-3 md:p-4 lg:p-6 border-2 transition-all text-gray-900 cursor-pointer hover:bg-gray-50/50 ${isSelected ? 'border-red-400 bg-red-50/30' : 'border-navy-700/30 hover:border-brand-500'}`}
     >
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 md:gap-4">
+        <div className="flex items-start gap-2 md:gap-3 flex-1 min-w-0">
+          <input
+            type="checkbox"
+            checked={isSelected}
+            onChange={(e) => {
+              e.stopPropagation();
+              onToggleSelect();
+            }}
+            onClick={(e) => e.stopPropagation()}
+            className="mt-1 w-4 h-4 md:w-5 md:h-5 rounded border-gray-300 text-red-600 focus:ring-red-500 cursor-pointer flex-shrink-0"
+          />
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 md:gap-3 mb-2 flex-wrap">
             <h3 className="font-bold text-gray-900 text-sm md:text-base lg:text-lg truncate">
@@ -607,6 +699,7 @@ const OrderCard: React.FC<OrderCardProps> = ({ order, onView, getStatusColor, ge
               <p className="text-[10px] md:text-xs text-gray-500">{new Date(order.created_at).toLocaleTimeString()}</p>
             </div>
           </div>
+        </div>
         </div>
 
         <div className="flex flex-col gap-2 md:min-w-[120px]">
