@@ -1,19 +1,9 @@
 import React, { useState } from 'react';
-import { ChevronDown, ChevronUp, Heart, Package, CreditCard, Truck, ArrowLeft, MessageCircle, HelpCircle } from 'lucide-react';
+import { ChevronDown, ChevronUp, Heart, ArrowLeft, HelpCircle } from 'lucide-react';
 import { useFAQs } from '../hooks/useFAQs';
 
 const categoryIcons: { [key: string]: React.ReactElement } = {
     'PRODUCT & USAGE': <Heart className="w-5 h-5" fill="currentColor" />,
-    'ORDERING & PACKAGING': <Package className="w-5 h-5" />,
-    'PAYMENT METHODS': <CreditCard className="w-5 h-5" />,
-    'SHIPPING & DELIVERY': <Truck className="w-5 h-5" />,
-};
-
-const categoryColors: { [key: string]: string } = {
-    'PRODUCT & USAGE': 'text-black border-brand-200 bg-brand-50/50',
-    'ORDERING & PACKAGING': 'text-black border-brand-200 bg-brand-50/50',
-    'PAYMENT METHODS': 'text-black border-brand-200 bg-brand-50/50',
-    'SHIPPING & DELIVERY': 'text-black border-brand-200 bg-brand-50/50',
 };
 
 const FAQ: React.FC = () => {
@@ -36,9 +26,6 @@ const FAQ: React.FC = () => {
     const filteredFAQs = activeCategory
         ? faqs.filter(faq => faq.category === activeCategory)
         : faqs;
-
-    const viberUrl = 'viber://chat?number=%2B639989747336';
-    const whatsappUrl = 'https://wa.me/639058429200';
 
     if (loading) {
         return (
@@ -143,33 +130,6 @@ const FAQ: React.FC = () => {
                     </div>
                 ))}
 
-                {/* Contact CTA */}
-                <div className="mt-12 bg-white rounded-2xl border border-brand-200 p-6 md:p-8 text-center shadow-soft">
-                    <h3 className="text-lg md:text-xl font-bold text-black mb-2">
-                        Still have questions?
-                    </h3>
-                    <p className="text-black mb-6">
-                        We're here to help! Reach out to us via Viber or WhatsApp for quick assistance.
-                    </p>
-                    <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                        <a
-                            href={viberUrl}
-                            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#7360f2] text-white px-6 py-3 rounded-2xl font-cute font-medium hover:opacity-90 transition-all shadow-soft hover:shadow-lg"
-                        >
-                            <MessageCircle className="w-5 h-5" />
-                            Message us on Viber
-                        </a>
-                        <a
-                            href={whatsappUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#25D366] text-white px-6 py-3 rounded-2xl font-cute font-medium hover:opacity-90 transition-all shadow-soft hover:shadow-lg"
-                        >
-                            <MessageCircle className="w-5 h-5" />
-                            Message us on WhatsApp
-                        </a>
-                    </div>
-                </div>
             </div>
         </div>
     );
