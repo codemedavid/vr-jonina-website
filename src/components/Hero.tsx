@@ -13,7 +13,7 @@ const Hero: React.FC<HeroProps> = ({ onShopAll }) => {
   }, []);
 
   return (
-    <div className="relative min-h-[90vh] overflow-hidden flex items-center justify-center" style={{ background: 'linear-gradient(180deg, #FFF0F5 0%, #FFE4EE 30%, #FFF5F7 70%, #FFFFFF 100%)' }}>
+    <div className="relative overflow-hidden flex items-center justify-center" style={{ background: 'linear-gradient(180deg, #FFF0F5 0%, #FFE4EE 30%, #FFF5F7 70%, #FFFFFF 100%)' }}>
 
       {/* ── Ribbon Decorations ── */}
 

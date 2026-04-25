@@ -65,7 +65,7 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({
       {/* Click overlay for product details */}
       <div
         onClick={() => onProductClick?.(product)}
-        className="absolute inset-x-0 top-0 h-24 sm:h-44 z-10 cursor-pointer"
+        className="absolute inset-0 z-10 cursor-pointer"
         title="View details"
       />
 
@@ -221,7 +221,7 @@ const MenuItemCard: React.FC<MenuItemCardProps> = ({
                 onAddToCart?.(product, selectedVariation, 1, effectiveKitType);
               }}
               disabled={!product.available || !hasAnyStock}
-              className={`w-full py-2 sm:py-3 text-[10px] sm:text-sm flex items-center justify-center gap-1.5 sm:gap-2 font-semibold transition-all rounded-xl sm:rounded-2xl
+              className={`relative z-20 w-full py-2 sm:py-3 text-[10px] sm:text-sm flex items-center justify-center gap-1.5 sm:gap-2 font-semibold transition-all rounded-xl sm:rounded-2xl
                 ${(!product.available || !hasAnyStock)
                   ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
                   : 'btn-primary'}
