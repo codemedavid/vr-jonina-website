@@ -146,3 +146,11 @@
 .animate-fade-in-up {
   animation: fadeInUp 0.4s ease-out forwards;
 }
+
+.scrollbar-hide {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}

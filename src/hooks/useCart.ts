@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import posthog from 'posthog-js';
 import type { CartItem, Product, ProductVariation, KitType } from '../types';
 import { KIT_UPGRADE_PRICE } from '../types';
+import { getEffectiveUnitPrice } from '../lib/bundlePricing';
 
 export function useCart() {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
@@ -131,13 +132,8 @@ export function useCart() {
     localStorage.removeItem('peptide_cart');
   };
 
-  const getItemPrice = (item: CartItem) => {
-    const basePrice = item.variation
-      ? (item.variation.discount_active && item.variation.discount_price != null ? item.variation.discount_price : item.variation.price)
-      : (item.product.discount_active && item.product.discount_price != null ? item.product.discount_price : item.product.base_price);
-    const kitUpgrade = item.kitType === 'complete_kit' ? KIT_UPGRADE_PRICE : 0;
-    return basePrice + kitUpgrade;
-  };
+  const getItemPrice = (item: CartItem) =>
+    getEffectiveUnitPrice(item.product, item.variation, item.kitType, item.quantity);
 
   const getTotalPrice = () => {
     return cartItems.reduce((total, item) => {

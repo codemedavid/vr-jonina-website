@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Plus, Edit, Trash2, Save, X, ArrowLeft, TrendingUp, Package, Users, FolderOpen, CreditCard, Sparkles, Layers, Shield, RefreshCw, Warehouse, ShoppingCart, HelpCircle, MapPin, Tag, Truck } from 'lucide-react';
-import type { Product } from '../types';
+import type { Product, BundleTier } from '../types';
 import { useMenu } from '../hooks/useMenu';
 import { useCategories } from '../hooks/useCategories';
 import { useProtocols } from '../hooks/useProtocols';
@@ -63,10 +63,12 @@ const AdminDashboard: React.FC = () => {
     stock_quantity: 0,
     image_url: null,
     discount_active: false,
-    inclusions: null
+    inclusions: null,
+    paired_product_ids: [],
+    bundle_tiers: []
   });
   const [inclusionsText, setInclusionsText] = useState('');
-  const [autoGenerateProtocol, setAutoGenerateProtocol] = useState(false);
+  const [pairedSearchTerm, setPairedSearchTerm] = useState('');
 
 
   const handleAddProduct = () => {
@@ -89,10 +91,11 @@ const AdminDashboard: React.FC = () => {
       stock_quantity: 0,
       image_url: null,
       discount_active: false,
-      inclusions: null
+      inclusions: null,
+      paired_product_ids: [],
+      bundle_tiers: []
     });
     setInclusionsText('');
-    setAutoGenerateProtocol(true); // Default to true for new products
   };
 
   const handleEditProduct = (product: Product) => {
@@ -221,6 +224,8 @@ const AdminDashboard: React.FC = () => {
           'image_url',
           'safety_sheet_url',
           'inclusions',
+          'paired_product_ids',
+          'bundle_tiers',
         ];
 
         const dbPayload: Partial<Product> = {};
@@ -291,31 +296,7 @@ const AdminDashboard: React.FC = () => {
           saved_image_url: result.data?.image_url
         });
 
-        // Generate protocol when editing if checkbox is checked
-        if (autoGenerateProtocol && result.data) {
-          try {
-            console.log('📋 Generating protocol from template...');
-            // Convert category ID to display name for template matching
-            const categoryName = categories.find(cat => cat.id === result.data.category)?.name || result.data.category || 'default';
-            console.log('📋 Category for template:', categoryName);
-
-            const protocolData = generateProtocolFromTemplate(
-              result.data.name,
-              categoryName
-            );
-            await addProtocol({
-              ...protocolData,
-              product_id: result.data.id
-            });
-            console.log('✅ Protocol generated for edited product');
-            alert('Product updated AND Protocol generated successfully!');
-          } catch (protocolError) {
-            console.error('❌ Protocol Generation Error:', protocolError);
-            alert(`Product updated, but protocol generation failed.`);
-          }
-        } else {
-          alert('Product updated successfully!');
-        }
+        alert('Product updated successfully!');
       } else {
         // Remove non-creatable fields for new products
         const { variations, ...createData } = formData as any;
@@ -342,36 +323,7 @@ const AdminDashboard: React.FC = () => {
         }
         console.log('✅ Product created successfully');
 
-        // Template-based Protocol Generation (FREE - No AI needed)
-        if (autoGenerateProtocol) {
-          try {
-            console.log('📋 Generating protocol from template...');
-
-            // Convert category ID to display name for template matching
-            const categoryName = categories.find(cat => cat.id === dbPayload.category)?.name || dbPayload.category || 'default';
-            console.log('📋 Category for template:', categoryName);
-
-            const protocolData = generateProtocolFromTemplate(
-              dbPayload.name!,
-              categoryName
-            );
-
-            console.log('✅ Protocol generated from template:', protocolData);
-
-            if (result.data) {
-              await addProtocol({
-                ...protocolData,
-                product_id: result.data.id
-              });
-              alert('Product saved AND Protocol auto-generated successfully!');
-            }
-          } catch (protocolError) {
-            console.error('❌ Protocol Generation Error:', protocolError);
-            alert(`Product saved, but protocol generation failed: ${protocolError instanceof Error ? protocolError.message : 'Unknown error'}`);
-          }
-        } else {
-          alert('Product saved successfully!');
-        }
+        alert('Product saved successfully!');
       }
 
       // Refresh products to ensure UI is updated
@@ -652,71 +604,6 @@ const AdminDashboard: React.FC = () => {
                     />
                   </div>
 
-                  <div>
-                    <label className="block text-xs font-semibold text-gray-700 mb-1">Molecular Weight</label>
-                    <input
-                      type="text"
-                      value={formData.molecular_weight || ''}
-                      onChange={(e) => setFormData({ ...formData, molecular_weight: e.target.value })}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-navy-500 focus:border-transparent transition-all bg-white text-black placeholder-gray-400"
-                      placeholder="e.g., 1419.55 g/mol"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-semibold text-gray-700 mb-1">CAS Number</label>
-                    <input
-                      type="text"
-                      value={formData.cas_number || ''}
-                      onChange={(e) => setFormData({ ...formData, cas_number: e.target.value })}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-navy-500 focus:border-transparent transition-all bg-white text-black placeholder-gray-400"
-                      placeholder="e.g., 137525-51-0"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-semibold text-gray-700 mb-1">Storage Conditions</label>
-                    <input
-                      type="text"
-                      value={formData.storage_conditions || ''}
-                      onChange={(e) => setFormData({ ...formData, storage_conditions: e.target.value })}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-navy-500 focus:border-transparent transition-all bg-white text-black placeholder-gray-400"
-                      placeholder="Store at -20°C"
-                    />
-                  </div>
-
-                  <div className="md:col-span-2">
-                    <label className="block text-xs font-semibold text-gray-700 mb-1">Sequence</label>
-                    <input
-                      type="text"
-                      value={formData.sequence || ''}
-                      onChange={(e) => setFormData({ ...formData, sequence: e.target.value })}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-navy-500 focus:border-transparent transition-all bg-white text-black placeholder-gray-400"
-                      placeholder="e.g., GEPPPGKPADDAGLV"
-                    />
-                  </div>
-
-                  {/* Auto-Generate Protocol Checkbox */}
-                  <div className="md:col-span-2 mt-2 bg-gradient-to-r from-purple-50 to-indigo-50 p-4 rounded-lg border border-purple-200">
-                    <label className="flex items-center gap-3 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={autoGenerateProtocol}
-                        onChange={(e) => setAutoGenerateProtocol(e.target.checked)}
-                        className="w-5 h-5 text-purple-600 rounded focus:ring-purple-500"
-                      />
-                      <div>
-                        <span className="font-bold text-gray-800 flex items-center gap-2">
-                          📋 {editingProduct ? 'Generate/Update Protocol' : 'Auto-Generate Protocol'}
-                        </span>
-                        <p className="text-xs text-gray-600">
-                          {editingProduct
-                            ? 'Create or update the dosage protocol for this product.'
-                            : 'Automatically create a dosage protocol based on the product category.'}
-                        </p>
-                      </div>
-                    </label>
-                  </div>
                 </div>
               </div>
 
@@ -886,6 +773,314 @@ const AdminDashboard: React.FC = () => {
                     </label>
                   </div>
                 </div>
+              </div>
+
+              {/* Best Paired With */}
+              <div>
+                <h3 className="text-sm md:text-base font-bold text-gray-900 mb-2 md:mb-3 flex items-center gap-1.5">
+                  <span className="text-base md:text-lg">🤝</span>
+                  Best Paired With
+                </h3>
+                <p className="text-xs text-gray-500 mb-2">
+                  Pick products to recommend alongside this one in the cart, checkout, and product page. These take priority; the site auto-fills any remaining slots by category.
+                </p>
+                {(() => {
+                  const pairedIds = formData.paired_product_ids || [];
+                  const pairedProducts = pairedIds
+                    .map((id) => products.find((p) => p.id === id))
+                    .filter((p): p is Product => Boolean(p));
+                  const movePaired = (index: number, direction: -1 | 1) => {
+                    const next = [...pairedIds];
+                    const target = index + direction;
+                    if (target < 0 || target >= next.length) return;
+                    [next[index], next[target]] = [next[target], next[index]];
+                    setFormData({ ...formData, paired_product_ids: next });
+                  };
+                  const removePaired = (id: string) => {
+                    setFormData({
+                      ...formData,
+                      paired_product_ids: pairedIds.filter((pid) => pid !== id),
+                    });
+                  };
+                  const addPaired = (id: string) => {
+                    if (pairedIds.includes(id)) return;
+                    setFormData({
+                      ...formData,
+                      paired_product_ids: [...pairedIds, id],
+                    });
+                    setPairedSearchTerm('');
+                  };
+                  const search = pairedSearchTerm.trim().toLowerCase();
+                  const candidates = products
+                    .filter((p) => p.id !== editingProduct?.id)
+                    .filter((p) => !pairedIds.includes(p.id))
+                    .filter((p) =>
+                      search === ''
+                        ? true
+                        : p.name.toLowerCase().includes(search) ||
+                          p.category.toLowerCase().includes(search)
+                    )
+                    .slice(0, 8);
+                  return (
+                    <div className="space-y-2">
+                      {pairedProducts.length === 0 ? (
+                        <div className="text-xs text-gray-400 italic px-3 py-2 border border-dashed border-gray-300 rounded-lg">
+                          No manual pairings — recommendations will be fully automatic.
+                        </div>
+                      ) : (
+                        <ol className="space-y-1">
+                          {pairedProducts.map((p, index) => (
+                            <li
+                              key={p.id}
+                              className="flex items-center gap-2 px-2 py-1.5 bg-gray-50 border border-gray-200 rounded-lg"
+                            >
+                              <span className="text-xs font-semibold text-gray-500 w-5 text-center">
+                                {index + 1}
+                              </span>
+                              <span className="flex-1 text-xs font-medium text-gray-900 truncate">
+                                {p.name}
+                              </span>
+                              <span className="text-[10px] text-gray-500 hidden sm:inline">
+                                {p.category}
+                              </span>
+                              <button
+                                type="button"
+                                onClick={() => movePaired(index, -1)}
+                                disabled={index === 0}
+                                className="px-1.5 py-0.5 text-xs text-gray-600 hover:text-black disabled:opacity-30"
+                                aria-label="Move up"
+                              >
+                                ↑
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => movePaired(index, 1)}
+                                disabled={index === pairedProducts.length - 1}
+                                className="px-1.5 py-0.5 text-xs text-gray-600 hover:text-black disabled:opacity-30"
+                                aria-label="Move down"
+                              >
+                                ↓
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => removePaired(p.id)}
+                                className="px-1.5 py-0.5 text-xs text-red-600 hover:text-red-800"
+                                aria-label="Remove pairing"
+                              >
+                                ✕
+                              </button>
+                            </li>
+                          ))}
+                        </ol>
+                      )}
+                      <input
+                        type="text"
+                        value={pairedSearchTerm}
+                        onChange={(e) => setPairedSearchTerm(e.target.value)}
+                        placeholder="Search products to add…"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-navy-500 focus:border-transparent transition-all bg-white text-black placeholder-gray-400 text-xs"
+                      />
+                      {candidates.length > 0 && (
+                        <div className="max-h-48 overflow-y-auto border border-gray-200 rounded-lg divide-y divide-gray-100">
+                          {candidates.map((p) => (
+                            <button
+                              key={p.id}
+                              type="button"
+                              onClick={() => addPaired(p.id)}
+                              className="w-full text-left px-3 py-1.5 hover:bg-brand-50 flex items-center justify-between gap-2"
+                            >
+                              <span className="text-xs font-medium text-gray-900 truncate">
+                                {p.name}
+                              </span>
+                              <span className="text-[10px] text-gray-500 shrink-0">
+                                {p.category}
+                              </span>
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })()}
+              </div>
+
+              {/* Bundle & Save */}
+              <div>
+                <h3 className="text-sm md:text-base font-bold text-gray-900 mb-2 md:mb-3 flex items-center gap-1.5">
+                  <span className="text-base md:text-lg">📦</span>
+                  Bundle &amp; Save Tiers
+                </h3>
+                <p className="text-xs text-gray-500 mb-2">
+                  Quantity bundles shown on the product detail page. Leave empty to use the default 1 / 2 / 3 bottle tiers. Mark one as &quot;Most popular&quot; to highlight it.
+                  Set a bundle price (total for that quantity, vial only) and the site auto-shows a SAVE % tag and charges that bundle total at checkout. Leave price blank to just use quantity × unit price.
+                </p>
+                {(() => {
+                  const tiers: BundleTier[] = formData.bundle_tiers || [];
+                  const updateTiers = (next: BundleTier[]) =>
+                    setFormData({ ...formData, bundle_tiers: next });
+                  const updateTier = (index: number, patch: Partial<BundleTier>) => {
+                    const next = tiers.map((t, i) => (i === index ? { ...t, ...patch } : t));
+                    updateTiers(next);
+                  };
+                  const moveTier = (index: number, direction: -1 | 1) => {
+                    const target = index + direction;
+                    if (target < 0 || target >= tiers.length) return;
+                    const next = [...tiers];
+                    [next[index], next[target]] = [next[target], next[index]];
+                    updateTiers(next);
+                  };
+                  const removeTier = (index: number) =>
+                    updateTiers(tiers.filter((_, i) => i !== index));
+                  const addTier = () => {
+                    const nextQty = tiers.length === 0 ? 1 : Math.max(...tiers.map((t) => t.qty)) + 1;
+                    updateTiers([
+                      ...tiers,
+                      { qty: nextQty, label: `${nextQty} BOTTLE${nextQty === 1 ? '' : 'S'}`, popular: false, price: null },
+                    ]);
+                  };
+                  const setPopular = (index: number, value: boolean) => {
+                    const next = tiers.map((t, i) => ({
+                      ...t,
+                      popular: i === index ? value : value ? false : Boolean(t.popular),
+                    }));
+                    updateTiers(next);
+                  };
+                  const resetToDefaults = () =>
+                    updateTiers([
+                      { qty: 1, label: '1 BOTTLE', popular: false, price: null },
+                      { qty: 2, label: '2 BOTTLES', popular: true, price: null },
+                      { qty: 3, label: '3 BOTTLES', popular: false, price: null },
+                    ]);
+                  const computeSavingsPct = (tier: BundleTier): number | null => {
+                    const basePrice = formData.discount_active && formData.discount_price
+                      ? Number(formData.discount_price)
+                      : Number(formData.base_price || 0);
+                    if (!basePrice || !tier.price || tier.price <= 0) return null;
+                    const full = basePrice * tier.qty;
+                    if (tier.price >= full) return null;
+                    return Math.round((1 - tier.price / full) * 100);
+                  };
+                  return (
+                    <div className="space-y-2">
+                      {tiers.length === 0 ? (
+                        <div className="text-xs text-gray-400 italic px-3 py-2 border border-dashed border-gray-300 rounded-lg">
+                          Using the default 1 / 2 / 3 bottle tiers. Add a tier below to customize.
+                        </div>
+                      ) : (
+                        <ol className="space-y-1">
+                          {tiers.map((tier, index) => (
+                            <li
+                              key={index}
+                              className="flex flex-wrap items-center gap-2 px-2 py-1.5 bg-gray-50 border border-gray-200 rounded-lg"
+                            >
+                              <span className="text-xs font-semibold text-gray-500 w-5 text-center">
+                                {index + 1}
+                              </span>
+                              <input
+                                type="number"
+                                min={1}
+                                step={1}
+                                value={tier.qty}
+                                onChange={(e) =>
+                                  updateTier(index, { qty: Math.max(1, Number(e.target.value) || 1) })
+                                }
+                                className="w-16 px-2 py-1 border border-gray-300 rounded-md text-xs bg-white text-black"
+                                aria-label="Quantity"
+                              />
+                              <input
+                                type="text"
+                                value={tier.label}
+                                onChange={(e) => updateTier(index, { label: e.target.value })}
+                                placeholder="2 BOTTLES"
+                                className="flex-1 min-w-[8rem] px-2 py-1 border border-gray-300 rounded-md text-xs bg-white text-black"
+                                aria-label="Label"
+                              />
+                              <div className="flex items-center gap-1">
+                                <span className="text-[11px] text-gray-500">₱</span>
+                                <input
+                                  type="number"
+                                  min={0}
+                                  step={1}
+                                  value={tier.price ?? ''}
+                                  onChange={(e) => {
+                                    const v = e.target.value;
+                                    updateTier(index, {
+                                      price: v === '' ? null : Math.max(0, Number(v) || 0),
+                                    });
+                                  }}
+                                  placeholder="bundle price"
+                                  className="w-24 px-2 py-1 border border-gray-300 rounded-md text-xs bg-white text-black"
+                                  aria-label="Bundle price"
+                                />
+                              </div>
+                              {(() => {
+                                const pct = computeSavingsPct(tier);
+                                return pct ? (
+                                  <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 rounded px-1.5 py-0.5">
+                                    SAVE {pct}%
+                                  </span>
+                                ) : null;
+                              })()}
+                              <label className="flex items-center gap-1 text-[11px] text-gray-700">
+                                <input
+                                  type="checkbox"
+                                  checked={Boolean(tier.popular)}
+                                  onChange={(e) => setPopular(index, e.target.checked)}
+                                  className="w-3.5 h-3.5"
+                                />
+                                Popular
+                              </label>
+                              <button
+                                type="button"
+                                onClick={() => moveTier(index, -1)}
+                                disabled={index === 0}
+                                className="px-1.5 py-0.5 text-xs text-gray-600 hover:text-black disabled:opacity-30"
+                                aria-label="Move up"
+                              >
+                                ↑
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => moveTier(index, 1)}
+                                disabled={index === tiers.length - 1}
+                                className="px-1.5 py-0.5 text-xs text-gray-600 hover:text-black disabled:opacity-30"
+                                aria-label="Move down"
+                              >
+                                ↓
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => removeTier(index)}
+                                className="px-1.5 py-0.5 text-xs text-red-600 hover:text-red-800"
+                                aria-label="Remove tier"
+                              >
+                                ✕
+                              </button>
+                            </li>
+                          ))}
+                        </ol>
+                      )}
+                      <div className="flex flex-wrap gap-2">
+                        <button
+                          type="button"
+                          onClick={addTier}
+                          className="px-3 py-1.5 text-xs font-semibold text-white bg-gray-900 hover:bg-gray-800 rounded-md"
+                        >
+                          + Add tier
+                        </button>
+                        {tiers.length === 0 && (
+                          <button
+                            type="button"
+                            onClick={resetToDefaults}
+                            className="px-3 py-1.5 text-xs font-semibold text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 rounded-md"
+                          >
+                            Use 1 / 2 / 3 defaults
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })()}
               </div>
 
               {/* Product Image */}

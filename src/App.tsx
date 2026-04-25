@@ -28,10 +28,11 @@ import { useMenu } from './hooks/useMenu';
 function MainApp() {
     const cart = useCart();
     const { menuItems, refreshProducts } = useMenu();
-    const [currentView, setCurrentView] = useState<'menu' | 'cart' | 'checkout'>('menu');
+    const [currentView, setCurrentView] = useState<'menu' | 'checkout'>('menu');
+    const [cartOpen, setCartOpen] = useState(false);
     const [selectedCategory, setSelectedCategory] = useState<string>('all');
 
-    const handleViewChange = (view: 'menu' | 'cart' | 'checkout') => {
+    const handleViewChange = (view: 'menu' | 'checkout') => {
         setCurrentView(view);
         // Scroll to top when changing views
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -53,7 +54,7 @@ function MainApp() {
             </Suspense>
             <Header
                 cartItemsCount={cart.getTotalItems()}
-                onCartClick={() => handleViewChange('cart')}
+                onCartClick={() => setCartOpen(true)}
                 onMenuClick={() => handleViewChange('menu')}
             />
             <Suspense fallback={null}>
@@ -75,33 +76,45 @@ function MainApp() {
                         />
                     )}
 
-                    {currentView === 'cart' && (
-                        <Cart
-                            cartItems={cart.cartItems}
-                            updateQuantity={cart.updateQuantity}
-                            removeFromCart={cart.removeFromCart}
-                            clearCart={cart.clearCart}
-                            getTotalPrice={cart.getTotalPrice}
-                            onContinueShopping={() => handleViewChange('menu')}
-                            onCheckout={() => handleViewChange('checkout')}
-                        />
-                    )}
-
                     {currentView === 'checkout' && (
                         <Checkout
                             cartItems={cart.cartItems}
                             totalPrice={cart.getTotalPrice()}
-                            onBack={() => handleViewChange('cart')}
+                            onBack={() => {
+                                handleViewChange('menu');
+                                setCartOpen(true);
+                            }}
+                            allProducts={menuItems}
+                            addToCart={cart.addToCart}
                         />
                     )}
                 </Suspense>
             </main>
 
+            <Suspense fallback={null}>
+                <Cart
+                    isOpen={cartOpen}
+                    onClose={() => setCartOpen(false)}
+                    cartItems={cart.cartItems}
+                    updateQuantity={cart.updateQuantity}
+                    removeFromCart={cart.removeFromCart}
+                    clearCart={cart.clearCart}
+                    getTotalPrice={cart.getTotalPrice}
+                    onContinueShopping={() => setCartOpen(false)}
+                    onCheckout={() => {
+                        setCartOpen(false);
+                        handleViewChange('checkout');
+                    }}
+                    allProducts={menuItems}
+                    addToCart={cart.addToCart}
+                />
+            </Suspense>
+
             {currentView === 'menu' && (
                 <>
                     <FloatingCartButton
                         itemCount={cart.getTotalItems()}
-                        onCartClick={() => handleViewChange('cart')}
+                        onCartClick={() => setCartOpen(true)}
                     />
                     <Footer />
                 </>

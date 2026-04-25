@@ -1,21 +1,32 @@
 import React, { useState } from 'react';
 import { ArrowLeft, ShieldCheck, Package, CreditCard, Heart, Copy, Check, MessageCircle, Tag, Upload, Database, Lock, Truck } from 'lucide-react';
 import posthog from 'posthog-js';
-import type { CartItem } from '../types';
+import type { CartItem, Product, ProductVariation, KitType } from '../types';
 import { KIT_UPGRADE_PRICE } from '../types';
 import { usePaymentMethods } from '../hooks/usePaymentMethods';
 import { useShippingLocations } from '../hooks/useShippingLocations';
 import { useCouriers } from '../hooks/useCouriers';
 import { supabase } from '../lib/supabase';
 import { useImageUpload } from '../hooks/useImageUpload';
+import { useRecommendations } from '../hooks/useRecommendations';
+import RecommendationRail from './RecommendationRail';
+import { getEffectiveUnitPrice, getMatchingBundleTier, getRegularUnitPrice } from '../lib/bundlePricing';
 
 interface CheckoutProps {
     cartItems: CartItem[];
     totalPrice: number;
     onBack: () => void;
+    allProducts?: Product[];
+    addToCart?: (product: Product, variation?: ProductVariation, quantity?: number, kitType?: KitType) => void;
 }
 
-const Checkout: React.FC<CheckoutProps> = ({ cartItems, totalPrice, onBack }) => {
+const Checkout: React.FC<CheckoutProps> = ({ cartItems, totalPrice, onBack, allProducts = [], addToCart }) => {
+    const recommendations = useRecommendations({
+        products: allProducts,
+        cartItems,
+        limit: 3,
+    });
+
     const { paymentMethods } = usePaymentMethods();
     const { locations: shippingLocations } = useShippingLocations();
     const { couriers } = useCouriers();
@@ -231,18 +242,12 @@ const Checkout: React.FC<CheckoutProps> = ({ cartItems, totalPrice, onBack }) =>
             }
 
             const orderItems = cartItems.map(item => {
-                const basePrice = item.variation ? item.variation.price : item.product.base_price;
-                let currentPrice = basePrice;
-                const isDiscounted = item.variation
-                    ? (item.variation.discount_active && item.variation.discount_price !== null && item.variation.discount_price < basePrice)
-                    : (item.product.discount_active && item.product.discount_price !== null && item.product.discount_price < item.product.base_price);
-                if (isDiscounted) {
-                    currentPrice = item.variation?.discount_price ?? item.product.discount_price ?? basePrice;
-                }
-
-                // Include kit upgrade price for complete_kit items
-                const kitUpgrade = item.kitType === 'complete_kit' ? KIT_UPGRADE_PRICE : 0;
-                currentPrice += kitUpgrade;
+                const currentPrice = getEffectiveUnitPrice(
+                    item.product,
+                    item.variation,
+                    item.kitType,
+                    item.quantity
+                );
 
                 return {
                     product_id: item.product.id,
@@ -717,16 +722,12 @@ Please confirm this order. Thank you!
                                 <h3 className="font-heading font-bold text-charcoal-900 mb-4">Order Summary</h3>
                                 <div className="space-y-2 mb-4">
                                     {cartItems.map((item, idx) => {
-                                        const basePrice = item.variation ? item.variation.price : item.product.base_price;
-                                        let currentPrice = basePrice;
-                                        const isDiscounted = item.variation
-                                            ? (item.variation.discount_active && item.variation.discount_price !== null && item.variation.discount_price < basePrice)
-                                            : (item.product.discount_active && item.product.discount_price !== null && item.product.discount_price < item.product.base_price);
-                                        if (isDiscounted) {
-                                            currentPrice = item.variation?.discount_price || item.product.discount_price || basePrice;
-                                        }
-                                        const kitUpgrade = item.kitType === 'complete_kit' ? KIT_UPGRADE_PRICE : 0;
-                                        currentPrice += kitUpgrade;
+                                        const currentPrice = getEffectiveUnitPrice(
+                                            item.product,
+                                            item.variation,
+                                            item.kitType,
+                                            item.quantity
+                                        );
 
                                         return (
                                             <div key={idx} className="flex justify-between text-sm">
@@ -1029,15 +1030,20 @@ Please confirm this order. Thank you!
 
                         <div className="space-y-4 mb-6">
                             {cartItems.map((item, index) => {
-                                const basePrice = item.variation ? item.variation.price : item.product.base_price;
-                                let currentPrice = basePrice;
-                                const isDiscounted = item.variation
-                                    ? (item.variation.discount_active && item.variation.discount_price !== null && item.variation.discount_price < basePrice)
-                                    : (item.product.discount_active && item.product.discount_price !== null && item.product.discount_price < item.product.base_price);
-
-                                if (isDiscounted) {
-                                    currentPrice = item.variation?.discount_price || item.product.discount_price || basePrice;
-                                }
+                                const currentPrice = getEffectiveUnitPrice(
+                                    item.product,
+                                    item.variation,
+                                    item.kitType,
+                                    item.quantity
+                                );
+                                const lineTotal = currentPrice * item.quantity;
+                                const tier = getMatchingBundleTier(item.product, item.quantity);
+                                const kitUpgradePerUnit = item.kitType === 'complete_kit' ? KIT_UPGRADE_PRICE : 0;
+                                const fullTotal = tier
+                                    ? (getRegularUnitPrice(item.product, item.variation) + kitUpgradePerUnit) * item.quantity
+                                    : lineTotal;
+                                const showSavings = tier != null && lineTotal < fullTotal;
+                                const pct = showSavings ? Math.round((1 - lineTotal / fullTotal) * 100) : 0;
 
                                 return (
                                     <div key={index} className="pb-4 border-b border-gray-100">
@@ -1048,9 +1054,19 @@ Please confirm this order. Thank you!
                                                     <p className="text-xs text-gray-600 mt-0.5">{item.variation.name}</p>
                                                 )}
                                             </div>
-                                            <span className="font-bold text-charcoal-900 text-sm">
-                                                ₱{(currentPrice * item.quantity).toLocaleString('en-PH', { minimumFractionDigits: 0 })}
-                                            </span>
+                                            <div className="text-right">
+                                                {showSavings && (
+                                                    <div className="text-[10px] text-charcoal-300 line-through">
+                                                        ₱{fullTotal.toLocaleString('en-PH', { minimumFractionDigits: 0 })}
+                                                    </div>
+                                                )}
+                                                <span className="font-bold text-charcoal-900 text-sm">
+                                                    ₱{lineTotal.toLocaleString('en-PH', { minimumFractionDigits: 0 })}
+                                                </span>
+                                                {showSavings && (
+                                                    <div className="text-[10px] font-bold text-emerald-600">SAVE {pct}%</div>
+                                                )}
+                                            </div>
                                         </div>
                                         <p className="text-xs text-gray-400">Qty: {item.quantity}</p>
                                     </div>
@@ -1117,6 +1133,19 @@ Please confirm this order. Thank you!
                             </div>
                             <p className="text-xs text-gray-400 text-right italic">+ Shipping fee added at payment</p>
                         </div>
+
+                        {/* Last-minute add-ons */}
+                        {addToCart && recommendations.length > 0 && (
+                            <div className="mt-6">
+                                <RecommendationRail
+                                    products={recommendations}
+                                    title="Add to your order"
+                                    variant="compact"
+                                    placement="checkout"
+                                    onAddToCart={addToCart}
+                                />
+                            </div>
+                        )}
 
                     </div>
                 </div>

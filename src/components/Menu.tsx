@@ -65,6 +65,8 @@ const Menu: React.FC<MenuProps> = ({ menuItems, addToCart, cartItems }) => {
           onAddToCart={(product, variation, quantity, kitType) => {
             addToCart(product, variation, quantity, kitType);
           }}
+          allProducts={menuItems}
+          onProductSelect={(product) => setSelectedProduct(product)}
         />
       )}
 

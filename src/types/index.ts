@@ -27,11 +27,26 @@ export interface Product {
   image_url: string | null;
   safety_sheet_url: string | null;
 
+  // Manual upsell picks; takes priority over auto recommendations
+  paired_product_ids: string[];
+
+  // Per-product Bundle & Save tiers shown on PDP. Empty = fall back to defaults.
+  bundle_tiers: BundleTier[];
+
   created_at: string;
   updated_at: string;
 
   // Relations
   variations?: ProductVariation[];
+}
+
+export interface BundleTier {
+  qty: number;
+  label: string;
+  popular?: boolean;
+  // Total bundle price (vial-only, base variation). When set and below qty * unit price, the
+  // PDP shows a SAVE % tag and the cart charges this total instead of unit * qty.
+  price?: number | null;
 }
 
 export interface ProductVariation {
