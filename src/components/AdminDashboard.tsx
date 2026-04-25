@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Plus, Edit, Trash2, Save, X, ArrowLeft, TrendingUp, Package, Users, FolderOpen, CreditCard, Sparkles, Layers, Shield, RefreshCw, Warehouse, ShoppingCart, HelpCircle, MapPin, Tag, Truck } from 'lucide-react';
+import { Plus, Edit, Trash2, Save, X, ArrowLeft, TrendingUp, Package, Users, FolderOpen, CreditCard, Sparkles, Layers, Shield, RefreshCw, Warehouse, ShoppingCart, HelpCircle, MapPin, Tag, Truck, ChevronDown } from 'lucide-react';
 import type { Product, BundleTier } from '../types';
 import { useMenu } from '../hooks/useMenu';
 import { useCategories } from '../hooks/useCategories';
@@ -20,6 +20,55 @@ import CourierManager from './CourierManager';
 import ProtocolManager from './ProtocolManager';
 // GuideManager removed (Peptalk functionality disabled)
 
+type CollapsibleSectionProps = {
+  icon: string;
+  title: string;
+  summary?: string;
+  expanded: boolean;
+  onToggle: () => void;
+  children: React.ReactNode;
+  variant?: 'default' | 'highlighted';
+};
+
+const CollapsibleSection: React.FC<CollapsibleSectionProps> = ({
+  icon,
+  title,
+  summary,
+  expanded,
+  onToggle,
+  children,
+  variant = 'default',
+}) => {
+  const wrapperClass =
+    variant === 'highlighted'
+      ? 'bg-gradient-to-r from-gold-50 to-gray-50 border border-gray-200 rounded-lg overflow-hidden'
+      : 'bg-white border border-gray-200 rounded-lg overflow-hidden';
+  return (
+    <div className={wrapperClass}>
+      <button
+        type="button"
+        onClick={onToggle}
+        aria-expanded={expanded}
+        className="w-full flex items-center justify-between px-3 py-2.5 hover:bg-gray-50/70 transition-colors text-left"
+      >
+        <div className="flex items-center gap-2 min-w-0 flex-1">
+          <span className="text-base shrink-0">{icon}</span>
+          <span className="text-sm font-bold text-gray-900 shrink-0">{title}</span>
+          {!expanded && summary && (
+            <span className="text-xs text-gray-500 truncate ml-1">— {summary}</span>
+          )}
+        </div>
+        <ChevronDown
+          className={`h-4 w-4 text-gray-400 transition-transform shrink-0 ${expanded ? 'rotate-180' : ''}`}
+        />
+      </button>
+      {expanded && (
+        <div className="px-3 pb-3 pt-2 border-t border-gray-100">{children}</div>
+      )}
+    </div>
+  );
+};
+
 const AdminDashboard: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
     return localStorage.getItem('peptide_admin_auth') === 'true';
@@ -34,7 +83,19 @@ const AdminDashboard: React.FC = () => {
   const [managingVariationsProductId, setManagingVariationsProductId] = useState<string | null>(null);
   const [selectedProducts, setSelectedProducts] = useState<Set<string>>(new Set());
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [expandedSections, setExpandedSections] = useState<Set<string>>(() => new Set(['basics']));
   const { addProtocol, protocols } = useProtocols();
+
+  const toggleSection = (id: string) => {
+    setExpandedSections((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
+
+  const ALL_SECTION_IDS = ['basics', 'scientific', 'inclusions', 'inventory', 'discount', 'paired', 'bundle', 'image'];
 
   const variationManagerProduct = managingVariationsProductId
     ? products.find((product) => product.id === managingVariationsProductId) || null
@@ -75,6 +136,7 @@ const AdminDashboard: React.FC = () => {
     setCurrentView('add');
     setSelectedProducts(new Set());
     setManagingVariationsProductId(null);
+    setExpandedSections(new Set(['basics']));
     const defaultCategory = categories.length > 0 ? categories[0].id : 'research';
     setFormData({
       name: '',
@@ -105,6 +167,7 @@ const AdminDashboard: React.FC = () => {
     setCurrentView('edit');
     setSelectedProducts(new Set());
     setManagingVariationsProductId(null);
+    setExpandedSections(new Set(['basics']));
   };
 
   const handleDeleteProduct = async (id: string) => {
@@ -484,11 +547,35 @@ const AdminDashboard: React.FC = () => {
 
   // Form View (Add/Edit)
   if (currentView === 'add' || currentView === 'edit') {
+    const inclusionsCount = formData.inclusions?.length || 0;
+    const pairedCount = formData.paired_product_ids?.length || 0;
+    const tierCount = formData.bundle_tiers?.length || 0;
+    const currentCategoryName = categories.find((c) => c.id === formData.category)?.name || formData.category || '';
+    const inventoryParts: string[] = [`${formData.stock_quantity || 0} in stock`];
+    if (formData.featured) inventoryParts.push('Featured');
+    if (formData.available === false) inventoryParts.push('Hidden');
+    const sectionSummaries = {
+      basics: formData.name
+        ? `${formData.name}${formData.base_price ? ` • ₱${formData.base_price}` : ''}`
+        : 'Required — fill in name, category, price',
+      scientific: formData.purity_percentage ? `${formData.purity_percentage}% purity` : 'Optional',
+      inclusions: formData.inclusions
+        ? `${inclusionsCount} item${inclusionsCount === 1 ? '' : 's'}`
+        : 'Not a set',
+      inventory: inventoryParts.join(' • '),
+      discount:
+        formData.discount_active && formData.discount_price
+          ? `₱${formData.discount_price} active`
+          : 'No discount',
+      paired: pairedCount > 0 ? `${pairedCount} pinned` : 'Auto-recommendations',
+      bundle: tierCount === 0 ? 'Default 1 / 2 / 3' : `${tierCount} custom tier${tierCount === 1 ? '' : 's'}`,
+      image: formData.image_url ? 'Image uploaded' : 'No image',
+    };
     return (
       <>
         {variationManagerModal}
         <div className="min-h-screen bg-gray-50">
-          <div className="bg-white shadow-sm border-b border-gray-200">
+          <div className="sticky top-0 z-20 bg-white shadow-sm border-b border-gray-200">
             <div className="max-w-6xl mx-auto px-3 sm:px-4">
               <div className="flex items-center justify-between h-12 md:h-14 gap-2">
                 <div className="flex items-center space-x-2">
@@ -500,7 +587,7 @@ const AdminDashboard: React.FC = () => {
                     <span className="text-xs md:text-sm">Back</span>
                   </button>
                   <h1 className="text-sm md:text-base font-bold text-charcoal-900">
-                    {currentView === 'add' ? '✨ Add New' : '✏️ Edit Product'}
+                    {currentView === 'add' ? 'Add Product' : 'Edit Product'}
                   </h1>
                 </div>
                 <div className="flex space-x-1.5">
@@ -521,14 +608,16 @@ const AdminDashboard: React.FC = () => {
             </div>
           </div>
 
-          <div className="max-w-5xl mx-auto px-3 sm:px-4 py-3 md:py-4">
-            <div className="bg-white rounded-lg md:rounded-xl shadow-sm p-3 md:p-4 lg:p-5 space-y-3 md:space-y-4 border border-gray-200">
-              {/* Basic Information */}
-              <div>
-                <h3 className="text-sm md:text-base font-bold text-gray-900 mb-2 md:mb-3 flex items-center gap-1.5">
-                  <span className="text-base md:text-lg">📝</span>
-                  Basic Information
-                </h3>
+          <div className="max-w-6xl mx-auto px-3 sm:px-4 py-3 md:py-4">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 md:gap-4">
+              <div className="lg:col-span-2 space-y-2">
+                <CollapsibleSection
+                  icon="📝"
+                  title="Basic Information"
+                  summary={sectionSummaries.basics}
+                  expanded={expandedSections.has('basics')}
+                  onToggle={() => toggleSection('basics')}
+                >
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-3">
                   <div className="md:col-span-2">
                     <label className="block text-xs font-semibold text-gray-700 mb-1">Product Name *</label>
@@ -583,14 +672,15 @@ const AdminDashboard: React.FC = () => {
                     )}
                   </div>
                 </div>
-              </div>
+                </CollapsibleSection>
 
-              {/* Scientific Details */}
-              <div>
-                <h3 className="text-sm md:text-base font-bold text-gray-900 mb-2 md:mb-3 flex items-center gap-1.5">
-                  <span className="text-base md:text-lg">🧪</span>
-                  Scientific Details
-                </h3>
+                <CollapsibleSection
+                  icon="🧪"
+                  title="Scientific Details"
+                  summary={sectionSummaries.scientific}
+                  expanded={expandedSections.has('scientific')}
+                  onToggle={() => toggleSection('scientific')}
+                >
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-3">
                   <div>
                     <label className="block text-xs font-semibold text-gray-700 mb-1">Purity (%)</label>
@@ -605,15 +695,17 @@ const AdminDashboard: React.FC = () => {
                   </div>
 
                 </div>
-              </div>
+                </CollapsibleSection>
 
-              {/* Complete Set Inclusions */}
-              <div className="bg-gradient-to-r from-gold-50 to-gray-50 border border-gray-200 rounded-lg p-3 md:p-4">
-                <div className="flex items-center justify-between mb-2 md:mb-3">
-                  <h3 className="text-sm md:text-base font-bold text-gray-900 flex items-center gap-1.5">
-                    <span className="text-base md:text-lg">📦</span>
-                    Complete Set Inclusions
-                  </h3>
+                <CollapsibleSection
+                  icon="📦"
+                  title="Complete Set Inclusions"
+                  summary={sectionSummaries.inclusions}
+                  expanded={expandedSections.has('inclusions')}
+                  onToggle={() => toggleSection('inclusions')}
+                  variant="highlighted"
+                >
+                <div className="flex items-center mb-2 md:mb-3">
                   <label className="flex items-center gap-1.5 cursor-pointer">
                     <input
                       type="checkbox"
@@ -698,14 +790,15 @@ const AdminDashboard: React.FC = () => {
                     </button>
                   </div>
                 )}
-              </div>
+                </CollapsibleSection>
 
-              {/* Inventory */}
-              <div>
-                <h3 className="text-sm md:text-base font-bold text-gray-900 mb-2 md:mb-3 flex items-center gap-1.5">
-                  <span className="text-base md:text-lg">📦</span>
-                  Inventory & Availability
-                </h3>
+                <CollapsibleSection
+                  icon="📦"
+                  title="Inventory & Availability"
+                  summary={sectionSummaries.inventory}
+                  expanded={expandedSections.has('inventory')}
+                  onToggle={() => toggleSection('inventory')}
+                >
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-3">
                   <div>
                     <label className="block text-xs font-semibold text-gray-700 mb-1">Stock Quantity</label>
@@ -740,14 +833,15 @@ const AdminDashboard: React.FC = () => {
                     </label>
                   </div>
                 </div>
-              </div>
+                </CollapsibleSection>
 
-              {/* Discount */}
-              <div>
-                <h3 className="text-sm md:text-base font-bold text-gray-900 mb-2 md:mb-3 flex items-center gap-1.5">
-                  <span className="text-base md:text-lg">💰</span>
-                  Discount Pricing
-                </h3>
+                <CollapsibleSection
+                  icon="💰"
+                  title="Discount Pricing"
+                  summary={sectionSummaries.discount}
+                  expanded={expandedSections.has('discount')}
+                  onToggle={() => toggleSection('discount')}
+                >
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-3">
                   <div>
                     <label className="block text-xs font-semibold text-gray-700 mb-1">Discount Price (₱)</label>
@@ -773,14 +867,15 @@ const AdminDashboard: React.FC = () => {
                     </label>
                   </div>
                 </div>
-              </div>
+                </CollapsibleSection>
 
-              {/* Best Paired With */}
-              <div>
-                <h3 className="text-sm md:text-base font-bold text-gray-900 mb-2 md:mb-3 flex items-center gap-1.5">
-                  <span className="text-base md:text-lg">🤝</span>
-                  Best Paired With
-                </h3>
+                <CollapsibleSection
+                  icon="🤝"
+                  title="Best Paired With"
+                  summary={sectionSummaries.paired}
+                  expanded={expandedSections.has('paired')}
+                  onToggle={() => toggleSection('paired')}
+                >
                 <p className="text-xs text-gray-500 mb-2">
                   Pick products to recommend alongside this one in the cart, checkout, and product page. These take priority; the site auto-fills any remaining slots by category.
                 </p>
@@ -902,14 +997,15 @@ const AdminDashboard: React.FC = () => {
                     </div>
                   );
                 })()}
-              </div>
+                </CollapsibleSection>
 
-              {/* Bundle & Save */}
-              <div>
-                <h3 className="text-sm md:text-base font-bold text-gray-900 mb-2 md:mb-3 flex items-center gap-1.5">
-                  <span className="text-base md:text-lg">📦</span>
-                  Bundle &amp; Save Tiers
-                </h3>
+                <CollapsibleSection
+                  icon="📦"
+                  title="Bundle & Save Tiers"
+                  summary={sectionSummaries.bundle}
+                  expanded={expandedSections.has('bundle')}
+                  onToggle={() => toggleSection('bundle')}
+                >
                 <p className="text-xs text-gray-500 mb-2">
                   Quantity bundles shown on the product detail page. Leave empty to use the default 1 / 2 / 3 bottle tiers. Mark one as &quot;Most popular&quot; to highlight it.
                   Set a bundle price (total for that quantity, vial only) and the site auto-shows a SAVE % tag and charges that bundle total at checkout. Leave price blank to just use quantity × unit price.
@@ -1081,14 +1177,15 @@ const AdminDashboard: React.FC = () => {
                     </div>
                   );
                 })()}
-              </div>
+                </CollapsibleSection>
 
-              {/* Product Image */}
-              <div>
-                <h3 className="text-sm md:text-base font-bold text-gray-900 mb-2 md:mb-3 flex items-center gap-1.5">
-                  <span className="text-base md:text-lg">🖼️</span>
-                  Product Image
-                </h3>
+                <CollapsibleSection
+                  icon="🖼️"
+                  title="Product Image"
+                  summary={sectionSummaries.image}
+                  expanded={expandedSections.has('image')}
+                  onToggle={() => toggleSection('image')}
+                >
                 <p className="text-xs text-gray-500 mb-2">
                   Upload a product image (optional). This will appear on the customer-facing site.
                 </p>
@@ -1113,11 +1210,77 @@ const AdminDashboard: React.FC = () => {
                     });
                   }}
                 />
+                </CollapsibleSection>
               </div>
 
+              <aside className="hidden lg:block lg:col-span-1">
+                <div className="lg:sticky lg:top-16 space-y-2">
+                  <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
+                    <div className="aspect-square bg-gray-100 flex items-center justify-center">
+                      {formData.image_url ? (
+                        <img
+                          src={formData.image_url}
+                          alt={formData.name || 'Product preview'}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <div className="text-gray-400 text-xs">No image yet</div>
+                      )}
+                    </div>
+                    <div className="p-3 space-y-1.5">
+                      <div className="text-sm font-bold text-gray-900 truncate">
+                        {formData.name || 'Untitled product'}
+                      </div>
+                      {currentCategoryName && (
+                        <div className="text-xs text-gray-500 truncate">{currentCategoryName}</div>
+                      )}
+                      <div className="flex items-baseline gap-2 pt-1">
+                        {formData.discount_active && formData.discount_price ? (
+                          <>
+                            <span className="text-base font-bold text-red-600">₱{formData.discount_price}</span>
+                            <span className="text-xs text-gray-400 line-through">₱{formData.base_price || 0}</span>
+                          </>
+                        ) : (
+                          <span className="text-base font-bold text-gray-900">₱{formData.base_price || 0}</span>
+                        )}
+                      </div>
+                      <div className="flex flex-wrap gap-1 pt-1.5">
+                        {formData.featured && (
+                          <span className="text-[10px] font-semibold px-1.5 py-0.5 bg-gold-100 text-gold-800 rounded">⭐ Featured</span>
+                        )}
+                        {formData.available !== false ? (
+                          <span className="text-[10px] font-semibold px-1.5 py-0.5 bg-green-100 text-green-800 rounded">Available</span>
+                        ) : (
+                          <span className="text-[10px] font-semibold px-1.5 py-0.5 bg-gray-200 text-gray-700 rounded">Hidden</span>
+                        )}
+                        <span className="text-[10px] font-semibold px-1.5 py-0.5 bg-gray-100 text-gray-700 rounded">
+                          {formData.stock_quantity || 0} stock
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="bg-white border border-gray-200 rounded-lg p-2 flex gap-1.5">
+                    <button
+                      type="button"
+                      onClick={() => setExpandedSections(new Set(ALL_SECTION_IDS))}
+                      className="flex-1 text-[11px] font-medium text-gray-600 hover:text-gray-900 px-2 py-1 rounded hover:bg-gray-50"
+                    >
+                      Expand all
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setExpandedSections(new Set())}
+                      className="flex-1 text-[11px] font-medium text-gray-600 hover:text-gray-900 px-2 py-1 rounded hover:bg-gray-50"
+                    >
+                      Collapse all
+                    </button>
+                  </div>
+                </div>
+              </aside>
             </div>
           </div>
-        </div >
+        </div>
       </>
     );
   }
