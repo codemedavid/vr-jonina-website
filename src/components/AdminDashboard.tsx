@@ -3,8 +3,6 @@ import { Plus, Edit, Trash2, Save, X, ArrowLeft, TrendingUp, Package, Users, Fol
 import type { Product, BundleTier } from '../types';
 import { useMenu } from '../hooks/useMenu';
 import { useCategories } from '../hooks/useCategories';
-import { useProtocols } from '../hooks/useProtocols';
-import { generateProtocolFromTemplate } from '../lib/protocolTemplates';
 import ImageUpload from './ImageUpload';
 import CategoryManager from './CategoryManager';
 import PaymentMethodManager from './PaymentMethodManager';
@@ -84,7 +82,6 @@ const AdminDashboard: React.FC = () => {
   const [selectedProducts, setSelectedProducts] = useState<Set<string>>(new Set());
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [expandedSections, setExpandedSections] = useState<Set<string>>(() => new Set(['basics']));
-  const { addProtocol, protocols } = useProtocols();
 
   const toggleSection = (id: string) => {
     setExpandedSections((prev) => {
@@ -448,44 +445,6 @@ const AdminDashboard: React.FC = () => {
     setIsRefreshing(true);
     await refreshProducts();
     setTimeout(() => setIsRefreshing(false), 500);
-  };
-
-  const handleBulkGenerateProtocols = async () => {
-    if (!confirm(`This will generate/regenerate protocols for ALL ${products.length} products using AI. This may take a while and will consume API credits. Continue?`)) {
-      return;
-    }
-
-    try {
-      setIsProcessing(true);
-      let successCount = 0;
-      let errorCount = 0;
-
-      for (const product of products) {
-        try {
-          console.log(`📋 Generating protocol for: ${product.name}`);
-          // Convert category ID to display name for template matching
-          const categoryName = categories.find(cat => cat.id === product.category)?.name || product.category || 'default';
-          const protocolData = generateProtocolFromTemplate(product.name, categoryName);
-          await addProtocol({
-            ...protocolData,
-            product_id: product.id
-          });
-          successCount++;
-          console.log(`✅ Protocol created for: ${product.name}`);
-        } catch (err) {
-          console.error(`❌ Failed to generate protocol for ${product.name}:`, err);
-          errorCount++;
-        }
-      }
-
-      alert(`Bulk Generation Complete:\n✅ Generated: ${successCount}\n❌ Failed: ${errorCount}`);
-
-    } catch (error) {
-      console.error('Bulk generation error:', error);
-      alert('Bulk generation failed.');
-    } finally {
-      setIsProcessing(false);
-    }
   };
 
   // Login Screen
@@ -1628,26 +1587,6 @@ const AdminDashboard: React.FC = () => {
   if (currentView === 'protocols') {
     return (
       <div className="min-h-screen bg-gray-50">
-        {/* Bulk Generate Banner */}
-        <div className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white p-4">
-          <div className="max-w-4xl mx-auto flex items-center justify-between flex-wrap gap-4">
-            <div className="flex items-center gap-3">
-              <Sparkles className="w-5 h-5 text-purple-200" />
-              <div>
-                <h3 className="font-bold text-white">AI Protocol Assistant</h3>
-                <p className="text-xs text-purple-200">Generate protocols for all {products.length} products</p>
-              </div>
-            </div>
-            <button
-              onClick={handleBulkGenerateProtocols}
-              disabled={isProcessing}
-              className="bg-white text-purple-700 px-4 py-2 rounded-lg text-sm font-bold shadow-sm hover:bg-purple-50 transition-colors disabled:opacity-50"
-            >
-              {isProcessing ? 'Generating...' : '🤖 Bulk Generate All Protocols'}
-            </button>
-          </div>
-        </div>
-
         <ProtocolManager onBack={() => setCurrentView('dashboard')} />
       </div>
     );
@@ -1774,68 +1713,68 @@ const AdminDashboard: React.FC = () => {
 
         <div className="max-w-6xl mx-auto px-4 py-8">
           {/* Stats Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3 md:gap-4 mb-4 md:mb-8">
             <button
               onClick={() => setCurrentView('products')}
-              className="group relative overflow-hidden bg-white rounded-2xl p-5 border border-gray-200 hover:border-blue-500 hover:shadow-lg transition-all duration-300 text-left"
+              className="group relative overflow-hidden bg-white rounded-xl md:rounded-2xl p-3 md:p-5 border border-gray-200 hover:border-blue-500 hover:shadow-lg transition-all duration-300 text-left"
             >
-              <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
-                <Package className="w-24 h-24 text-blue-600" />
+              <div className="absolute top-0 right-0 p-2 md:p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                <Package className="w-16 h-16 md:w-24 md:h-24 text-blue-600" />
               </div>
               <div className="relative z-10">
-                <div className="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300">
-                  <Package className="h-5 w-5 text-blue-600" />
+                <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg bg-blue-50 flex items-center justify-center mb-2 md:mb-3 group-hover:scale-110 transition-transform duration-300">
+                  <Package className="h-4 w-4 md:h-5 md:w-5 text-blue-600" />
                 </div>
-                <p className="text-sm font-medium text-gray-500 mb-1">Total Products</p>
-                <p className="text-3xl font-bold text-gray-900 tracking-tight">{totalProducts}</p>
+                <p className="text-[11px] md:text-sm font-medium text-gray-500 mb-0.5 md:mb-1">Total Products</p>
+                <p className="text-xl md:text-3xl font-bold text-gray-900 tracking-tight">{totalProducts}</p>
               </div>
             </button>
 
             <button
               onClick={() => setCurrentView('products')}
-              className="group relative overflow-hidden bg-white rounded-2xl p-5 border border-gray-200 hover:border-green-500 hover:shadow-lg transition-all duration-300 text-left"
+              className="group relative overflow-hidden bg-white rounded-xl md:rounded-2xl p-3 md:p-5 border border-gray-200 hover:border-green-500 hover:shadow-lg transition-all duration-300 text-left"
             >
-              <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
-                <TrendingUp className="w-24 h-24 text-green-600" />
+              <div className="absolute top-0 right-0 p-2 md:p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                <TrendingUp className="w-16 h-16 md:w-24 md:h-24 text-green-600" />
               </div>
               <div className="relative z-10">
-                <div className="w-10 h-10 rounded-lg bg-green-50 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300">
-                  <TrendingUp className="h-5 w-5 text-green-600" />
+                <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg bg-green-50 flex items-center justify-center mb-2 md:mb-3 group-hover:scale-110 transition-transform duration-300">
+                  <TrendingUp className="h-4 w-4 md:h-5 md:w-5 text-green-600" />
                 </div>
-                <p className="text-sm font-medium text-gray-500 mb-1">Available Stock</p>
-                <p className="text-3xl font-bold text-gray-900 tracking-tight">{availableProducts}</p>
+                <p className="text-[11px] md:text-sm font-medium text-gray-500 mb-0.5 md:mb-1">Available Stock</p>
+                <p className="text-xl md:text-3xl font-bold text-gray-900 tracking-tight">{availableProducts}</p>
               </div>
             </button>
 
             <button
               onClick={() => setCurrentView('products')}
-              className="group relative overflow-hidden bg-white rounded-2xl p-5 border border-gray-200 hover:border-amber-500 hover:shadow-lg transition-all duration-300 text-left"
+              className="group relative overflow-hidden bg-white rounded-xl md:rounded-2xl p-3 md:p-5 border border-gray-200 hover:border-amber-500 hover:shadow-lg transition-all duration-300 text-left"
             >
-              <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
-                <Sparkles className="w-24 h-24 text-amber-600" />
+              <div className="absolute top-0 right-0 p-2 md:p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                <Sparkles className="w-16 h-16 md:w-24 md:h-24 text-amber-600" />
               </div>
               <div className="relative z-10">
-                <div className="w-10 h-10 rounded-lg bg-amber-50 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300">
-                  <Sparkles className="h-5 w-5 text-amber-600" />
+                <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg bg-amber-50 flex items-center justify-center mb-2 md:mb-3 group-hover:scale-110 transition-transform duration-300">
+                  <Sparkles className="h-4 w-4 md:h-5 md:w-5 text-amber-600" />
                 </div>
-                <p className="text-sm font-medium text-gray-500 mb-1">Featured Items</p>
-                <p className="text-3xl font-bold text-gray-900 tracking-tight">{featuredProducts}</p>
+                <p className="text-[11px] md:text-sm font-medium text-gray-500 mb-0.5 md:mb-1">Featured Items</p>
+                <p className="text-xl md:text-3xl font-bold text-gray-900 tracking-tight">{featuredProducts}</p>
               </div>
             </button>
 
             <button
               onClick={() => setCurrentView('categories')}
-              className="group relative overflow-hidden bg-white rounded-2xl p-5 border border-gray-200 hover:border-purple-500 hover:shadow-lg transition-all duration-300 text-left"
+              className="group relative overflow-hidden bg-white rounded-xl md:rounded-2xl p-3 md:p-5 border border-gray-200 hover:border-purple-500 hover:shadow-lg transition-all duration-300 text-left"
             >
-              <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
-                <Users className="w-24 h-24 text-purple-600" />
+              <div className="absolute top-0 right-0 p-2 md:p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                <Users className="w-16 h-16 md:w-24 md:h-24 text-purple-600" />
               </div>
               <div className="relative z-10">
-                <div className="w-10 h-10 rounded-lg bg-purple-50 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300">
-                  <Users className="h-5 w-5 text-purple-600" />
+                <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg bg-purple-50 flex items-center justify-center mb-2 md:mb-3 group-hover:scale-110 transition-transform duration-300">
+                  <Users className="h-4 w-4 md:h-5 md:w-5 text-purple-600" />
                 </div>
-                <p className="text-sm font-medium text-gray-500 mb-1">Categories</p>
-                <p className="text-3xl font-bold text-gray-900 tracking-tight">{categories.length}</p>
+                <p className="text-[11px] md:text-sm font-medium text-gray-500 mb-0.5 md:mb-1">Categories</p>
+                <p className="text-xl md:text-3xl font-bold text-gray-900 tracking-tight">{categories.length}</p>
               </div>
             </button>
           </div>
@@ -1852,8 +1791,8 @@ const AdminDashboard: React.FC = () => {
                   onClick={handleAddProduct}
                   className="group flex items-center gap-3 p-3 text-left hover:bg-gray-50 rounded-xl transition-all border border-transparent hover:border-gray-200"
                 >
-                  <div className="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                    <Plus className="h-5 w-5 text-blue-600" />
+                  <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg bg-blue-50 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <Plus className="h-4 w-4 md:h-5 md:w-5 text-blue-600" />
                   </div>
                   <div>
                     <span className="block text-sm font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">Add Product</span>
@@ -1864,8 +1803,8 @@ const AdminDashboard: React.FC = () => {
                   onClick={() => setCurrentView('products')}
                   className="group flex items-center gap-3 p-3 text-left hover:bg-gray-50 rounded-xl transition-all border border-transparent hover:border-gray-200"
                 >
-                  <div className="w-10 h-10 rounded-lg bg-emerald-50 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                    <Package className="h-5 w-5 text-brand-600" />
+                  <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg bg-emerald-50 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <Package className="h-4 w-4 md:h-5 md:w-5 text-brand-600" />
                   </div>
                   <div>
                     <span className="block text-sm font-semibold text-gray-900 group-hover:text-brand-600 transition-colors">Manage Products</span>
@@ -1876,8 +1815,8 @@ const AdminDashboard: React.FC = () => {
                   onClick={() => setCurrentView('categories')}
                   className="group flex items-center gap-3 p-3 text-left hover:bg-gray-50 rounded-xl transition-all border border-transparent hover:border-gray-200"
                 >
-                  <div className="w-10 h-10 rounded-lg bg-pink-50 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                    <FolderOpen className="h-5 w-5 text-pink-600" />
+                  <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg bg-pink-50 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <FolderOpen className="h-4 w-4 md:h-5 md:w-5 text-pink-600" />
                   </div>
                   <div>
                     <span className="block text-sm font-semibold text-gray-900 group-hover:text-pink-600 transition-colors">Categories</span>
@@ -1888,8 +1827,8 @@ const AdminDashboard: React.FC = () => {
                   onClick={() => setCurrentView('orders')}
                   className="group flex items-center gap-3 p-3 text-left hover:bg-gray-50 rounded-xl transition-all border border-transparent hover:border-gray-200"
                 >
-                  <div className="w-10 h-10 rounded-lg bg-amber-50 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                    <ShoppingCart className="h-5 w-5 text-amber-600" />
+                  <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg bg-amber-50 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <ShoppingCart className="h-4 w-4 md:h-5 md:w-5 text-amber-600" />
                   </div>
                   <div>
                     <span className="block text-sm font-semibold text-gray-900 group-hover:text-amber-600 transition-colors">Orders</span>
@@ -1900,8 +1839,8 @@ const AdminDashboard: React.FC = () => {
                   onClick={() => setCurrentView('inventory')}
                   className="group flex items-center gap-3 p-3 text-left hover:bg-gray-50 rounded-xl transition-all border border-transparent hover:border-gray-200"
                 >
-                  <div className="w-10 h-10 rounded-lg bg-orange-50 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                    <Warehouse className="h-5 w-5 text-orange-600" />
+                  <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg bg-orange-50 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <Warehouse className="h-4 w-4 md:h-5 md:w-5 text-orange-600" />
                   </div>
                   <div>
                     <span className="block text-sm font-semibold text-gray-900 group-hover:text-orange-600 transition-colors">Inventory</span>
@@ -1912,8 +1851,8 @@ const AdminDashboard: React.FC = () => {
                   onClick={() => setCurrentView('shipping')}
                   className="group flex items-center gap-3 p-3 text-left hover:bg-gray-50 rounded-xl transition-all border border-transparent hover:border-gray-200"
                 >
-                  <div className="w-10 h-10 rounded-lg bg-cyan-50 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                    <MapPin className="h-5 w-5 text-cyan-600" />
+                  <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg bg-cyan-50 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <MapPin className="h-4 w-4 md:h-5 md:w-5 text-cyan-600" />
                   </div>
                   <div>
                     <span className="block text-sm font-semibold text-gray-900 group-hover:text-cyan-600 transition-colors">Shipping</span>
@@ -1924,8 +1863,8 @@ const AdminDashboard: React.FC = () => {
                   onClick={() => setCurrentView('couriers')}
                   className="group flex items-center gap-3 p-3 text-left hover:bg-gray-50 rounded-xl transition-all border border-transparent hover:border-gray-200"
                 >
-                  <div className="w-10 h-10 rounded-lg bg-teal-50 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                    <Truck className="h-5 w-5 text-teal-600" />
+                  <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg bg-teal-50 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <Truck className="h-4 w-4 md:h-5 md:w-5 text-teal-600" />
                   </div>
                   <div>
                     <span className="block text-sm font-semibold text-gray-900 group-hover:text-teal-600 transition-colors">Couriers</span>
@@ -1936,8 +1875,8 @@ const AdminDashboard: React.FC = () => {
                   onClick={() => setCurrentView('coa')}
                   className="group flex items-center gap-3 p-3 text-left hover:bg-gray-50 rounded-xl transition-all border border-transparent hover:border-gray-200"
                 >
-                  <div className="w-10 h-10 rounded-lg bg-indigo-50 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                    <Shield className="h-5 w-5 text-indigo-600" />
+                  <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg bg-indigo-50 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <Shield className="h-4 w-4 md:h-5 md:w-5 text-indigo-600" />
                   </div>
                   <div>
                     <span className="block text-sm font-semibold text-gray-900 group-hover:text-indigo-600 transition-colors">Lab Results</span>
@@ -1948,8 +1887,8 @@ const AdminDashboard: React.FC = () => {
                   onClick={() => setCurrentView('promo-codes')}
                   className="group flex items-center gap-3 p-3 text-left hover:bg-gray-50 rounded-xl transition-all border border-transparent hover:border-gray-200"
                 >
-                  <div className="w-10 h-10 rounded-lg bg-rose-50 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                    <Tag className="h-5 w-5 text-rose-600" />
+                  <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg bg-rose-50 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <Tag className="h-4 w-4 md:h-5 md:w-5 text-rose-600" />
                   </div>
                   <div>
                     <span className="block text-sm font-semibold text-gray-900 group-hover:text-rose-600 transition-colors">Promo Codes</span>
@@ -1960,8 +1899,8 @@ const AdminDashboard: React.FC = () => {
                   onClick={() => setCurrentView('payments')}
                   className="group flex items-center gap-3 p-3 text-left hover:bg-gray-50 rounded-xl transition-all border border-transparent hover:border-gray-200"
                 >
-                  <div className="w-10 h-10 rounded-lg bg-violet-50 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                    <CreditCard className="h-5 w-5 text-violet-600" />
+                  <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg bg-violet-50 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <CreditCard className="h-4 w-4 md:h-5 md:w-5 text-violet-600" />
                   </div>
                   <div>
                     <span className="block text-sm font-semibold text-gray-900 group-hover:text-violet-600 transition-colors">Payments</span>
@@ -1972,8 +1911,8 @@ const AdminDashboard: React.FC = () => {
                   onClick={() => setCurrentView('faq')}
                   className="group flex items-center gap-3 p-3 text-left hover:bg-gray-50 rounded-xl transition-all border border-transparent hover:border-gray-200"
                 >
-                  <div className="w-10 h-10 rounded-lg bg-teal-50 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                    <HelpCircle className="h-5 w-5 text-teal-600" />
+                  <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg bg-teal-50 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <HelpCircle className="h-4 w-4 md:h-5 md:w-5 text-teal-600" />
                   </div>
                   <div>
                     <span className="block text-sm font-semibold text-gray-900 group-hover:text-teal-600 transition-colors">FAQ</span>
@@ -1984,8 +1923,8 @@ const AdminDashboard: React.FC = () => {
                   onClick={() => setCurrentView('protocols')}
                   className="group flex items-center gap-3 p-3 text-left hover:bg-gray-50 rounded-xl transition-all border border-transparent hover:border-gray-200"
                 >
-                  <div className="w-10 h-10 rounded-lg bg-rose-50 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                    <Shield className="h-5 w-5 text-rose-600" />
+                  <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg bg-rose-50 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <Shield className="h-4 w-4 md:h-5 md:w-5 text-rose-600" />
                   </div>
                   <div>
                     <span className="block text-sm font-semibold text-gray-900 group-hover:text-rose-600 transition-colors">Protocols</span>
