@@ -195,9 +195,21 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({ product, onClos
                 {product.category}
               </p>
             )}
-            <h2 className="font-heading text-3xl sm:text-4xl font-bold text-charcoal-900 tracking-tight mb-3">
-              {product.name}
-            </h2>
+            <div className="flex items-baseline justify-between gap-3 mb-3">
+              <h2 className="font-heading text-3xl sm:text-4xl font-bold text-charcoal-900 tracking-tight">
+                {product.name}
+              </h2>
+              <div className="flex items-baseline gap-2 flex-shrink-0">
+                {hasDiscount && (
+                  <span className="text-sm text-charcoal-300 line-through">
+                    {formatPrice(baseOriginal)}
+                  </span>
+                )}
+                <span className="text-2xl sm:text-3xl font-bold text-charcoal-900">
+                  {formatPrice(baseDiscounted ?? baseOriginal)}
+                </span>
+              </div>
+            </div>
 
             {tags.length > 0 && (
               <div className="flex flex-wrap gap-2 mb-3">

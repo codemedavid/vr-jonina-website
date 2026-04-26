@@ -42,32 +42,32 @@ export default function PromoBanner() {
   return (
     <>
       {/* Banner */}
-      <div className="w-full py-2 px-4 relative" style={{ background: 'linear-gradient(135deg, #FFB6C8, #E8739B)' }}>
-        <div className="container mx-auto flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3">
-          <span className="text-white text-sm font-medium flex items-center gap-1.5 whitespace-nowrap">
-            <Mail size={14} />
+      <div className="w-full py-1.5 sm:py-2 px-3 sm:px-4 pr-8 sm:pr-10 relative" style={{ background: 'linear-gradient(135deg, #FFB6C8, #E8739B)' }}>
+        <div className="container mx-auto flex flex-col sm:flex-row items-center justify-center gap-1.5 sm:gap-3">
+          <span className="text-white text-[11px] sm:text-sm font-medium flex items-center gap-1 sm:gap-1.5 whitespace-nowrap">
+            <Mail className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
             Get notified about promos & discounts!
           </span>
 
           {status === 'success' ? (
-            <span className="text-white text-sm font-medium flex items-center gap-1.5">
-              <Check size={16} /> Subscribed!
+            <span className="text-white text-[11px] sm:text-sm font-medium flex items-center gap-1 sm:gap-1.5">
+              <Check className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> Subscribed!
             </span>
           ) : (
-            <form onSubmit={handleSubmit} className="flex items-center gap-2">
+            <form onSubmit={handleSubmit} className="flex items-center gap-1.5 sm:gap-2">
               <input
                 type="email"
                 value={email}
                 onChange={(e) => { setEmail(e.target.value); if (status === 'error') setStatus('idle'); }}
                 placeholder="Enter your email"
-                className={`px-3 py-1.5 rounded-lg text-sm bg-white/90 text-pink-800 placeholder-pink-300 border-2 focus:outline-none transition-colors w-48 sm:w-56 ${
+                className={`px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-md sm:rounded-lg text-[11px] sm:text-sm bg-white/90 text-pink-800 placeholder-pink-300 border-2 focus:outline-none transition-colors w-40 sm:w-56 ${
                   status === 'error' ? 'border-red-400' : 'border-transparent focus:border-white/50'
                 }`}
               />
               <button
                 type="submit"
                 disabled={status === 'loading'}
-                className="px-4 py-1.5 rounded-lg text-sm font-semibold bg-white text-pink-600 hover:bg-pink-50 transition-colors disabled:opacity-60 whitespace-nowrap"
+                className="px-3 sm:px-4 py-1 sm:py-1.5 rounded-md sm:rounded-lg text-[11px] sm:text-sm font-semibold bg-white text-pink-600 hover:bg-pink-50 transition-colors disabled:opacity-60 whitespace-nowrap"
               >
                 {status === 'loading' ? '...' : 'Subscribe'}
               </button>
@@ -77,9 +77,9 @@ export default function PromoBanner() {
 
         <button
           onClick={close}
-          className="absolute top-1/2 -translate-y-1/2 right-3 p-1 rounded-full hover:bg-white/20 transition-colors"
+          className="absolute top-1/2 -translate-y-1/2 right-2 sm:right-3 p-1 rounded-full hover:bg-white/20 transition-colors"
         >
-          <X size={16} className="text-white/80" />
+          <X className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white/80" />
         </button>
       </div>
 
